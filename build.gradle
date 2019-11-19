@@ -1,0 +1,55 @@
+/**
+ 常用命令：
+ 1. tasks 列出项目可运行的task
+ 2. assemble - 打包输出项目.
+ 3. bootRepackage - 打可以通过'java -jar' 命令执行的JAR或WAR包
+ 4. build - 测试并打包输出.
+ 5. clean - 删除build目录.
+ 6. jar - 打jar包.
+ 7. javadoc - 打javadoc包.
+ 8. dependencies - 显示项目的所有依赖关系.
+ 9. uploadArchives - 上传':archives'中配置的所有包到maven 仓库
+ */
+buildscript { // buildscript 不能抽取出来，只能重复写。
+    ext {
+        sxGradleHome = "http://192.168.120.68/root/gradle-scripts/raw/master/"
+        // sxGradleHome = "https://raw.githubusercontent.com/iSayCheese/gradle-scripts/master/"
+        suixingpayStarterVersion = "3.0.4.RELEASE" // 基础框架
+        suixingpayConfigVersion = "1.1.0-SNAPSHOT" // 配置中心
+        fdPortalVersion = "1.0.0-SNAPSHOT" // 统一门户
+        springBootAdminVersion = "1.5.7"
+    }
+    apply from: sxGradleHome + 'maven.gradle'
+    apply from: sxGradleHome + 'spring-cloud-edgware.gradle' // 导入使用Spring Cloud及相应的Spring Boot版本号
+    repositories {
+        maven {
+            //url REPOSITORY_URL
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:2.0.0"
+    }
+}
+
+subprojects {
+    // 参考 http://172.16.60.101:8080/wcp/webdoc/view/Pubff8080815ebdbff7015fc2efb33600b1.html
+    apply from: sxGradleHome + 'maven.gradle'
+    apply from: sxGradleHome + 'spring-cloud.gradle'
+    apply from: sxGradleHome + 'jacoco.gradle'
+
+//    version = '1.0.0-SNAPSHOT' // 设置版本
+//    group = 'com.suixingpay.cloud' // 设置group id
+    description = '随行付Spring cloud 实现' // 设置描述
+    group 'com.suixingpay'
+    version '1.0-SNAPSHOT'
+
+    dependencies {
+        compileOnly('org.springframework.boot:spring-boot-configuration-processor')
+        compileOnly('org.projectlombok:lombok')
+        testCompile('org.projectlombok:lombok')
+        testCompile "org.springframework.boot:spring-boot-starter-test"
+        testCompile "org.springframework.boot:spring-boot-test-autoconfigure"
+    }
+}
