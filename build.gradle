@@ -49,6 +49,7 @@ subprojects {
         compileOnly('org.springframework.boot:spring-boot-configuration-processor')
         compileOnly('org.projectlombok:lombok')
         testCompile('org.projectlombok:lombok')
+        annotationProcessor('org.projectlombok:lombok')
         testCompile "org.springframework.boot:spring-boot-starter-test"
         testCompile "org.springframework.boot:spring-boot-test-autoconfigure"
     }
