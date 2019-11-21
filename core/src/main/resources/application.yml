@@ -1,8 +1,8 @@
 server:
   port: 8080
 mybatis:
-  mapper-locations: classpath:/com/suixingpay/mapper/*.xml
   type-aliases-package: com.suixingpay.pojo
+  mapper-locations: classpath:mybatis/*.xml
 spring:
   profiles:
     active: dev
