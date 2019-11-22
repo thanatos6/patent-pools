@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suixingpay.mapper.UserMapper">
+       <resultMap id="userMap" type="com.suixingpay.pojo.User">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="account" property="account" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="DATE"/>
+    </resultMap>
+
+
+    <select id="userByAccountAndPassword" resultMap="userMap" parameterType="java.lang.String">
+        SELECT name,password,account,status,modify_date,create_date
+        FROM patent_user
+        WHERE account=#{account} and  password=#{password}
+    </select>
+
+    <select id="userByName" resultMap="userMap">
+        SELECT name,password,account,status,modify_date,create_date,is_delete FROM patent_user WHERE account=#{account}
+    </select>
+</mapper>
