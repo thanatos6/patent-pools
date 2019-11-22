@@ -1,8 +1,10 @@
 server:
   port: 8080
 mybatis:
-  mapper-locations: classpath:/com/suixingpay/mapper/*.xml
+  #    主环境
+  mapper-locations: classpath:mybatis/*.xml
   type-aliases-package: com.suixingpay.pojo
+
 spring:
   profiles:
     active: dev
@@ -11,3 +13,5 @@ spring:
     url: jdbc:mysql://172.16.41.67:3306/patent_zwl?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: team3member
     password: team3team3
+
+
