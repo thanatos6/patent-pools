@@ -3,6 +3,8 @@ server:
 mybatis:
   type-aliases-package: com.suixingpay.pojo
   mapper-locations: classpath:mybatis/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 spring:
   profiles:
     active: dev
