@@ -1,9 +1,14 @@
 server:
   port: 8080
 mybatis:
-  mapper-locations: classpath:/com/suixingpay/mapper/*.xml
-  type-aliases-package: com.suixingpay.pojo
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.suixingpay.bean
+
 spring:
+  http:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 30MB
   profiles:
     active: dev
   datasource:
