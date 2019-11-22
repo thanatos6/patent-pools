@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.suixingpay.mapper.PatentInfoMapper">
+
+    <!--    数据库到服务层映射- 返回值类型-->
+    <resultMap id="BaseResultMap" type="com.suixingpay.pojo.PatentInfo">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="batch" property="batch" jdbcType="VARCHAR"/>
+        <result column="case_number" property="caseNumber" jdbcType="VARCHAR"/>
+        <result column="apply_number" property="applyNumber" jdbcType="VARCHAR"/>
+        <result column="apply_date" property="applyDate" jdbcType="DATE"/>
+        <result column="apply_tech_linkman" property="applyTechLinkman" jdbcType="VARCHAR"/>
+        <result column="apply_man_chs" property="applyManChs" jdbcType="VARCHAR"/>
+        <result column="invention_chs" property="inventionChs" jdbcType="VARCHAR"/>
+        <result column="law_status" property="lawStatus" jdbcType="VARCHAR"/>
+        <result column="patent_type" property="patentType" jdbcType="VARCHAR"/>
+        <result column="invent_man_chs" property="inventManChs" jdbcType="VARCHAR"/>
+        <result column="patent_comment" property="patentComment" jdbcType="VARCHAR"/>
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT"/>
+        <result column="current_status" property="currentStatus" jdbcType="TINYINT"/>
+        <result column="current_process" property="currentProcess" jdbcType="VARCHAR"/>
+        <result column="owner_user_id" property="ownerUserId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--数据库字段集合 - SQL 查询字段-->
+    <sql id="Base_Column_List">
+    id, batch, case_number, apply_number, apply_date, apply_tech_linkman, apply_man_chs,
+    invention_chs, law_status, patent_type, invent_man_chs, patent_comment, modify_date,
+    create_date, is_delete, current_status, current_process, owner_user_id
+  </sql>
+
+    <!-- 动态SQL ：模糊插入一条专利，对应新建专利功能 -->
+
+    <insert id="insertPatentInfo" parameterType="com.suixingpay.pojo.PatentInfo">
+        insert into patent_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="batch != null and batch !=''">
+                batch,
+            </if>
+            <if test="caseNumber != null and caseNumber !=''">
+                case_number,
+            </if>
+            <if test="applyNumber != null and applyNumber !=''">
+                apply_number,
+            </if>
+            <if test="applyDate != null">
+                apply_date,
+            </if>
+            <if test="applyTechLinkman != null and applyTechLinkman !=''">
+                apply_tech_linkman,
+            </if>
+            <if test="applyManChs != null and applyManChs !=''">
+                apply_man_chs,
+            </if>
+            <if test="inventionChs != null and inventionChs!=''">
+                invention_chs,
+            </if>
+            <if test="lawStatus != null and lawStatus!=''">
+                law_status,
+            </if>
+            <if test="patentType != null and patentType !=''">
+                patent_type,
+            </if>
+            <if test="inventManChs != null and inventManChs !=''">
+                invent_man_chs,
+            </if>
+            <if test="patentComment != null and patentComment !=''">
+                patent_comment,
+            </if>
+            <if test="modifyDate != null">
+                modify_date,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="currentStatus != null">
+                current_status,
+            </if>
+            <if test="currentProcess != null and currentProcess !=''">
+                current_process,
+            </if>
+            <if test="ownerUserId != null">
+                owner_user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="batch != null and batch !=''">
+                #{batch,jdbcType=VARCHAR},
+            </if>
+            <if test="caseNumber != null and caseNumber !=''">
+                #{caseNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="applyNumber != null and applyNumber !=''">
+                #{applyNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="applyDate != null">
+                #{applyDate,jdbcType=DATE},
+            </if>
+            <if test="applyTechLinkman != null and applyTechLinkman !=''">
+                #{applyTechLinkman,jdbcType=VARCHAR},
+            </if>
+            <if test="applyManChs != null and applyManChs !=''">
+                #{applyManChs,jdbcType=VARCHAR},
+            </if>
+            <if test="inventionChs != null and inventionChs!=''">
+                #{inventionChs,jdbcType=VARCHAR},
+            </if>
+            <if test="lawStatus != null and lawStatus!=''">
+                #{lawStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="patentType != null and patentType !=''">
+                #{patentType,jdbcType=VARCHAR},
+            </if>
+            <if test="inventManChs != null and inventManChs !=''">
+                #{inventManChs,jdbcType=VARCHAR},
+            </if>
+            <if test="patentComment != null and patentComment !=''">
+                #{patentComment,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyDate != null">
+                #{modifyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="currentStatus != null">
+                #{currentStatus,jdbcType=TINYINT},
+            </if>
+            <if test="currentProcess != null and currentProcess !=''">
+                #{currentProcess,jdbcType=VARCHAR},
+            </if>
+            <if test="ownerUserId != null">
+                #{ownerUserId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!--动态 SQL ：模糊查询专利，对应专利搜索功能-->
+    <select id="selectPatentFuzzy" resultMap="BaseResultMap"
+            parameterType="com.suixingpay.pojo.PatentInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from patent_info
+        where 1 = 1
+        <if test="id != null">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="batch != null and batch !=''">
+            and batch = #{batch,jdbcType=VARCHAR}
+        </if>
+        <if test="caseNumber != null and caseNumber !=''">
+            and case_number = #{caseNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="applyNumber != null and applyNumber !=''">
+            and apply_number = #{applyNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="applyDate != null">
+            and apply_date = #{applyDate,jdbcType=DATE}
+        </if>
+        <if test="applyTechLinkman != null and applyTechLinkman !=''">
+            and apply_tech_linkman = #{applyTechLinkman,jdbcType=VARCHAR}
+        </if>
+        <if test="applyManChs != null and applyManChs !=''">
+            and apply_man_chs = #{applyManChs,jdbcType=VARCHAR}
+        </if>
+        <if test="inventionChs != null and inventionChs!=''">
+            and invention_chs = #{inventionChs,jdbcType=VARCHAR}
+        </if>
+        <if test="lawStatus != null and lawStatus!=''">
+            and law_status = #{lawStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="patentType != null and patentType !=''">
+            and patent_type = #{patentType,jdbcType=VARCHAR}
+        </if>
+        <if test="inventManChs != null and inventManChs !=''">
+            and invent_man_chs = #{inventManChs,jdbcType=VARCHAR}
+        </if>
+        <if test="patentComment != null and patentComment !=''">
+            and patent_comment = #{patentComment,jdbcType=VARCHAR}
+        </if>
+        <if test="modifyDate != null">
+            and modify_date #{modifyDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createDate != null">
+            and create_date = #{createDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="isDelete != null">
+            and is_delete = #{isDelete,jdbcType=TINYINT}
+        </if>
+        <if test="currentStatus != null">
+            and current_status = #{currentStatus,jdbcType=TINYINT}
+        </if>
+        <if test="currentProcess != null and currentProcess !=''">
+            and current_process = #{currentProcess,jdbcType=VARCHAR}
+        </if>
+        <if test="ownerUserId != null">
+            and owner_user_id = #{ownerUserId,jdbcType=INTEGER}
+        </if>
+    </select>
+    
+</mapper>
