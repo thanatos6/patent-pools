@@ -6,6 +6,14 @@
         <result column="role" property="role" jdbcType="INTEGER"/>
         <result column="process_code" property="processCode" jdbcType="INTEGER"/>
     </resultMap>
+    <resultMap id="ManageMap" type="com.suixingpay.pojo.PatentInfo">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="case_number" property="caseNumber" jdbcType="INTEGER"/>
+        <result column="apply_number" property="processCode" jdbcType="INTEGER"/>
+        <result column="apply_date" property="processCode" jdbcType="INTEGER"/>
+        <result column="apply_tech_linkman" property="processCode" jdbcType="INTEGER"/>
+        <result column="apply_number" property="processCode" jdbcType="INTEGER"/>
+    </resultMap>
     <!-- 用于页面三类管理员审批通过驳回，根据专利id修改状态码
      1.当一审通过1变2，待认领
      当一审不通过1变11，一审不通过
@@ -53,6 +61,12 @@
         where `id` = #{id,jdbcType=INTEGER}
     </update>
     <select id="selectCodeByRole" parameterType="int" resultMap="RoleMap">
+        SELECT process_code
+        FROM patent_process
+        WHERE role = #{role,jdbcType=INTEGER}
+    </select>
+    <!--管理员查看待办事项-->
+    <select id="selectWaitByManage" parameterType="com.suixingpay.pojo.PatentInfo" resultMap="RoleMap">
         SELECT process_code
         FROM patent_process
         WHERE role = #{role,jdbcType=INTEGER}
