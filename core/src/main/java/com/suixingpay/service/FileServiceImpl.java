@@ -1,10 +1,9 @@
 package com.suixingpay.service;
 
-import com.suixingpay.bean.Files;
+import com.suixingpay.pojo.Files;
 import com.suixingpay.mapper.FileMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package com.suixingpay.service;
 
-import com.suixingpay.bean.Files;
-import org.springframework.web.multipart.MultipartFile;
+import com.suixingpay.pojo.Files;
 
 import java.util.List;
 

@@ -2,8 +2,7 @@ server:
   port: 8080
 mybatis:
   mapper-locations: classpath:mybatis/*.xml
-  type-aliases-package: com.suixingpay.bean
-
+  type-aliases-package: com.suixingpay.pojo
 spring:
   http:
     multipart:

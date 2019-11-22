@@ -1,6 +1,6 @@
 package com.suixingpay.controller;
 
-import com.suixingpay.bean.Files;
+import com.suixingpay.pojo.Files;
 import com.suixingpay.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;

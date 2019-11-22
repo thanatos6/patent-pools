@@ -1,6 +1,6 @@
 package com.suixingpay.mapper;
 
-import com.suixingpay.bean.Files;
+import com.suixingpay.pojo.Files;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
