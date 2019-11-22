@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.suixingpay.mapper.FileMapper" >
+  <resultMap id="result" type="com.suixingpay.bean.Files">
+    <id property="fileId" column="file_id"/>
+    <result property="fileCreateTime" column="file_create_time"/>
+    <result property="fileName" column="file_name"/>
+    <result property="filePatentId" column="file_patent_id"/>
+    <result property="fileStatus" column="file_status"/>
+    <result property="filePath" column="file_path"/>
+  </resultMap>
+
+  <insert id="insert" parameterType="com.suixingpay.bean.Files" >
+    insert into file (file_patent_id, file_path,
+      file_status, file_create_time,file_name
+      )  values (#{filePatentId,jdbcType=INTEGER}, #{filePath,jdbcType=VARCHAR},
+       #{fileStatus,jdbcType=INTEGER}, #{fileCreateTime,jdbcType=TIMESTAMP},#{fileName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="update">
+    update file set file_status =0 where file_id =#{fileId};
+  </update>
+
+  <select id="selectById"  parameterType="int"  resultMap="result">
+     select file_id , file_patent_id , file_path, file_status , file_create_time , file_name from  file where file_patent_id=#{filePatentId} and
+     file_status=1
+  </select>
+
+  <select id="selectPathByFileId"  resultMap="result">
+    select file_id , file_patent_id , file_path, file_status , file_create_time , file_name from file where file_id =#{file_id}
+  </select>
+
+</mapper>
