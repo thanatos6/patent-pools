@@ -11,6 +11,7 @@
         <result column="create_date" property="createDate" jdbcType="DATE"/>
     </resultMap>
 
+
     <select id="selectStatusById" resultMap="userMap" parameterType="java.lang.Integer">
         SELECT status FROM patent_user WHERE id=#{id}
     </select>

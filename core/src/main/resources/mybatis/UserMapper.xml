@@ -10,6 +10,7 @@
         <result column="create_date" property="createDate" jdbcType="DATE"/>
     </resultMap>
 
+
     <select id="userByAccountAndPassword" resultMap="userMap" parameterType="java.lang.String">
         SELECT name,password,account,status,modify_date,create_date
         FROM patent_user

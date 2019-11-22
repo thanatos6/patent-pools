@@ -30,6 +30,7 @@ public class UserImpl implements UserService {
         return  user;
     }
 
+
     @Override
     public User userByName(String name) {
         return new User();

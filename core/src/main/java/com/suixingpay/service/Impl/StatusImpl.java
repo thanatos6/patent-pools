@@ -12,6 +12,7 @@ public class StatusImpl {
     @Autowired
     StatusMapper statusMapper;
 
+
     public int statusById(int id){
         return statusMapper.selectStatusById(id);
     }
