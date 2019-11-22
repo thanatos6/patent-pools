@@ -1,16 +1,25 @@
-package com.suixingpay.common.model;
+package com.suixingpay.pojo;
 
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-
+@Component
 public class User {
 
     private String name;
+    private String account;
+    private int id;
+    private String password;
+    private String isDelete;
+    private Date createDate;
+    private Date modifyDate;
+    private int status;
 
-    public Date getCreateDate() {
+
+   public Date getCreateDate() {
         return createDate;
     }
 
@@ -18,29 +27,21 @@ public class User {
         this.createDate = createDate;
     }
 
-    public String getModifyDate() {
+    public Date getModifyDate() {
         return modifyDate;
     }
 
-    public void setModifyDate(String modifyDate) {
+    public void setModifyDate(Date modifyDate) {
         this.modifyDate = modifyDate;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
-
-    private String account;
-    private int id;
-    private String password;
-    private String isDelete;
-    private Date createDate;
-    private String modifyDate;
-    private String status;
 
     public String getIsDelete() {
         return isDelete;
