@@ -43,7 +43,7 @@
     </insert>-->
 
     <insert id="insertPatentProperty" parameterType="com.suixingpay.pojo.PatentProperties" useGeneratedKeys="true" keyColumn="id">
-        insert into patent_properties (patent_id, indicator_name) values (#{patentId:INTEGER}, #{indicatorName:VARCHAR})
+        insert into patent_properties (patent_id, indicator_name, create_date, modify_date) values (#{patentId:INTEGER}, #{indicatorName:VARCHAR}, #{createDate:TIMESTAMP}, #{modifyDate:TIMESTAMP})
     </insert>
 
     <update id="deletePatentProperty" parameterType="com.suixingpay.pojo.PatentProperties">

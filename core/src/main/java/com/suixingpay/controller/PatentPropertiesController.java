@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequestMapping("/properties")
@@ -43,6 +42,12 @@ public class PatentPropertiesController {
         PatentProperties patentProperties = new PatentProperties();
         patentProperties.setPatentId(patentId);
         patentProperties.setIndicatorName(name);
+//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+//        String date = df.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
+        Date date = new Date();
+        Timestamp now = new Timestamp(date.getTime());
+        patentProperties.setCreateDate(now);
+        patentProperties.setModifyDate(now);
         patentPropertiesService.savePatentProperties(patentProperties);
         Map<String, Object> result = new HashMap<>();
         result.put("code", 0);
