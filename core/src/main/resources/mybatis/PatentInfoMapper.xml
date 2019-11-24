@@ -212,5 +212,5 @@
             and owner_user_id = #{ownerUserId,jdbcType=INTEGER}
         </if>
     </select>
-    
+
 </mapper>

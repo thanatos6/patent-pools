@@ -1,8 +1,11 @@
 server:
   port: 8080
 mybatis:
+
+  #    主环境
   mapper-locations: classpath:mybatis/*.xml
   type-aliases-package: com.suixingpay.pojo
+
 spring:
   profiles:
     active: dev
@@ -12,12 +15,4 @@ spring:
     username: team3member
     password: team3team3
 
-##mybatis配置
-#mybatis:
-#  #mybatis扫描实体类
-#  #type-aliases-package: com.springboot.mybatis.entity
-#  #扫面的映射关系文件
-#  mapper-locations: classpath:repository/**/*Repository*.xml
-#  #开启二级缓存
-#  configuration:
-#    cache-enabled: true
+

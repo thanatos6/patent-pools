@@ -32,5 +32,4 @@ public interface PatentInfoService {
     String searchPatentAnyCondition(PatentInfo patentInfo);
 
 
-
 }

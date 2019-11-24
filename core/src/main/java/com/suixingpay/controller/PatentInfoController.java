@@ -5,7 +5,9 @@ import com.suixingpay.pojo.PatentInfo;
 import com.suixingpay.service.PatentInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -27,14 +29,18 @@ public class PatentInfoController {
     @Autowired
     private PatentInfoService patentInfoService;
 
+
+
     @RequestMapping("/addPatent")
-    public String addNewPatent(PatentInfo patentInfo) {
+    public String addNewPatent(@RequestBody PatentInfo patentInfo) {
+        log.warn(patentInfo.getApplyTechLinkman());
         String addPatentResult = patentInfoService.createNewPatent(patentInfo);
         return addPatentResult;
     }
 
     @RequestMapping("/searchPatent")
-    public String searchPatentFuzzy(PatentInfo patentInfo) {
+    public String searchPatentFuzzy(@RequestBody PatentInfo patentInfo) {
+
         String searchPatentResult = patentInfoService.searchPatentAnyCondition(patentInfo);
         return searchPatentResult;
     }
