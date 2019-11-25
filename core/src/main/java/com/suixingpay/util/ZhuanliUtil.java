@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 public class ZhuanliUtil {
 
 
-    public  static String  getJSONString(int code,String msg){
+    public  static String  getJSONString(int code,Object msg){
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("code", code);
         jsonObject.put("msg",msg);
