@@ -1,7 +1,6 @@
 package com.suixingpay.service;
 
 import com.suixingpay.pojo.PatentInfo;
-import com.suixingpay.pojo.StatusCode;
 
 import java.util.List;
 
@@ -27,5 +26,7 @@ public interface StatusCodeService {
     boolean updateStatusFinish(int patentId);
 
     //根据角色码查找有权限的待办
-    String selectCodeByRole(int role);
+    List selectCodeByRole(int role);
+
+    //List<PatentInfo> dynamicForeachTest(List<Integer> ids);
 }

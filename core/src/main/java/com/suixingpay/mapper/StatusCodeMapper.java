@@ -28,5 +28,6 @@ public interface StatusCodeMapper {
 
     //根据角色码查找有权限的待办
     List<StatusCode> selectCodeByRole(int role);
+    public List<PatentInfo> dynamicForeachTest(List<Integer> ids);
 }
 
