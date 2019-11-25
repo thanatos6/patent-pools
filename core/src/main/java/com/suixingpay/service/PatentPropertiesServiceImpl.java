@@ -46,4 +46,10 @@ public class PatentPropertiesServiceImpl implements PatentPropertiesService {
 //        }
 //        return result;
     }
+
+    @Override
+    public List<PatentProperties> searchPatentPropertiesByPatentId(int patentId) {
+        List<PatentProperties> patentPropertiesByPatentId = patentPropertiesMapper.selectPatentPropertiesByPatentId(patentId);
+        return patentPropertiesByPatentId;
+    }
 }

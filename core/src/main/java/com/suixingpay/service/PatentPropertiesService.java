@@ -9,6 +9,8 @@ public interface PatentPropertiesService {
 
     List<PatentProperties> searchPatentPropertiesByName(String name);
 
+    List<PatentProperties> searchPatentPropertiesByPatentId(int id);
+
     void savePatentProperties(PatentProperties patentProperties);
 
     void removePatentProperties(PatentProperties patentProperties);

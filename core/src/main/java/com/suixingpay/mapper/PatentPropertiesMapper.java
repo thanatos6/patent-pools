@@ -17,5 +17,6 @@ public interface PatentPropertiesMapper {
 
     void deletePatentProperty(PatentProperties patentProperties);
 
+    List<PatentProperties> selectPatentPropertiesByPatentId(int id);
     // List<PatentPropertiesList> selectPatentByPropertiesName(PatentPropertiesList patentPropertiesList)
 }

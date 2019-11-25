@@ -28,6 +28,13 @@
         where indicator_name like concat('%', #{indicatorName,jdbcType=VARCHAR}, '%') AND is_delete=0
     </select>
 
+    <select id="selectPatentPropertiesByPatentId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from patent_properties
+        where patent_id = #{patentId, jdbcType=INTEGER}
+    </select>
+
     <!--<insert id="insertPatentProperty" parameterType="java.lang.String">
         insert into `patent_properties`
             <trim prefix="(" suffix=")" suffixOverrides=",">

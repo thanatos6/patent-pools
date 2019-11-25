@@ -30,6 +30,12 @@ public class PatentPropertiesController {
         return patentPropertiesService.searchPatentProperties(1).getIndicatorName();
     }
 
+    @RequestMapping("/get-by-patent-id")
+    public List<PatentProperties> propertiesByPatentId(@RequestParam("patentId") Integer patentId) {
+        List<PatentProperties> patentPropertiesByPatentId = patentPropertiesService.searchPatentPropertiesByPatentId(patentId);
+        return patentPropertiesByPatentId;
+    }
+
     @RequestMapping("/patent-by-properties-name")
     public List<PatentProperties> propertiesByName (@RequestParam("name") String name) {
         List<PatentProperties> patentListByPropertiesName = patentPropertiesService.searchPatentPropertiesByName(name);

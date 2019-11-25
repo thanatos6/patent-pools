@@ -1,5 +1,6 @@
 server:
   port: 8080
+
 mybatis:
   type-aliases-package: com.suixingpay.pojo
   mapper-locations: classpath:mybatis/*.xml
@@ -8,18 +9,15 @@ mybatis:
 spring:
   profiles:
     active: dev
+#  datasource:
+#    platform: mysql
+#    url: jdbc:mysql://localhost:3306/patent?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+#    username: kongjian
+#    password: 123456
+#    driver-class-name: com.mysql.jdbc.Driver
   datasource:
     platform: mysql
     url: jdbc:mysql://172.16.41.67:3306/patent_zwl?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: team3member
     password: team3team3
-
-##mybatis配置
-#mybatis:
-#  #mybatis扫描实体类
-#  #type-aliases-package: com.springboot.mybatis.entity
-#  #扫面的映射关系文件
-#  mapper-locations: classpath:repository/**/*Repository*.xml
-#  #开启二级缓存
-#  configuration:
-#    cache-enabled: true
+    driver-class-name: com.mysql.jdbc.Driver
