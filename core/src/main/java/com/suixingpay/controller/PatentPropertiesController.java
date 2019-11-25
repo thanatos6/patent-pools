@@ -15,6 +15,7 @@ import com.suixingpay.service.UserLoginDemoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -32,13 +33,16 @@ public class PatentPropertiesController {
     private PatentPropertiesService patentPropertiesService;
 
     @RequestMapping("/search-patent")
+    @ResponseBody
     public String getProperties() {
         return patentPropertiesService.searchPatentProperties(1).getIndicatorName();
     }
 
     @RequestMapping("/get-by-patent-id")
-    public PageInfo propertiesByPatentId(@RequestParam("patentId") Integer patentId) {
-        PageHelper.startPage(1,1);
+    @ResponseBody
+    public PageInfo propertiesByPatentId(@RequestParam("patentId") Integer patentId,
+                                         @RequestParam("pageNum") Integer pageNum) {
+        PageHelper.startPage(pageNum,20);
         List<PatentProperties> patentPropertiesByPatentId = patentPropertiesService.searchPatentPropertiesByPatentId(patentId);
         //用PageInfo对结果进行包装
         PageInfo page = new PageInfo(patentPropertiesByPatentId);
@@ -60,12 +64,14 @@ public class PatentPropertiesController {
     }
 
     @RequestMapping("/patent-by-properties-name")
+    @ResponseBody
     public List<PatentProperties> propertiesByName (@RequestParam("name") String name) {
         List<PatentProperties> patentListByPropertiesName = patentPropertiesService.searchPatentPropertiesByName(name);
         return patentListByPropertiesName;
     }
 
     @RequestMapping("/save-properties")
+    @ResponseBody
     public String saveProperties(@RequestParam("name") String name, @RequestParam("patentId") Integer patentId) {
         // Map<String, Object> userInfo = UserLoginDemoService.getUserInfo();
         PatentProperties patentProperties = new PatentProperties();
@@ -90,6 +96,7 @@ public class PatentPropertiesController {
     }
 
     @RequestMapping("/remove-properties")
+    @ResponseBody
     public String removeProperties(@RequestParam("id") Integer id) {
         PatentProperties patentProperties = new PatentProperties();
         patentProperties.setId(id);
@@ -102,6 +109,7 @@ public class PatentPropertiesController {
     }
 
     @RequestMapping("/patent-by-properties-name-test")
+    @ResponseBody
     public List<PatentPropertiesList> test1() {
         List<PatentPropertiesList> result = new ArrayList<PatentPropertiesList>();
         for (int i = 0; i < 3; i++) {
