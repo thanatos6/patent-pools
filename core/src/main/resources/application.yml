@@ -7,6 +7,12 @@ mybatis:
   type-aliases-package: com.suixingpay.pojo
   configuration:
     map-underscore-to-camel-case: true
+#pagehelper
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 spring:
   profiles:
     active: dev

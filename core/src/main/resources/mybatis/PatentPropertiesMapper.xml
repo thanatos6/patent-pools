@@ -2,13 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.suixingpay.mapper.PatentPropertiesMapper">
 
-
     <resultMap id="BaseResultMap" type="com.suixingpay.pojo.PatentProperties">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="patent_id" jdbcType="INTEGER" property="patentId"/>
         <result column="indicator_name" jdbcType="VARCHAR" property="indicatorName"/>
     </resultMap>
-
 
     <sql id="Base_Column_List">
         id, patent_id, indicator_name, create_date, modify_date, is_delete

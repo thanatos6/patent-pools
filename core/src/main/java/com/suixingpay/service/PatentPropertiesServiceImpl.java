@@ -1,5 +1,6 @@
 package com.suixingpay.service;
 
+import com.github.pagehelper.PageHelper;
 import org.springframework.boot.builder.ParentContextCloserApplicationListener;
 import org.springframework.stereotype.Service;
 import com.suixingpay.mapper.PatentPropertiesMapper;
@@ -33,6 +34,7 @@ public class PatentPropertiesServiceImpl implements PatentPropertiesService {
 
     @Override
     public List<PatentProperties> searchPatentPropertiesByName(String name) {
+        PageHelper.startPage(1,1);
         List<PatentProperties> patentPropertiesLikeName = patentPropertiesMapper.selectPatentPropertiesByName(name);
         return patentPropertiesLikeName;
 

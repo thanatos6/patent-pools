@@ -4,6 +4,9 @@ package com.suixingpay.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.support.spring.annotation.FastJsonFilter;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mysql.fabric.xmlrpc.base.Array;
 import com.suixingpay.pojo.PatentProperties;
 import com.suixingpay.pojo.PatentPropertiesList;
@@ -34,9 +37,26 @@ public class PatentPropertiesController {
     }
 
     @RequestMapping("/get-by-patent-id")
-    public List<PatentProperties> propertiesByPatentId(@RequestParam("patentId") Integer patentId) {
+    public PageInfo propertiesByPatentId(@RequestParam("patentId") Integer patentId) {
+        PageHelper.startPage(1,1);
         List<PatentProperties> patentPropertiesByPatentId = patentPropertiesService.searchPatentPropertiesByPatentId(patentId);
-        return patentPropertiesByPatentId;
+        //用PageInfo对结果进行包装
+        PageInfo page = new PageInfo(patentPropertiesByPatentId);
+//        //测试PageInfo全部属性
+//        //PageInfo包含了非常全面的分页属性
+//        assertEquals(1, page.getPageNum());
+//        assertEquals(10, page.getPageSize());
+//        assertEquals(1, page.getStartRow());
+//        assertEquals(10, page.getEndRow());
+//        assertEquals(183, page.getTotal());
+//        assertEquals(19, page.getPages());
+//        assertEquals(1, page.getFirstPage());
+//        assertEquals(8, page.getLastPage());
+//        assertEquals(true, page.isFirstPage());
+//        assertEquals(false, page.isLastPage());
+//        assertEquals(false, page.isHasPreviousPage());
+//        assertEquals(true, page.isHasNextPage());
+        return page;
     }
 
     @RequestMapping("/patent-by-properties-name")
