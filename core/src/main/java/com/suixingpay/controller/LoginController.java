@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class LoginController {
@@ -22,7 +24,7 @@ public class LoginController {
     UserService userService;
 
     @PostMapping("/login")//一般注册都是写入到后台所以是post
-    public  String  login(@RequestParam(value = "password") String password,
+    public   String  login(@RequestParam(value = "password") String password,
                           @RequestParam(value = "account") String account,
                           HttpSession session){
 
@@ -33,7 +35,7 @@ public class LoginController {
             System.out.println(user);
 
             if (user==null){
-                return  String.valueOf(505);
+                return  ZhuanliUtil.getJSONString(505,"");
             }
             /*if (StringUtils.isEmpty(password)){
                 return  ZhuanliUtil.getJSONString("密码不能为空");
@@ -44,7 +46,9 @@ public class LoginController {
             Date now=new Date();
             user.setCreateDate(now);
             session.setAttribute("user",user);
-            return  String.valueOf(200);
+
+
+            return  ZhuanliUtil.getJSONString(200,user);
 
 
         }catch (Exception e){
