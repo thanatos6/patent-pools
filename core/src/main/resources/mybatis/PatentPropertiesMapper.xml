@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suixingpay.mapper.PatentPropertiesMapper">
+
+    <resultMap id="BaseResultMap" type="com.suixingpay.pojo.PatentProperties">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="patent_id" jdbcType="INTEGER" property="patentId"/>
+        <result column="indicator_name" jdbcType="VARCHAR" property="indicatorName"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, patent_id, indicator_name, create_date, modify_date, is_delete
+    </sql>
+
+    <select id="selectPatentPropertiesById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from patent_properties
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectPatentPropertiesByName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from patent_properties
+        where indicator_name like concat('%', #{indicatorName,jdbcType=VARCHAR}, '%') AND is_delete=0
+    </select>
+
+    <select id="selectPatentPropertiesByPatentId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from patent_properties
+        where patent_id = #{patentId, jdbcType=INTEGER}
+    </select>
+
+    <!--<insert id="insertPatentProperty" parameterType="java.lang.String">
+        insert into `patent_properties`
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="indicatorName != null">
+                `indicator_name`
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="indicatorName != null">
+                #{indicatorName,jdbcType=VARCHAR},
+                </if>
+            </trim>
+    </insert>-->
+
+    <insert id="insertPatentProperty" parameterType="com.suixingpay.pojo.PatentProperties" useGeneratedKeys="true" keyColumn="id">
+        insert into patent_properties (patent_id, indicator_name, create_date, modify_date) values (#{patentId:INTEGER}, #{indicatorName:VARCHAR}, #{createDate:TIMESTAMP}, #{modifyDate:TIMESTAMP})
+    </insert>
+
+    <update id="deletePatentProperty" parameterType="com.suixingpay.pojo.PatentProperties">
+        update patent_properties
+        <set>
+            `is_delete`=1
+        </set>
+        where `id` = #{id:INTEGER};
+    </update>
+
+    <select id="selectPatentByPropertiesName" parameterType="com.suixingpay.pojo.PatentPropertiesList">
+        select pp.indicator_name, pp.patent_id, p.id, p.case_number, p.status, p.apply_date,p.invent_man_chs,p.owner_user_id
+        from patent_properties as pp left join patent_info as p on pp.patent_id = p.id
+        where 1=1
+        <if test="indicatorName != null and indicatorName != ''">
+            and indicator_name like concat('%', #{indicatorName,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="caseNumber != null and caseNumber != ''">
+            and caseNumber = #{caseNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="invent_man_chs != null and invent_man_chs != ''">
+            and inventManChs = #{inventManChs,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null and status != ''">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+    </select>
+</mapper>

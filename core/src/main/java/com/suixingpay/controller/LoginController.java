@@ -35,7 +35,7 @@ public class LoginController {
             System.out.println(user);
 
             if (user==null){
-                return  ZhuanliUtil.getJSONString(505,"");
+                return  String.valueOf(505);
             }
             /*if (StringUtils.isEmpty(password)){
                 return  ZhuanliUtil.getJSONString("密码不能为空");
@@ -46,9 +46,7 @@ public class LoginController {
             Date now=new Date();
             user.setCreateDate(now);
             session.setAttribute("user",user);
-
-
-            return  ZhuanliUtil.getJSONString(200,user);
+            return  String.valueOf(200);
 
 
         }catch (Exception e){

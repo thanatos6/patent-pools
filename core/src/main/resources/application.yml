@@ -1,15 +1,30 @@
 server:
   port: 8080
+
 mybatis:
-  type-aliases-package: com.suixingpay.pojo
+  #    主环境
   mapper-locations: classpath:mybatis/*.xml
+  type-aliases-package: com.suixingpay.pojo
   configuration:
     map-underscore-to-camel-case: true
+#pagehelper
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 spring:
   profiles:
     active: dev
+#  datasource:
+#    platform: mysql
+#    url: jdbc:mysql://localhost:3306/patent?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+#    username: kongjian
+#    password: 123456
+#    driver-class-name: com.mysql.jdbc.Driver
   datasource:
     platform: mysql
     url: jdbc:mysql://172.16.41.67:3306/patent_zwl?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: team3member
     password: team3team3
+    driver-class-name: com.mysql.jdbc.Driver
