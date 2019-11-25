@@ -12,7 +12,7 @@
 
 
     <select id="userByAccountAndPassword" resultMap="userMap" parameterType="java.lang.String">
-        SELECT name,password,account,status,modify_date,create_date
+        SELECT id,name,password,account,status,modify_date,create_date
         FROM patent_user
         WHERE account=#{account} and  password=#{password}
     </select>

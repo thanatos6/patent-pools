@@ -2,8 +2,9 @@ server:
   port: 8080
 
 mybatis:
-  type-aliases-package: com.suixingpay.pojo
+  #    主环境
   mapper-locations: classpath:mybatis/*.xml
+  type-aliases-package: com.suixingpay.pojo
   configuration:
     map-underscore-to-camel-case: true
 spring:

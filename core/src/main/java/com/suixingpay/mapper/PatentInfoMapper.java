@@ -27,7 +27,52 @@ public interface PatentInfoMapper {
      * 模糊查询专利专利，为搜索专利提供的服务
      *
      * @param patentInfo 专利信息实体
-     * @return 模糊搜索专利的实体集合，如果为空就返回空
+     * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
      */
     List<PatentInfo> selectPatentFuzzy(PatentInfo patentInfo);
+
+    /**
+     * 根据专利的 id, 更新专利的各种信息
+     *
+     * @param patentInfo 专利信息实体
+     * @return 0 表示更新失败, 1 表示更新成功
+     */
+    Integer updatePatentInfoById(PatentInfo patentInfo);
+
+
+    /**
+     * 普通用户的专利搜索页初始化，就把 owner_id 为该用户的专利记录和 owner_id 为空的记录返回
+     * owner_id 已经存在的排在前面
+     * owner_id 没有的排在后面
+     *
+     * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
+     */
+    List<PatentInfo> selectPatentNormalUser();
+
+
+    /**
+     * 管理员的专利搜索页初始化，信息全部返回, 并做一个排序, 直接按照修改时间倒序排 ASC
+     *
+     * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
+     */
+    List<PatentInfo> selectPatentRootUser();
+
+    /**
+     * 普通用户的专利搜索页的条件模糊搜索，就把 owner_id 为该用户的专利记录和 owner_id 为空的记录返回
+     * owner_id 已经存在的排在前面
+     * owner_id 没有的排在后面
+     *
+     * @param patentInfo 专利信息实体
+     * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
+     */
+    List<PatentInfo> selectPatentNormalUserCondition(PatentInfo patentInfo);
+
+
+    /**
+     * 管理员的专利搜索页的条件模糊搜索，信息全部返回, 并做一个排序, 直接按照修改时间倒序排 ASC
+     *
+     * @param patentInfo 专利信息实体
+     * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
+     */
+    List<PatentInfo> selectPatentRootUserCondition(PatentInfo patentInfo);
 }
