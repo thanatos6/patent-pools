@@ -22,13 +22,13 @@ public class DateConverterConfig implements Converter<String, Date> {
     /**
      * 日期字符串格式容器
      */
-    private static final List<String> FOMATS = new ArrayList<>(4);
+    private static final List<String> FORMATS = new ArrayList<>(4);
 
     static {
-        FOMATS.add("yyyy-MM");
-        FOMATS.add("yyyy-MM-dd");
-        FOMATS.add("yyyy-MM-dd hh:mm");
-        FOMATS.add("yyyy-MM-dd hh:mm:ss");
+        FORMATS.add("yyyy-MM");
+        FORMATS.add("yyyy-MM-dd");
+        FORMATS.add("yyyy-MM-dd hh:mm");
+        FORMATS.add("yyyy-MM-dd hh:mm:ss");
     }
 
     /**
@@ -57,13 +57,13 @@ public class DateConverterConfig implements Converter<String, Date> {
             return null;
         }
         if (source.matches("^\\d{4}-\\d{1,2}$")) {
-            return parseDate(source, FOMATS.get(0));
+            return parseDate(source, FORMATS.get(0));
         } else if (source.matches("^\\d{4}-\\d{1,2}-\\d{1,2}$")) {
-            return parseDate(source, FOMATS.get(1));
+            return parseDate(source, FORMATS.get(1));
         } else if (source.matches("^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}$")) {
-            return parseDate(source, FOMATS.get(2));
+            return parseDate(source, FORMATS.get(2));
         } else if (source.matches("^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}:\\d{1,2}$")) {
-            return parseDate(source, FOMATS.get(3));
+            return parseDate(source, FORMATS.get(3));
         } else {
             throw new IllegalArgumentException("Invalid boolean value '" + source + "'");
         }
