@@ -8,6 +8,9 @@ import com.suixingpay.pojo.PatentProperties;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * @author kongjian
+ */
 @Service
 public class PatentPropertiesServiceImpl implements PatentPropertiesService {
 

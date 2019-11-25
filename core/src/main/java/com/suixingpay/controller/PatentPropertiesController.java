@@ -19,6 +19,9 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * @author kongjian
+ */
 @RestController
 @RequestMapping("/properties")
 public class PatentPropertiesController {
