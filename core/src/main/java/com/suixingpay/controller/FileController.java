@@ -20,7 +20,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/file")
 @Slf4j
-
 public class FileController {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileController.class);
 
@@ -28,7 +27,7 @@ public class FileController {
         private FileService fileService;
 
     /**
-     * 下载文件
+     * 上传文件
      * @param FilePatentId
      * @param file
      * @return
@@ -46,9 +45,9 @@ public class FileController {
         //文件路径
         String filePath = "D://test/";
          UUID uuid=UUID.randomUUID();
-        File dest = new File(filePath + uuid + fileName );
+        File filed = new File(filePath + uuid + fileName );
         try {
-            file.transferTo(dest);
+            file.transferTo(filed);
             LOGGER.info("上传成功");
             //上传到数据库中
             Files files = new Files();
@@ -75,7 +74,6 @@ public class FileController {
     public List<Files> selectById(@RequestParam("id") int PatentId){
         List<Files> files1 = fileService.selectById(PatentId);
         return files1;
-
     }
 
     /**
@@ -93,19 +91,24 @@ public class FileController {
         return "{\"result\": \"删除成功\"}";
     }
 
+    /**
+     * 下载文件
+     * @param fileId
+     * @param response
+     * @throws UnsupportedEncodingException
+     */
     @GetMapping("/download")
     public void selectPathByFileId(@Param("fileId") int fileId, HttpServletResponse response) throws UnsupportedEncodingException {
-        //获取查询方法
+        //通过查询方法获取信息
         Files files = fileService.selectPathByFileId(fileId);
         //获取文件名
         String fileName =files.getFileName();
         /*获取文件地址
         地址格式为：
         正规路径加UUID
-        例：D://test/419dfa74-f1a2-4694-87f8-c5616b8673c3
+        例：D://test/419dfa74-f1a2-4694-87f8-c5616b8673c3hello.txt
          */
         String filePath = files.getFilePath();
-        System.out.println(filePath);
         if (fileName != null) {
             //设置文件路径
             File file = new File(filePath+fileName);
@@ -134,16 +137,13 @@ public class FileController {
                     }
                     //刷新，否则写入的时候写不全
                     os.flush();
-
-
-                    System.out.println("Download the file successfully!");
+                    System.out.println("下载成功");
                 }
                 catch (Exception e) {
-                    System.out.println("Download the file failed!");
-                }
+                    System.out.println("下载失败");
+               }
                 //关流
                 finally {
-
                     if (bis != null) {
                         try {
                             bis.close();
@@ -168,6 +168,5 @@ public class FileController {
                 }
             }
         }
-
     }
 }
