@@ -13,10 +13,11 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+/**
+ * @author duansiyu
+ */
 @RestController
 @RequestMapping("/file")
 @Slf4j
@@ -28,71 +29,40 @@ public class FileController {
 
     /**
      * 上传文件
-     * @param FilePatentId
+     * @param filePatentId
      * @param file
      * @return
      */
     @PostMapping("/upload")
     @ResponseBody
-    public String upload(@RequestParam("id") int FilePatentId ,@RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return "{\"result\": \"上传失败，请选择文件\"}";
-        }
-        //文件专利ID
-        int  filePatentId=FilePatentId;
-        //文件名
-        String fileName = file.getOriginalFilename();
-        //文件路径
-        String filePath = "D://test/";
-         UUID uuid=UUID.randomUUID();
-        File filed = new File(filePath + uuid + fileName );
-        try {
-            file.transferTo(filed);
-            LOGGER.info("上传成功");
-            //上传到数据库中
-            Files files = new Files();
-            files.setFileCreateTime(new Date());
-            files.setFileName(fileName);
-            files.setFilePatentId(filePatentId);
-            files.setFilePath(filePath + uuid);
-            files.setFileStatus(1);
-
-            fileService.insert(files);
-          return "{\"result\": \"上传成功\"}";
-        } catch (IOException e) {
-            LOGGER.error(e.toString(), e);
-        }
-        return "{\"result\": \"上传失败\"}";
+    public String upload(@RequestParam("id") int filePatentId ,@RequestParam("file") MultipartFile file) {
+      return fileService.insert(file,filePatentId);
     }
 
+
     /**
-     * 用户查询操作，可以查专利下的所有状态为1的文件
-     * @param PatentId
+     * @param patentId
      * @return
      */
     @GetMapping("/select")
-    public List<Files> selectById(@RequestParam("id") int PatentId){
-        List<Files> files1 = fileService.selectById(PatentId);
-        return files1;
+    public  Map<String, Object> selectById(@RequestParam("id") int patentId){
+           return fileService.selectById(patentId);
     }
 
+
     /**
-     *删除文件，逻辑删除，只更改状态，保留文件内容
-     *1为可用，0为不可用。
-     * @param fileID
+     * @param fileId
      * @return
      */
     @PostMapping("/update")
     @ResponseBody
-    public String update(@RequestParam("fileId") int fileID){
-        //文件ID
-        int fileId =fileID;
+    public String update(@RequestParam("fileId") int fileId){
         fileService.update(fileId);
         return "{\"result\": \"删除成功\"}";
     }
 
+
     /**
-     * 下载文件
      * @param fileId
      * @param response
      * @throws UnsupportedEncodingException
@@ -100,73 +70,6 @@ public class FileController {
     @GetMapping("/download")
     public void selectPathByFileId(@Param("fileId") int fileId, HttpServletResponse response) throws UnsupportedEncodingException {
         //通过查询方法获取信息
-        Files files = fileService.selectPathByFileId(fileId);
-        //获取文件名
-        String fileName =files.getFileName();
-        /*获取文件地址
-        地址格式为：
-        正规路径加UUID
-        例：D://test/419dfa74-f1a2-4694-87f8-c5616b8673c3hello.txt
-         */
-        String filePath = files.getFilePath();
-        if (fileName != null) {
-            //设置文件路径
-            File file = new File(filePath+fileName);
-            // 如果文件名存在，则进行下载
-            if (file.exists()) {
-                // 配置
-                response.setHeader("content-type", "application/octet-stream");
-                response.setContentType("application/octet-stream");
-                // 下载文件能正常显示中文
-                response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
-                // 文件下载
-                byte[] buffer = new byte[1024];
-                FileInputStream fis = null;
-                BufferedInputStream bis = null;
-                try {
-                    //io流输入
-                    fis = new FileInputStream(file);
-                    //保证文件的准确性
-                    bis = new BufferedInputStream(fis);
-                    //io流输出
-                    ServletOutputStream os = response.getOutputStream();
-
-                    int i = 0;
-                    while ((i = bis.read(buffer)) != -1) {
-                        os.write(buffer, 0, buffer.length);
-                    }
-                    //刷新，否则写入的时候写不全
-                    os.flush();
-                    System.out.println("下载成功");
-                }
-                catch (Exception e) {
-                    System.out.println("下载失败");
-               }
-                //关流
-                finally {
-                    if (bis != null) {
-                        try {
-                            bis.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (fis != null) {
-                        try {
-                            fis.close();
-                        } catch (IOException e) {
-                             e.printStackTrace();
-                        }
-                    }
-                    if (fis != null) {
-                        try {
-                            fis.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }
+        fileService.selectPathByFileId(fileId, response);
     }
-}
+ }

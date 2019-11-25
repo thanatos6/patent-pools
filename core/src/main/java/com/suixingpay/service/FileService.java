@@ -1,12 +1,16 @@
 package com.suixingpay.service;
 
 import com.suixingpay.pojo.Files;
+import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
-import java.util.List;
-
+/**
+ * @author duansiyu
+ */
 public interface FileService {
-    int insert(Files data);
+    String insert(MultipartFile data,int filePatentId);
     void  update (int fileId);
-    List<Files> selectById (int filePatentId);
-    Files selectPathByFileId(int fileId);
+    Map<String, Object> selectById (int filePatentId);
+    Files selectPathByFileId(int fileId, HttpServletResponse response);
 }

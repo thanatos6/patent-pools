@@ -3,8 +3,11 @@ package com.suixingpay.mapper;
 import com.suixingpay.pojo.Files;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
+
+/**
+ * @author duansiyu
+ */
 @Mapper
 @Component
 public interface FileMapper {

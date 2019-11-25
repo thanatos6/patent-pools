@@ -17,6 +17,7 @@
        #{fileStatus,jdbcType=INTEGER}, #{fileCreateTime,jdbcType=TIMESTAMP},#{fileName,jdbcType=VARCHAR}
       )
   </insert>
+
   <update id="update">
     update patent_file set file_status =0 where file_id =#{fileId};
   </update>
