@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author 詹文良
@@ -39,14 +36,17 @@ public class PatentInfoController {
 
     @RequestMapping("/addPatent")
     public String addNewPatent(@RequestBody PatentInfo patentInfo) {
+
+        // TODO: 2019/11/26 测试通过，可作为生产代码
         String addPatentResult = patentInfoService.createNewPatent(patentInfo);
         return addPatentResult;
+
     }
 
     @RequestMapping("/searchPatent")
     public String searchPatentFuzzy(@RequestBody PatentInfo patentInfo) {
-        // TODO: 2019/11/25 本地测试完成后，跟前端对一下 
-        // 获取当前登录的用户 id，在服务层实现判断 id 并返回相关的模糊搜索数据
+
+        // TODO: 2019/11/26 前端测试通过，跟测试对接口
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
         String searchPatentResult = patentInfoService.searchPatentByUserType(patentInfo, user.getId());
         return searchPatentResult;
@@ -56,8 +56,7 @@ public class PatentInfoController {
     @RequestMapping("/searchPatentPool")
     public String searchPatentPool() {
 
-        // TODO: 2019/11/25 postman 测试通过，跟前端对接口
-        // 获取当前登录的用户 id，在服务层实现判断 id 并返回相关的专利池数据
+        // TODO: 2019/11/26 前端测试通过，跟测试对接口
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
         String searchPatentPoolResult = patentInfoService.searchNavigationInfo(user.getId());
         return searchPatentPoolResult;
@@ -67,7 +66,7 @@ public class PatentInfoController {
     @RequestMapping("/receivePatent")
     public String receiveOnePatent(@RequestBody PatentInfo patentInfo) {
 
-        // TODO: 2019/11/25 postman 测试通过，跟前端对接口
+        // TODO: 2019/11/26 前端测试通过，跟测试对接口
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
         patentInfo.setOwnerUserId(user.getId());
         String receivePatentResult = patentInfoService.receivePatent(patentInfo);
@@ -78,7 +77,7 @@ public class PatentInfoController {
     @RequestMapping("/editPatent")
     public String editPatentById(@RequestBody PatentInfo patentInfo) {
 
-        // TODO: 2019/11/25 postman 测试通过，跟前端对接口
+        // TODO: 2019/11/26 前端测试通过，跟测试对接口
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
         String editPatentResult = patentInfoService.editPatent(patentInfo, user.getId());
         return editPatentResult;
@@ -88,12 +87,11 @@ public class PatentInfoController {
     @RequestMapping("/getPatentDetail")
     public String showPatentDetails(PatentInfo patentInfo) {
 
-        // TODO: 2019/11/25 postman 测试通过，跟前端对接口
+        // TODO: 2019/11/26 前端测试通过，跟测试对接口
         //由于只传入专利的 id 即可，则会返回只有一个专利的 List
         String showPatentDetailsResult = patentInfoService.searchPatentAnyCondition(patentInfo);
         return showPatentDetailsResult;
 
     }
-
 
 }

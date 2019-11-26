@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 public class LoginController {
@@ -24,14 +22,14 @@ public class LoginController {
     UserService userService;
 
     @PostMapping("/login")//一般注册都是写入到后台所以是post
-    public   String  login(@RequestParam(value = "password") String password,
-                          @RequestParam(value = "account") String account,
+    public  String  login(@RequestParam("password") String password,
+                          @RequestParam("account") String account,
                           HttpSession session){
 
         try {
             //System.out.println(userService);
 
-            User user =userService.login(password,account);
+            User user =userService.login(account,password);
             System.out.println(user);
 
             if (user==null){
