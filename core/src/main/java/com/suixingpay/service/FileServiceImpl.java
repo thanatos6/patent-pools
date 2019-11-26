@@ -67,15 +67,16 @@ public class FileServiceImpl implements FileService {
     @Override
     public Map<String, Object> selectById(int filePatentId) {
          Map<String, Object> map =new HashMap<>(0);
-         List<Files> files1 =fileMapper.selectById(filePatentId);
-            if (files1.size() ==0){
+         List<Files> list =fileMapper.selectById(filePatentId);
+            if (list.size() ==0){
                  map.put("status","0");
-                 map.put("files1",null);
+                 map.put("list",null);
+                 return map;
               }
                  map.put("status","1");
-                 map.put("files1",files1);
+                 map.put("list",list);
                  LOGGER.info("查询成功");
-                   return map;
+                 return map;
     }
 
     @Override
