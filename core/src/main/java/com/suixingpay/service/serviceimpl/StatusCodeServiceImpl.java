@@ -92,13 +92,7 @@ public class StatusCodeServiceImpl implements StatusCodeService {
     @Override
     public List selectCodeByRole(int role) {
 
-
-        StringBuffer sb = new StringBuffer();
         List<StatusCode> statusCode = statusCodeMapper.selectCodeByRole(role);
-        //List<Integer> List1 = new List<Integer>
-        for (int i = 0; i < statusCode.size(); i++) {
-            sb.append(statusCode.get(i).getProcessCode());
-        }
 
         return statusCode;
     }
