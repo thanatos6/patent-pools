@@ -16,7 +16,7 @@ public interface LogMapper {
 
     int insertSelective(Log record);
 
-    Log selectLogById(Integer id);
+    List<Log> selectLogById(Integer id);
 
     int updateByPrimaryKeySelective(Log record);
 
