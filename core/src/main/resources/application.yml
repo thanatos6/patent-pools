@@ -28,7 +28,7 @@ spring:
 #    driver-class-name: com.mysql.jdbc.Driver
   datasource:
     platform: mysql
-    url: jdbc:mysql://localhost:3306/patent_zwl?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://172.16.41.67:3306/patent_zwl?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: team3member
     password: team3team3
     driver-class-name: com.mysql.jdbc.Driver
