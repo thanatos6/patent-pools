@@ -11,7 +11,6 @@ spring:
     active: dev
   datasource:
     platform: mysql
-    url: jdbc:mysql://172.16.41.67:3306/patent_zwl?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://localhost:3306/patent_zwl?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: team3member
     password: team3team3
-

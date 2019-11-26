@@ -81,21 +81,20 @@ public class PatentInfoServiceImpl implements PatentInfoService {
     }
 
     @Override
-    public String editPatent(PatentInfo patentInfo) {
+    public String editPatent(PatentInfo patentInfo, Integer editUserId) {
 
         // 定义要返回的 JSON 结果
         String returnJsonStr = "";
 
-        // 如果专利还没被认领或者当前的编辑用户和认领者 id 对不上就不能编辑
-        PatentInfo patentInfoSearching = new PatentInfo();
-        patentInfoSearching.setId(patentInfo.getId());
-        List<PatentInfo> patentInfos = patentInfoMapper.selectPatentFuzzy(patentInfoSearching);
+        // 根据专利的 id 查询，controller 层传入的 patentinfo 实体应当只包含专利 id
+        List<PatentInfo> patentInfos = executeSelectPatentAnyCondition(patentInfo);
 
         // 查询不到指定的专利或者专利的拥有者未空
         Integer originalPatentOwnerId = patentInfos.isEmpty() ? null : patentInfos.get(0).getOwnerUserId();
 
-        // TODO: 2019/11/24 需要在这里获取当前的用户，现在还没完成，在下面 if 判断写
-        if (originalPatentOwnerId == null) {
+        // TODO: 2019/11/25 决定在 controller 获取 id，在这里需要判断 null 的 editUserId 能不能传进来
+        // 查不到指定的专利或当前的编辑用户 id 对不上认领者 id
+        if (!editUserId.equals(originalPatentOwnerId)) {
             returnJsonStr = getExecuteJsonMessage(0);
         } else {
             returnJsonStr = executeUpdatePatent(patentInfo);
@@ -109,8 +108,15 @@ public class PatentInfoServiceImpl implements PatentInfoService {
         // 定义要返回的 JSON 结果
         String returnJsonStr = "";
 
-        // 如果已经有了拥有者, 则不再二次认领
-        if (patentInfo.getOwnerUserId() != null) {
+        // 如果专利还没被认领或者当前的编辑用户或者认领者 id 对不上就不能编辑
+        List<PatentInfo> patentInfos = executeSelectPatentAnyCondition(patentInfo);
+
+        // 查询不到指定的专利或者专利的拥有者未空
+        Integer originalPatentOwnerId = patentInfos.isEmpty() ? null : patentInfos.get(0).getOwnerUserId();
+
+
+        // 如果已经有了拥有者, 就是 owner_user_id 不为 0, 则不再二次认领
+        if (!originalPatentOwnerId.equals(0)) {
             returnJsonStr = getExecuteJsonMessage(0);
         } else {
             returnJsonStr = executeUpdatePatent(patentInfo);
@@ -124,17 +130,55 @@ public class PatentInfoServiceImpl implements PatentInfoService {
         // 定义要返回的 JSON 结果
         String returnJsonStr = "";
 
-        List<PatentInfo> list;
         // 如果是管理员 id，返回全部, 因为没有一个 role 字段，暂时写死为 2
         if (id != ROOT_USER_ID) {
-            list = patentInfoMapper.selectPatentNormalUser();
-            returnJsonStr = JSON.toJSONString(patentInfoMapper.selectPatentNormalUser());
+            returnJsonStr = JSON.toJSONString(patentInfoMapper.selectPatentNormalUser(id));
         } else {
-            list = patentInfoMapper.selectPatentRootUser();
             returnJsonStr = JSON.toJSONString(patentInfoMapper.selectPatentRootUser());
         }
 
         return returnJsonStr;
+    }
+
+    @Override
+    public String searchPatentByUserType(PatentInfo patentInfo, int id) {
+        // 定义要返回的 JSON 结果
+        String returnJsonStr = "";
+
+        // 0 表示未登录，ROOT_USER_ID 表示管理员，其他用户 id 表示普通用户
+        if (id == 0) {
+            returnJsonStr = getExecuteJsonMessage(0);
+        } else if (id == ROOT_USER_ID) {
+            returnJsonStr = JSON.toJSONString(patentInfoMapper.selectPatentRootUserCondition(patentInfo));
+        } else {
+            returnJsonStr = JSON.toJSONString(patentInfoMapper.selectPatentNormalUserCondition(patentInfo));
+        }
+
+        return returnJsonStr;
+    }
+
+    @Override
+    public String searchPatentByCurrentStatusList(List<Integer> statusList, Integer userId) {
+        // 定义要返回的 JSON 结果
+        String returnJsonStr = "";
+
+        // 返回执行结果
+        returnJsonStr = JSON.toJSONString(patentInfoMapper.selectPatentByStatusList(statusList, userId));
+
+        return returnJsonStr;
+    }
+
+    /**
+     * 封装一系列条件到实体，查询指定条件的记录返回成一个 LIST，此方法只对该服务的所有 查询专利 的方法适用
+     *
+     * @param patentInfo 专利实体
+     * @return 专利记录 LIST
+     */
+    private List<PatentInfo> executeSelectPatentAnyCondition(PatentInfo patentInfo) {
+        PatentInfo patentInfoSearching = new PatentInfo();
+        patentInfoSearching.setId(patentInfo.getId());
+        List<PatentInfo> patentInfos = patentInfoMapper.selectPatentFuzzy(patentInfoSearching);
+        return patentInfos;
     }
 
     /**

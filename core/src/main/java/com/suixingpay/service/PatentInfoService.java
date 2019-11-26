@@ -3,6 +3,9 @@ package com.suixingpay.service;
 
 import com.suixingpay.pojo.PatentInfo;
 
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * @author 詹文良
@@ -35,9 +38,10 @@ public interface PatentInfoService {
      * 传入专利实体, 按照认领人的 id (用户 id)来更新一个专利各种信息
      *
      * @param patentInfo 专利实体
+     * @param editUserId 编辑的用户 id
      * @return 返回一个状态 Json 串。{status :  value}.成功返回：value = success;失败返回：value = error
      */
-    String editPatent(PatentInfo patentInfo);
+    String editPatent(PatentInfo patentInfo, Integer editUserId);
 
     /**
      * 传入专利实体, 按照专利的 id (用户 id)来更新一个专利的认领人 id
@@ -55,5 +59,25 @@ public interface PatentInfoService {
      * @return 返回一个 JSON 串。返回: JSON 串 ：List<PatentInfo> , 如果差不多则返回一个空的 LIST
      */
     String searchNavigationInfo(int id);
+
+
+    /**
+     * 传入用户 id ， 做对应用户的模糊查询，也就是专利搜索，因此需要传进一个 Patent，封装查询条件
+     * searchPatentAnyCondition() 已经分割为 selectPatentNormalUserCondition() 和 selectPatentNormalUserCondition()
+     *
+     * @param id         用户 id
+     * @param patentInfo 专利实体
+     * @return 返回一个 JSON 串。返回: JSON 串 ：List<PatentInfo> , 如果差不多则返回一个空的 LIST
+     */
+    String searchPatentByUserType(PatentInfo patentInfo, int id);
+
+    /**
+     * 根据状态码来返回指定集合状态码集合里的专利，id 如果为空，就返回全部专利，不为空则还有 认领者 owner_user_id 的返回限制
+     *
+     * @param statusList 状态码集合
+     * @param userId     用户 id
+     * @return
+     */
+    String searchPatentByCurrentStatusList(List<Integer> statusList, Integer userId);
 
 }

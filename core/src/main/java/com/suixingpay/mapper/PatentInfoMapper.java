@@ -2,6 +2,7 @@ package com.suixingpay.mapper;
 
 import com.suixingpay.pojo.PatentInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -46,8 +47,9 @@ public interface PatentInfoMapper {
      * owner_id 没有的排在后面
      *
      * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
+     * @param ownerUserId
      */
-    List<PatentInfo> selectPatentNormalUser();
+    List<PatentInfo> selectPatentNormalUser(@Param("ownerUserId") Integer ownerUserId);
 
 
     /**
@@ -75,4 +77,7 @@ public interface PatentInfoMapper {
      * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
      */
     List<PatentInfo> selectPatentRootUserCondition(PatentInfo patentInfo);
+
+    List<PatentInfo> selectPatentByStatusList(@Param("currentStatusList")List<Integer> currentStatusList,
+                                              @Param("userId")Integer userId);
 }

@@ -214,19 +214,18 @@
     </select>
 
 
-    <!--    管理员的搜索导航页，初始化详情数据查询  -->
+    <!--    普通用户的搜索导航页，初始化详情数据查询  -->
     <select id="selectPatentNormalUser" resultType="com.suixingpay.pojo.PatentInfo">
         select
         <include refid="Base_Column_List"/>
         from patent_info
         where 1 = 1
-        and owner_user_id = #{ownerUserId,jdbcType=INTEGER}
-        or owner_user_id = 0
+        and owner_user_id = #{ownerUserId,jdbcType=INTEGER} or owner_user_id = 0
         order by modify_date ASC
     </select>
 
 
-    <!--    用户的搜索导航页，初始化详情数据查询  -->
+    <!--    管理员的搜索导航页，初始化详情数据查询  owner_user_id = 0 表示未被领取-->
     <select id="selectPatentRootUser" resultType="com.suixingpay.pojo.PatentInfo">
         select
         <include refid="Base_Column_List"/>
@@ -237,7 +236,7 @@
 
 
     <!--    动态 SQL ：管理员的条件模糊搜索  -->
-    <select id="selectPatentNormalUserCondition" resultType="com.suixingpay.pojo.PatentInfo">
+    <select id="selectPatentRootUserCondition" resultType="com.suixingpay.pojo.PatentInfo">
         select
         <include refid="Base_Column_List"/>
         from patent_info
@@ -300,8 +299,8 @@
     </select>
 
 
-    <!--    动态 SQL ：用户的条件模糊搜索  -->
-    <select id="selectPatentRootUserCondition" resultType="com.suixingpay.pojo.PatentInfo">
+    <!--    动态 SQL ：普通用户的条件模糊搜索  -->
+    <select id="selectPatentNormalUserCondition" resultType="com.suixingpay.pojo.PatentInfo">
         select
         <include refid="Base_Column_List"/>
         from patent_info
@@ -357,9 +356,27 @@
         <if test="currentProcess != null and currentProcess !=''">
             and current_process = #{currentProcess,jdbcType=VARCHAR}
         </if>
-        and owner_user_id = #{ownerUserId,jdbcType=INTEGER}
-        or owner_user_id = 0
+        and (owner_user_id = #{ownerUserId,jdbcType=INTEGER}
+        or owner_user_id = 0)
         order by modify_date ASC
+    </select>
+
+
+    <!--    动态 SQL ：根据状态集合和指定类型返回指定的集合，动态判断 use_id 是否为空     -->
+    <select id="selectPatentByStatusList" resultType="com.suixingpay.pojo.PatentInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from `patent_info`
+        where 1 = 1
+        <if test="currentStatusList != null">
+            and current_status in
+            <foreach collection="currentStatusList" item="statusNum" open="(" close=")" separator=",">
+                #{statusNum}
+            </foreach>
+        </if>
+        <if test="userId != null">
+            and owner_user_id = #{userId}
+        </if>
     </select>
 
 
