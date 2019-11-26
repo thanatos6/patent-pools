@@ -115,17 +115,12 @@
     from log
   </select>
 
-<!--  <select id="selectById" parameterType="Integer" resultMap="BaseResultMap">-->
-<!--    select-->
-<!--    <include refid="Base_Column_List" />-->
-<!--    from log-->
-<!--    where patent_info_id = #{patentInfoId,jdbcType=INTEGER}-->
-<!--  </select>-->
-
   <select id="selectLogById" parameterType="Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from log
-    where id = #{id,jdbcType=INTEGER}
+    where patent_info_id = #{id,jdbcType=INTEGER}
   </select>
+
+
 </mapper>
