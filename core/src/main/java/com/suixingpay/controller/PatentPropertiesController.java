@@ -117,7 +117,7 @@ public class PatentPropertiesController {
             list.setPatentId(1);
             list.setPropertiesTitle("make Laugh");
             list.setCode("hahahahha");
-            list.setStatus(2);
+            list.setCurrentStatus(2);
             list.setApplyDate("2019-11-21 11:11:11");
             list.setCodingPerson("王伟");
             list.setStatusName("待审核");
@@ -125,5 +125,15 @@ public class PatentPropertiesController {
             result.add(list);
         }
         return result;
+    }
+
+    @RequestMapping("/join-patent")
+    @ResponseBody
+    public PageInfo getPropertiesJoinPatent(@RequestParam("name") String name,
+                                            @RequestParam("pageNum") Integer pageNum) {
+        PageHelper.startPage(pageNum, 20);
+        List<PatentPropertiesList> result = patentPropertiesService.searchPropertiesJoinPatent(name);
+        PageInfo page = new PageInfo(result);
+        return page;
     }
 }

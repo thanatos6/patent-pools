@@ -4,17 +4,29 @@ public class PatentPropertiesList {
     private int patentId;
     private String propertiesTitle;
     private String code;
-    private int status;
+
+    public int getCurrentStatus() {
+        return currentStatus;
+    }
+
+    public void setCurrentStatus(int currentStatus) {
+        this.currentStatus = currentStatus;
+    }
+
+    private int currentStatus;
     private String statusName;
     private String applyDate;
     private String person;
     private String codingPerson;
-//    public PatentPropertiesList(Integer patentId, String propertiesTitle, String code, Integer status) {
-//        this.patentId = patentId;
-//        this.propertiesTitle = propertiesTitle;
-//        this.code = code;
-//        this.status = status;
-//    }
+    private String patentTitle;
+
+    public String getPatentTitle() {
+        return patentTitle;
+    }
+
+    public void setPatentTitle(String patentTitle) {
+        this.patentTitle = patentTitle;
+    }
 
     public int getPatentId() {
         return patentId;
@@ -38,14 +50,6 @@ public class PatentPropertiesList {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public String getStatusName() {

@@ -1,6 +1,7 @@
 package com.suixingpay.service;
 
 import com.github.pagehelper.PageHelper;
+import com.suixingpay.pojo.PatentPropertiesList;
 import org.springframework.boot.builder.ParentContextCloserApplicationListener;
 import org.springframework.stereotype.Service;
 import com.suixingpay.mapper.PatentPropertiesMapper;
@@ -28,6 +29,7 @@ public class PatentPropertiesServiceImpl implements PatentPropertiesService {
         patentPropertiesMapper.insertPatentProperty(patentProperties);
     }
 
+    @Override
     public void removePatentProperties(PatentProperties patentProperties) {
         patentPropertiesMapper.deletePatentProperty(patentProperties);
     }
@@ -56,5 +58,11 @@ public class PatentPropertiesServiceImpl implements PatentPropertiesService {
     public List<PatentProperties> searchPatentPropertiesByPatentId(int patentId) {
         List<PatentProperties> patentPropertiesByPatentId = patentPropertiesMapper.selectPatentPropertiesByPatentId(patentId);
         return patentPropertiesByPatentId;
+    }
+
+    @Override
+    public List<PatentPropertiesList> searchPropertiesJoinPatent(String name) {
+        List<PatentPropertiesList> propertiesJoinPatent = patentPropertiesMapper.selectPropertiesJoinPatent(name);
+        return propertiesJoinPatent;
     }
 }
