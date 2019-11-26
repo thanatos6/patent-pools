@@ -1,7 +1,11 @@
 package com.suixingpay.service;
 
+import com.suixingpay.controller.FileController;
 import com.suixingpay.mapper.FileMapper;
 import com.suixingpay.pojo.Files;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,17 +17,22 @@ import java.util.*;
 
 /**
  * @author duansiyu
+ *
  */
 @Service
+@Slf4j
 public class FileServiceImpl implements FileService {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileServiceImpl.class);
     @Autowired
     FileMapper fileMapper;
 
     @Override
-    public String insert(MultipartFile file,int filePatentId){
+    public Map<String,Object> insert(MultipartFile file,int filePatentId){
+        Map<String,Object> map =new HashMap<>();
         if (file.isEmpty()) {
-            return "{\"result\": \"上传失败，请选择文件\"}";
+            LOGGER.info("上传失败，请选择文件");
+            map.put("result","上传失败，请选择文件");
+            return map;
         }
         //文件名
         String fileName = file.getOriginalFilename();
@@ -33,24 +42,26 @@ public class FileServiceImpl implements FileService {
         File filed = new File(filePath + uuid + fileName );
         try {
             file.transferTo(filed);
+            LOGGER.info("上传成功");
             //上传到数据库中
             Files files = new Files();
             files.setFileCreateTime(new Date());
             files.setFileName(fileName);
             files.setFilePatentId(filePatentId);
             files.setFilePath(filePath + uuid);
+            LOGGER.info(files.getFilePath());
             files.setFileStatus(1);
-            fileMapper.insert(files); ;
-            return "{\"result\": \"上传成功\"}";
+            fileMapper.insert(files);
+            map.put("result","上传成功");
         } catch (IOException e) {
             System.out.println(e.toString());
         }
-        return "{\"result\": \"上传失败\"}";
+        return map;
         }
 
     @Override
-    public void update(int fileId) {
-        fileMapper.update(fileId);
+    public int update(int fileId) {
+       return fileMapper.update(fileId);
     }
 
     @Override
@@ -58,10 +69,10 @@ public class FileServiceImpl implements FileService {
          Map<String, Object> map =new HashMap<>(0);
          List<Files> files1 =fileMapper.selectById(filePatentId);
             if (files1.size() ==0){
-                 map.put("status","500");
+                 map.put("status","0");
                  map.put("files1",null);
               }
-                 map.put("status","200");
+                 map.put("status","1");
                  map.put("files1",files1);
                    return map;
     }
@@ -95,6 +106,7 @@ public class FileServiceImpl implements FileService {
                 byte[] buffer = new byte[1024];
                 FileInputStream fis = null;
                 BufferedInputStream bis = null;
+
                 try {
                     //io流输入
                     fis = new FileInputStream(file);
