@@ -1,6 +1,5 @@
 package com.suixingpay.service;
 
-import com.suixingpay.controller.FileController;
 import com.suixingpay.mapper.FileMapper;
 import com.suixingpay.pojo.Files;
 import lombok.extern.slf4j.Slf4j;
