@@ -24,13 +24,16 @@ public class StatusCodeController {
 
     //根据角色码查找有权限的待办
     @RequestMapping(value = "/wait", method = RequestMethod.POST)
-    public List<StatusCode> wait(HttpServletRequest request, HttpSession session) {
+    public String wait(HttpSession session) {
+        //(User)session.getAttribute("user");
+        String list1= statusCodeService.selectCodeByRole(0);
 
-        String patentID = request.getParameter("id");
-        int pid = Integer.parseInt(patentID);
-
-        return statusCodeService.selectCodeByRole(pid);
+        return list1;
     }
+
+
+
+
 
     //管理员点击同意按钮，改变专利当前状态
     @RequestMapping(value = "/agree", method = RequestMethod.POST)

@@ -90,8 +90,23 @@ public class StatusCodeServiceImpl implements StatusCodeService {
     }
 
     @Override
-    public List<StatusCode> selectCodeByRole(int role) {
+    public String selectCodeByRole(int role) {
+
+        String sqlWhere=" ";
+        StringBuffer sb = new StringBuffer();
         List<StatusCode> statusCode = statusCodeMapper.selectCodeByRole(role);
-        return statusCode;
+        for(int i=0;i<statusCode.size();i++){
+
+            sb.append(statusCode.get(i).getProcessCode() );
+
+            if(i != statusCode.size() -1){
+
+                sb.append(",");
+            }
+
+        }
+        sqlWhere+=" ("+sb.toString()+")";
+        System.out.println("list1:"+sqlWhere);
+        return sqlWhere;
     }
 }

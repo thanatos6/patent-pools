@@ -27,5 +27,5 @@ public interface StatusCodeService {
     boolean updateStatusFinish(int patentId);
 
     //根据角色码查找有权限的待办
-    List<StatusCode> selectCodeByRole(int role);
+    String selectCodeByRole(int role);
 }
