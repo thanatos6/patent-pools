@@ -9,8 +9,8 @@ import java.util.Map;
  * @author duansiyu
  */
 public interface FileService {
-    String insert(MultipartFile data,int filePatentId);
-    void  update (int fileId);
+    Map<String,Object> insert(MultipartFile data,int filePatentId);
+    int  update (int fileId);
     Map<String, Object> selectById (int filePatentId);
     Files selectPathByFileId(int fileId, HttpServletResponse response);
 }

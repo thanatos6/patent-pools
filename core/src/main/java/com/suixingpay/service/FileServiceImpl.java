@@ -50,6 +50,7 @@ public class FileServiceImpl implements FileService {
             files.setFilePatentId(filePatentId);
             files.setFilePath(filePath + uuid);
             LOGGER.info(files.getFilePath());
+            LOGGER.info(files.getFileName());
             files.setFileStatus(1);
             fileMapper.insert(files);
             map.put("result","上传成功");
@@ -74,6 +75,7 @@ public class FileServiceImpl implements FileService {
               }
                  map.put("status","1");
                  map.put("files1",files1);
+                 LOGGER.info("查询成功");
                    return map;
     }
 
@@ -82,12 +84,14 @@ public class FileServiceImpl implements FileService {
         //获取文件
         Files files =fileMapper.selectPathByFileId(fileId);
         String fileName =files.getFileName();
+        LOGGER.info(fileName);
         /*获取文件地址
         地址格式为：
         正规路径加UUID
         例：D://test/419dfa74-f1a2-4694-87f8-c5616b8673c3hello.txt
          */
         String filePath = files.getFilePath();
+        LOGGER.info(filePath);
         if (fileName != null) {
             //设置文件路径
             File file = new File(filePath+fileName);
@@ -120,10 +124,10 @@ public class FileServiceImpl implements FileService {
                         os.flush();
                     }
                     //刷新，否则写入的时候写不全
-                    System.out.println("下载成功");
+                   LOGGER.info("下载成功");
                 }
                 catch (Exception e) {
-                    System.out.println("下载失败");
+                    LOGGER.info("下载失败");
                 }
                 //关流
                 finally {
