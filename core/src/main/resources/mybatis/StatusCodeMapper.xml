@@ -6,6 +6,17 @@
         <result column="role" property="role" jdbcType="INTEGER"/>
         <result column="process_code" property="processCode" jdbcType="INTEGER"/>
     </resultMap>
+    <resultMap id="ManageMap" type="com.suixingpay.pojo.PatentInfo">
+        <id column="id" property="id" jdbcType="INTEGER"/><!--专利的id-->
+        <result column="case_number" property="caseNumber" jdbcType="INTEGER"/><!--专利的案件文号-->
+        <result column="apply_number" property="applyNumber" jdbcType="INTEGER"/><!--专利的申请号-->
+        <result column="apply_date" property="applyDate" jdbcType="INTEGER"/><!--专利的申请日-->
+        <result column="apply_man_chs" property="applyManChs" jdbcType="INTEGER"/><!--专利的申请人的中文名称-->
+        <result column="invention_chs" property="inventionChs" jdbcType="INTEGER"/><!--专利的中文发明名称-->
+        <result column="current_status" property="currentStatus" jdbcType="INTEGER"/><!--当前专利所在的流程状态-->
+        <result column="owner_user_id" property="ownerUserId" jdbcType="INTEGER"/><!--认领该专利的用户的id-->
+
+    </resultMap>
     <!-- 用于页面三类管理员审批通过驳回，根据专利id修改状态码
      1.当一审通过1变2，待认领
      当一审不通过1变11，一审不通过
@@ -52,9 +63,12 @@
             current_status = 5
         where `id` = #{id,jdbcType=INTEGER}
     </update>
+    <!--根据当前登录人role,判断状态表的list-->
     <select id="selectCodeByRole" parameterType="int" resultMap="RoleMap">
         SELECT process_code
         FROM patent_process
         WHERE role = #{role,jdbcType=INTEGER}
     </select>
+
+
 </mapper>

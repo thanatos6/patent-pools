@@ -48,10 +48,18 @@ subprojects {
 
     dependencies {
         compileOnly('org.springframework.boot:spring-boot-configuration-processor')
-        compileOnly('org.projectlombok:lombok')
+        compile('org.projectlombok:lombok')
         testCompile('org.projectlombok:lombok')
         annotationProcessor('org.projectlombok:lombok')
         testCompile "org.springframework.boot:spring-boot-starter-test"
         testCompile "org.springframework.boot:spring-boot-test-autoconfigure"
+
+        compile group: 'org.slf4j', name: 'slf4j-api'
+
+        compile group: 'org.springframework', name: 'spring-aop'
+
+        compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+
+        compile group: 'com.alibaba', name: 'fastjson', version: '1.2.58'
     }
 }
