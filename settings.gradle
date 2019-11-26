@@ -1,4 +1,3 @@
 rootProject.name = 'patent-pool-3th'
 include 'core'
-include 'patent-me'
 

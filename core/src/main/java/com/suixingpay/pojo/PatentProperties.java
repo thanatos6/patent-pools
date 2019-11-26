@@ -1,14 +1,16 @@
 package com.suixingpay.pojo;
 
+import java.sql.Timestamp;
+
 public class PatentProperties {
     private int id;
     private int patentId;
     private String indicatorName;
-    private String createDate;
-    private String modifyDate;
+    private Timestamp createDate;
+    private Timestamp modifyDate;
     private int isDelete;
 
-    public String getModifyDate() {
+    public Timestamp getModifyDate() {
         return modifyDate;
     }
 
@@ -20,15 +22,15 @@ public class PatentProperties {
         this.isDelete = isDelete;
     }
 
-    public void setModifyDate(String modifyDate) {
+    public void setModifyDate(Timestamp modifyDate) {
         this.modifyDate = modifyDate;
     }
 
-    public String getCreateDate() {
+    public Timestamp getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
     }
 

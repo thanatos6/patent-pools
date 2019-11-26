@@ -1,7 +1,7 @@
 package com.suixingpay.mapper;
 
 import com.suixingpay.pojo.PatentProperties;
-// import com.suixingpay.pojo.PatentPropertiesList;
+import com.suixingpay.pojo.PatentPropertiesList;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -17,5 +17,7 @@ public interface PatentPropertiesMapper {
 
     void deletePatentProperty(PatentProperties patentProperties);
 
-    // List<PatentPropertiesList> selectPatentByPropertiesName(PatentPropertiesList patentPropertiesList)
+    List<PatentProperties> selectPatentPropertiesByPatentId(int id);
+
+    List<PatentPropertiesList> selectPropertiesJoinPatent(String indicatorName);
 }

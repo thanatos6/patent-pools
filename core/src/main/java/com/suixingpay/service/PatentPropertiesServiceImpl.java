@@ -1,5 +1,7 @@
 package com.suixingpay.service;
 
+import com.github.pagehelper.PageHelper;
+import com.suixingpay.pojo.PatentPropertiesList;
 import org.springframework.boot.builder.ParentContextCloserApplicationListener;
 import org.springframework.stereotype.Service;
 import com.suixingpay.mapper.PatentPropertiesMapper;
@@ -8,6 +10,9 @@ import com.suixingpay.pojo.PatentProperties;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * @author kongjian
+ */
 @Service
 public class PatentPropertiesServiceImpl implements PatentPropertiesService {
 
@@ -24,12 +29,14 @@ public class PatentPropertiesServiceImpl implements PatentPropertiesService {
         patentPropertiesMapper.insertPatentProperty(patentProperties);
     }
 
+    @Override
     public void removePatentProperties(PatentProperties patentProperties) {
         patentPropertiesMapper.deletePatentProperty(patentProperties);
     }
 
     @Override
     public List<PatentProperties> searchPatentPropertiesByName(String name) {
+        PageHelper.startPage(1,1);
         List<PatentProperties> patentPropertiesLikeName = patentPropertiesMapper.selectPatentPropertiesByName(name);
         return patentPropertiesLikeName;
 
@@ -45,5 +52,17 @@ public class PatentPropertiesServiceImpl implements PatentPropertiesService {
 //            result.add(list);
 //        }
 //        return result;
+    }
+
+    @Override
+    public List<PatentProperties> searchPatentPropertiesByPatentId(int patentId) {
+        List<PatentProperties> patentPropertiesByPatentId = patentPropertiesMapper.selectPatentPropertiesByPatentId(patentId);
+        return patentPropertiesByPatentId;
+    }
+
+    @Override
+    public List<PatentPropertiesList> searchPropertiesJoinPatent(String name) {
+        List<PatentPropertiesList> propertiesJoinPatent = patentPropertiesMapper.selectPropertiesJoinPatent(name);
+        return propertiesJoinPatent;
     }
 }

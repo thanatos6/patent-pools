@@ -2,13 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.suixingpay.mapper.PatentPropertiesMapper">
 
-
     <resultMap id="BaseResultMap" type="com.suixingpay.pojo.PatentProperties">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="patent_id" jdbcType="INTEGER" property="patentId"/>
         <result column="indicator_name" jdbcType="VARCHAR" property="indicatorName"/>
     </resultMap>
 
+    <resultMap id="JoinResultMap" type="com.suixingpay.pojo.PatentPropertiesList">
+        <result column="indicator_name" jdbcType="VARCHAR" property="propertiesTitle" />
+        <result column="patent_id" jdbcType="INTEGER" property="patentId" />
+        <result column="case_number" jdbcType="VARCHAR" property="code" />
+        <result column="current_status" jdbcType="INTEGER" property="currentStatus" />
+        <result column="apply_date" jdbcType="VARCHAR" property="applyDate" />
+        <result column="invention_chs" jdbcType="VARCHAR" property="patentTitle" />
+        <result column="invent_man_chs" jdbcType="VARCHAR" property="person" />
+        <result column="owner_user_id" jdbcType="INTEGER" property="codingPerson" />
+    </resultMap>
 
     <sql id="Base_Column_List">
         id, patent_id, indicator_name, create_date, modify_date, is_delete
@@ -28,6 +37,13 @@
         where indicator_name like concat('%', #{indicatorName,jdbcType=VARCHAR}, '%') AND is_delete=0
     </select>
 
+    <select id="selectPatentPropertiesByPatentId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from patent_properties
+        where patent_id = #{patentId, jdbcType=INTEGER}
+    </select>
+
     <!--<insert id="insertPatentProperty" parameterType="java.lang.String">
         insert into `patent_properties`
             <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -43,7 +59,7 @@
     </insert>-->
 
     <insert id="insertPatentProperty" parameterType="com.suixingpay.pojo.PatentProperties" useGeneratedKeys="true" keyColumn="id">
-        insert into patent_properties (patent_id, indicator_name) values (#{patentId:INTEGER}, #{indicatorName:VARCHAR})
+        insert into patent_properties (patent_id, indicator_name, create_date, modify_date) values (#{patentId:INTEGER}, #{indicatorName:VARCHAR}, #{createDate:TIMESTAMP}, #{modifyDate:TIMESTAMP})
     </insert>
 
     <update id="deletePatentProperty" parameterType="com.suixingpay.pojo.PatentProperties">
@@ -55,7 +71,8 @@
     </update>
 
     <select id="selectPatentByPropertiesName" parameterType="com.suixingpay.pojo.PatentPropertiesList">
-        select pp.indicator_name, pp.patent_id, p.id, p.case_number, p.status, p.apply_date,p.invent_man_chs,p.owner_user_id
+        别名可以在上面的resultMap定义
+        select pp.indicator_name as properties_title, pp.patent_id, p.id, p.case_number, p.status, p.apply_date,p.invent_man_chs,p.owner_user_id
         from patent_properties as pp left join patent_info as p on pp.patent_id = p.id
         where 1=1
         <if test="indicatorName != null and indicatorName != ''">
@@ -70,5 +87,12 @@
         <if test="status != null and status != ''">
             and status = #{status,jdbcType=INTEGER}
         </if>
+    </select>
+
+    <select id="selectPropertiesJoinPatent" resultMap="JoinResultMap">
+        select pp.indicator_name, pp.patent_id, p.id, p.case_number, p.current_status, p.apply_date,
+        p.invention_chs, p.invent_man_chs, p.owner_user_id
+        from patent_properties as pp left join patent_info as p on pp.patent_id = p.id
+        where pp.indicator_name like concat('%', #{indicatorName,jdbcType=VARCHAR}, '%') AND p.is_delete=0
     </select>
 </mapper>
