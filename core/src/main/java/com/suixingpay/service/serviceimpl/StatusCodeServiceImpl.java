@@ -1,4 +1,4 @@
-package com.suixingpay.service.serviceImpl;
+package com.suixingpay.service.serviceimpl;
 
 import com.suixingpay.mapper.StatusCodeMapper;
 import com.suixingpay.pojo.PatentInfo;
@@ -7,7 +7,6 @@ import com.suixingpay.service.StatusCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -18,36 +17,36 @@ import java.util.List;
 @Service
 public class StatusCodeServiceImpl implements StatusCodeService {
     @Autowired
-    StatusCodeMapper statusCodeMapper;
+    private StatusCodeMapper statusCodeMapper;
 
     //审批通过
     @Override
-    public boolean updateStatusPass(int patentID) {
-
-        boolean result = false;
+    public String updateStatusPass(int patentID) {
+        String url = "";
         try {
             statusCodeMapper.updateStatusPass(patentID);
-            result = true;
+            url = "200";
         } catch (Exception e) {
+            url = "失败";
             e.printStackTrace();
         }
-        return result;
+        return url;
     }
 
     //审批驳回
     @Override
-    public boolean updateStatusReject(int patentID) {
-
-        boolean result = false;
+    public String updateStatusReject(int patentID) {
+        String url = "";
         try {
             statusCodeMapper.updateStatusReject(patentID);
-            result = true;
+            url = "200";
 
         } catch (Exception e) {
+            url = "失败";
             e.printStackTrace();
         }
 
-        return result;
+        return url;
     }
 
     //用于页面撰写人的待办事件的状态码转化
@@ -66,15 +65,16 @@ public class StatusCodeServiceImpl implements StatusCodeService {
 
     //点击认领
     @Override
-    public boolean updateStatusClaim(PatentInfo patentInfo) {
-        boolean result = false;
+    public String updateStatusClaim(PatentInfo patentInfo) {
+        String url = "";
         try {
             statusCodeMapper.updateStatusClaim(patentInfo);
-            result = true;
+            url = "200";
         } catch (Exception e) {
+            url = "失败";
             e.printStackTrace();
         }
-        return result;
+        return url;
     }
 
     @Override
@@ -97,13 +97,10 @@ public class StatusCodeServiceImpl implements StatusCodeService {
         List<StatusCode> statusCode = statusCodeMapper.selectCodeByRole(role);
         //List<Integer> List1 = new List<Integer>
         for (int i = 0; i < statusCode.size(); i++) {
-
-           sb.append(statusCode.get(i).getProcessCode());
+            sb.append(statusCode.get(i).getProcessCode());
         }
 
         return statusCode;
     }
-//    public List<PatentInfo> dynamicForeachTest(List<Integer> ids){
-//        return statusCodeMapper.dynamicForeachTest(ids);
-//    }
+
 }

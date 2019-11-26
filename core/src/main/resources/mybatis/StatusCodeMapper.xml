@@ -69,24 +69,6 @@
         FROM patent_process
         WHERE role = #{role,jdbcType=INTEGER}
     </select>
-    <!--<select id="selectCodeByRole" parameterType="int" resultMap="RoleMap">-->
-    <!--SELECT process_code-->
-    <!--FROM patent_process-->
-    <!--WHERE role = #{role,jdbcType=INTEGER}-->
-    <!--</select>-->
-    <!--根据状态表权限的list,查找待办事项的list返回给前台-->
-    <select id="dynamicForeachTest" resultMap="ManageMap">
-        SELECT i.id,
-        i.case_number,
-        i.apply_number,
-        i.apply_date,
-        i.apply_man_chs,
-        i.invention_chs,
-        i.current_status,
-        i.owner_user_id
-        FROM patent_info i where i.current_status in
-        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-            #{item,jdbcType = INTEGER}
-        </foreach>
-    </select>
+
+
 </mapper>

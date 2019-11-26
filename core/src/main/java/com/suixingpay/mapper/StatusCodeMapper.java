@@ -3,7 +3,6 @@ package com.suixingpay.mapper;
 import com.suixingpay.pojo.PatentInfo;
 import com.suixingpay.pojo.StatusCode;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -28,6 +27,6 @@ public interface StatusCodeMapper {
 
     //根据角色码查找有权限的待办
     List<StatusCode> selectCodeByRole(int role);
-    public List<PatentInfo> dynamicForeachTest(List<Integer> ids);
+
 }
 
