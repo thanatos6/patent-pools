@@ -87,7 +87,7 @@ public class LogAspect {
 
     }
 
-    @After("pointCutagree()")
+    @After("pointCutAgree()")
     public void after2(JoinPoint joinPoint){
         /*
         从request域中，获取session，通过session获取user对象
