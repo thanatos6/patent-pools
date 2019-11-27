@@ -36,25 +36,25 @@ public class LogAspect {
     /*
     定义切点1，切入点1为com.suixingpay.controller下的所有函数
      */
-    @Pointcut("execution(public * com.suixingpay.controller.*.*(..))")
-    public void pointCut() {
+    @Pointcut("execution(public * com.suixingpay.controller.StatusCodeController.reject(..))")
+    public void pointCutReject() {
     }
 
     /*
     定义切点2，切点2为编辑专利方法
      */
-    @Pointcut("execution(public * com.suixingpay.controller.PatentInfoController.*(..))")
-    public void pointCut1() {
+    @Pointcut("execution(public * com.suixingpay.controller.PatentInfoController.editPatentById(..))")
+    public void pointCutEditPatentById() {
     }
 
 
-    @Pointcut("execution(public * com.suixingpay.controller.StatusCodeController.*(..))")
-    public void pointCut2() {
+    @Pointcut("execution(public * com.suixingpay.controller.StatusCodeController.agree(..))")
+    public void pointCutAgree() {
     }
 
 
 
-    @After("pointCut1()")
+    @After("pointCutEditPatentById()")
     public void after1(JoinPoint joinPoint){
         /*
         从request域中，获取session，通过session获取user对象
@@ -78,8 +78,6 @@ public class LogAspect {
         String username = user.getName();
         if ("editPatentById".equals(joinPoint.getSignature().getName())){
             log.setMessage(username+"修改了专利");
-        }else if ("addNewPatent".equals(joinPoint.getSignature().getName())){
-            log.setMessage(username+"新建了专利，专利ID为"+patentInfo.getId());
         }
         log.setCreateDate(date);
         log.setModifyDate(date);
@@ -89,7 +87,7 @@ public class LogAspect {
 
     }
 
-    @After("pointCut2()")
+    @After("pointCutagree()")
     public void after2(JoinPoint joinPoint){
         /*
         从request域中，获取session，通过session获取user对象
@@ -103,6 +101,7 @@ public class LogAspect {
         使用getArgs()获取切点方法的入参，
          */
         Object[] args = joinPoint.getArgs();
+
         PatentInfo patentInfo = (PatentInfo)args[0];
 
 
@@ -113,10 +112,6 @@ public class LogAspect {
         String username = user.getName();
         if ("agree".equals(joinPoint.getSignature().getName())){
             log.setMessage(username+"同意了ID为"+patentInfo.getId()+"的专利申请");
-        }else if ("reject".equals(joinPoint.getSignature().getName())){
-            log.setMessage(username+"驳回了ID为"+patentInfo.getId()+"的专利申请");
-        }else if ("claim".equals(joinPoint.getSignature().getName())){
-            log.setMessage(username+"认领了ID为"+patentInfo.getId()+"的专利");
         }
 
         log.setCreateDate(date);
@@ -128,6 +123,44 @@ public class LogAspect {
     }
 
 
+    @After("pointCutReject()")
+    public void after(JoinPoint joinPoint){
+
+         /*
+        从request域中，获取session，通过session获取user对象
+         */
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        /*
+        使用getArgs()获取切点方法的入参，
+         */
+        Object[] args = joinPoint.getArgs();
+
+        PatentInfo patentInfo = (PatentInfo)args[0];
 
 
+        Date date=new Date();
+        Log log = new Log();
+        log.setPatentInfoId(patentInfo.getId());
+        log.setUserId(user.getId());
+        String username = user.getName();
+        if ("reject".equals(joinPoint.getSignature().getName())){
+            log.setMessage(username+"驳回了了ID为"+patentInfo.getId()+"的专利申请");
+        }
+
+        log.setCreateDate(date);
+        log.setModifyDate(date);
+        log.setIsDelete((byte)0);
+
+        logMapper.insert(log);
+
+    }
 }
+
+
+
+
+
