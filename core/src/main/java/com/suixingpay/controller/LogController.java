@@ -29,10 +29,12 @@ public class LogController {
     }
 
     @RequestMapping("selectLogById")
-    public Log selectLogById(Integer id){
+    public List<Log> selectLogById(Integer id){
+
         System.out.println(logMapper.selectLogById(id));
 
-        return logMapper.selectLogById(id);
+        List<Log> list = logMapper.selectLogById(id);
+        return list;
     }
 
 //    @RequestMapping("addLog")

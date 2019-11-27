@@ -4,7 +4,7 @@
     <resultMap id="RoleMap" type="com.suixingpay.pojo.StatusCode">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="role" property="role" jdbcType="INTEGER"/>
-        <result column="process_code" property="processCode" jdbcType="INTEGER"/>
+        <result column="process_code" property="processCode" javaType="String" jdbcType="INTEGER"/>
     </resultMap>
     <resultMap id="ManageMap" type="com.suixingpay.pojo.PatentInfo">
         <id column="id" property="id" jdbcType="INTEGER"/><!--专利的id-->
@@ -67,7 +67,7 @@
     <select id="selectCodeByRole" parameterType="int" resultMap="RoleMap">
         SELECT process_code
         FROM patent_process
-        WHERE role = #{role,jdbcType=INTEGER}
+        WHERE role = #{role}
     </select>
 
 
