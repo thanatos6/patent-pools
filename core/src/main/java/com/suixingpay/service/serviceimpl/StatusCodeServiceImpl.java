@@ -68,25 +68,7 @@ public class StatusCodeServiceImpl implements StatusCodeService {
     }
 
 
-    /**
-     * 点击重新编写，根据专利Id号，改变流程状态
-     * 用于页面撰写人的待办事件的状态码转化
-     * 不管是哪次驳回，都要把状态码改为编写中15变4，16变4，编写中
-     *
-     * @param patentID 专利ID号
-     * @return
-     */
-    @Override
-    public boolean updateStatusWriter(int patentID) {
-        boolean result = false;
-        try {
-            statusCodeMapper.updateStatusWriter(patentID);
-            result = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
+
 
 
     /**
@@ -110,19 +92,19 @@ public class StatusCodeServiceImpl implements StatusCodeService {
 
 
     /**
-     * 点击编写完成，根据专利Id号，改变流程状态
+     * 点击编写完成，只有当状态为4编写中,15二审不通过,16提交审批不通过时，才允许走到下一步5待二审，根据专利Id号，改变流程状态
      *
-     * @param patentId 专利ID号
+     * @param patentInfo 专利实体
      * @return
      */
     @Override
-    public boolean updateStatusFinish(int patentId) {
+    public boolean updateStatusFinish(PatentInfo patentInfo) {
+        int code= patentInfo.getCurrentStatus();
+        int patentId= patentInfo.getId();
         boolean result = false;
-        try {
+        if(code==15||code==16||code==4){
             statusCodeMapper.updateStatusFinish(patentId);
             result = true;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return result;
     }
