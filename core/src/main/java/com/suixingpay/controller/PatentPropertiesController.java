@@ -40,12 +40,17 @@ public class PatentPropertiesController {
 
     @RequestMapping("/get-by-patent-id")
     @ResponseBody
-    public PageInfo propertiesByPatentId(@RequestParam("patentId") Integer patentId,
+    public String propertiesByPatentId(@RequestParam("patentId") Integer patentId,
                                          @RequestParam("pageNum") Integer pageNum) {
         PageHelper.startPage(pageNum,20);
         List<PatentProperties> patentPropertiesByPatentId = patentPropertiesService.searchPatentPropertiesByPatentId(patentId);
         //用PageInfo对结果进行包装
         PageInfo page = new PageInfo(patentPropertiesByPatentId);
+        Map<String, Object> mapResult = new HashMap<>();
+        mapResult.put("code", 0);
+        mapResult.put("result", page);
+        String text = JSON.toJSONString(mapResult);
+        return text;
 //        //测试PageInfo全部属性
 //        //PageInfo包含了非常全面的分页属性
 //        assertEquals(1, page.getPageNum());
@@ -60,7 +65,7 @@ public class PatentPropertiesController {
 //        assertEquals(false, page.isLastPage());
 //        assertEquals(false, page.isHasPreviousPage());
 //        assertEquals(true, page.isHasNextPage());
-        return page;
+//        return page;
     }
 
     @RequestMapping("/patent-by-properties-name")
@@ -129,11 +134,18 @@ public class PatentPropertiesController {
 
     @RequestMapping("/join-patent")
     @ResponseBody
-    public PageInfo getPropertiesJoinPatent(@RequestParam("name") String name,
+    public String getPropertiesJoinPatent(@RequestParam("name") String name,
                                             @RequestParam("pageNum") Integer pageNum) {
         PageHelper.startPage(pageNum, 20);
         List<PatentPropertiesList> result = patentPropertiesService.searchPropertiesJoinPatent(name);
         PageInfo page = new PageInfo(result);
-        return page;
+
+//        String pageJson = JSON.toJSON(page).toString();
+        Map<String, Object> mapResult = new HashMap<>();
+        mapResult.put("code", 0);
+        mapResult.put("result", page);
+        String text = JSON.toJSONString(mapResult);
+        return text;
+        // return page;
     }
 }
