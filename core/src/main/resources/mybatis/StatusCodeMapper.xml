@@ -42,12 +42,12 @@
     <!-- 用于页面撰写人的待办事件的状态码转化
       不管是哪次驳回，都要把状态码改为编写中15变4，16变4，编写中
     -->
-    <update id="updateStatusWriter" parameterType="int">
-        update `patent_info`
-        set
-            current_status = 4
-        where `id` = #{id,jdbcType=INTEGER}
-    </update>
+    <!--<update id="updateStatusWriter" parameterType="int">-->
+        <!--update `patent_info`-->
+        <!--set-->
+            <!--current_status = 4-->
+        <!--where `id` = #{id,jdbcType=INTEGER}-->
+    <!--</update>-->
     <!-- 当认领一瞬间，状态码1变4，状态变为编写中，-->
     <update id="updateStatusClaim" parameterType="com.suixingpay.pojo.PatentInfo">
         update `patent_info`
@@ -56,7 +56,7 @@
             owner_user_id=#{ownerUserId,jdbcType=INTEGER}
         where `id` = #{id,jdbcType=INTEGER}
     </update>
-    <!-- 编写完4变5 ，待二审-->
+    <!-- 编写完15,16，4变5 ，待二审-->
     <update id="updateStatusFinish" parameterType="int">
         update `patent_info`
         set

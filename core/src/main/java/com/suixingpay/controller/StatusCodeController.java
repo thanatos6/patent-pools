@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
  */
 @RestController
 @RequestMapping("/approval")
-public class StatusCodeController {
+public class  StatusCodeController {
     @Autowired
     private StatusCodeService statusCodeService;
     @Autowired
@@ -62,10 +62,5 @@ public class StatusCodeController {
         return statusCodeService.updateStatusClaim(patentInfo);
     }
 
-    //1.用于页面撰写人的待办事件的状态码转化
-    @RequestMapping(value = "/rewrite", method = RequestMethod.POST)
-    public boolean rewrite(@RequestBody PatentInfo patentInfo) {
-        int pid = patentInfo.getId();
-        return statusCodeService.updateStatusWriter(pid);
-    }
+
 }
