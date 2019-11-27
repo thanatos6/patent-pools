@@ -10,17 +10,12 @@ import java.util.List;
 @Component
 public interface LogMapper {
 
-    int deleteByPrimaryKey(Integer id);
 
     int insert(Log record);
 
-    int insertSelective(Log record);
 
     List<Log> selectLogById(Integer id);
 
-    int updateByPrimaryKeySelective(Log record);
-
-    int updateByPrimaryKey(Log record);
 
     List<Log> selectAllLog();
 }

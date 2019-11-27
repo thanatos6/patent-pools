@@ -75,7 +75,7 @@ public class PatentInfoController {
     }
 
     @RequestMapping("/editPatent")
-    public String editPatentById(@RequestBody PatentInfo patentInfo) {
+    public String editPatentById(PatentInfo patentInfo) {
 
         // TODO: 2019/11/26 前端测试通过，跟测试对接口
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());

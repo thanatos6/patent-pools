@@ -3,6 +3,7 @@ package com.suixingpay.pojo;
 import java.util.Date;
 
 public class Log {
+
     private Integer id;
 
     private Integer userId;

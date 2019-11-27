@@ -21,6 +21,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Date;
 
+
+/**
+ * @author hyx
+ * 切面实现日志功能
+ */
 @Aspect
 @Component
 public class LogAspect {
@@ -28,107 +33,100 @@ public class LogAspect {
     @Autowired
     LogMapper logMapper;
 
-
-
-    //    /*
-//    定义切点，切入点为com.suixingpay.controller下的所有函数
-//     */
+    /*
+    定义切点1，切入点1为com.suixingpay.controller下的所有函数
+     */
     @Pointcut("execution(public * com.suixingpay.controller.*.*(..))")
-    public void Pointcut() {
-
+    public void pointCut() {
     }
 
+    /*
+    定义切点2，切点2为编辑专利方法
+     */
     @Pointcut("execution(public * com.suixingpay.controller.PatentInfoController.*(..))")
-    public void Pointcut1() {
-
+    public void pointCut1() {
     }
 
-    @After("Pointcut1()")
-    public void After(JoinPoint joinPoint){
 
+    @Pointcut("execution(public * com.suixingpay.controller.StatusCodeController.*(..))")
+    public void pointCut2() {
+    }
+
+
+
+    @After("pointCut1()")
+    public void after1(JoinPoint joinPoint){
+        /*
+        从request域中，获取session，通过session获取user对象
+         */
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-
         HttpServletRequest request = attributes.getRequest();
-
-        //获取当前登陆的用户名和时间
         HttpSession session = request.getSession();
-
         User user = (User) session.getAttribute("user");
 
-
-
+        /*
+        使用getArgs()获取切点方法的入参，
+         */
         Object[] args = joinPoint.getArgs();
-        for (int i = 0; i < args.length; i++) {
-            System.out.println("第" + (i+1) + "个参数为:" + args[i]);
-        }
         PatentInfo patentInfo = (PatentInfo)args[0];
+
 
         Date date=new Date();
         Log log = new Log();
-
-
-
-//        log.setUserId(user.getId());
-
         log.setPatentInfoId(patentInfo.getId());
-
         log.setUserId(user.getId());
         String username = user.getName();
-
         if ("editPatentById".equals(joinPoint.getSignature().getName())){
-            log.setMessage(username+"编辑了专利");
+            log.setMessage(username+"修改了专利");
+        }else if ("addNewPatent".equals(joinPoint.getSignature().getName())){
+            log.setMessage(username+"新建了专利，专利ID为"+patentInfo.getId());
         }
         log.setCreateDate(date);
         log.setModifyDate(date);
+        log.setIsDelete((byte)0);
 
         logMapper.insert(log);
 
     }
 
+    @After("pointCut2()")
+    public void after2(JoinPoint joinPoint){
+        /*
+        从request域中，获取session，通过session获取user对象
+         */
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        /*
+        使用getArgs()获取切点方法的入参，
+         */
+        Object[] args = joinPoint.getArgs();
+        PatentInfo patentInfo = (PatentInfo)args[0];
 
 
+        Date date=new Date();
+        Log log = new Log();
+        log.setPatentInfoId(patentInfo.getId());
+        log.setUserId(user.getId());
+        String username = user.getName();
+        if ("agree".equals(joinPoint.getSignature().getName())){
+            log.setMessage(username+"同意了ID为"+patentInfo.getId()+"的专利申请");
+        }else if ("reject".equals(joinPoint.getSignature().getName())){
+            log.setMessage(username+"驳回了ID为"+patentInfo.getId()+"的专利申请");
+        }else if ("claim".equals(joinPoint.getSignature().getName())){
+            log.setMessage(username+"认领了ID为"+patentInfo.getId()+"的专利");
+        }
 
+        log.setCreateDate(date);
+        log.setModifyDate(date);
+        log.setIsDelete((byte)0);
 
+        logMapper.insert(log);
 
+    }
 
-
-
-
-
-//        System.out.println("Before执行了");
-//        System.out.println("目标方法名为:" + joinPoint.getSignature().getName());
-//        System.out.println("目标方法所属类的简单类名:" +  joinPoint.getSignature().getDeclaringType().getSimpleName());
-//        System.out.println("目标方法所属类的类名:" + joinPoint.getSignature().getDeclaringTypeName());
-//        System.out.println("目标方法声明类型:" + Modifier.toString(joinPoint.getSignature().getModifiers()));
-//        System.out.println("=================="+joinPoint.getSignature());
-//
-
-//        System.out.println("被代理的对象:" + joinPoint.getTarget());
-//        System.out.println("代理对象自己:" + joinPoint.getThis());
-
-        //获取传入目标方法的参数
-
-
-
-//
-//        log.setUserId(1002);
-//        } else if ("addLog".equals(joinPoint.getSignature().getName())){
-//            log.setMessage("增加了日志");
-//        } else if ("addLog".equals(joinPoint.getSignature().getName())){
-//
-//        } else if ("addLog".equals(joinPoint.getSignature().getName())){
-//
-//        } else if ("addLog".equals(joinPoint.getSignature().getName())){
-//
-//        }
-
-
-//    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-//    HttpServletRequest request = attributes.getRequest();
-//
-//    HttpSession httpSession = request.getSession();
-//
-//    User user = (User)httpSession.getAttribute("user");
 
 
 
