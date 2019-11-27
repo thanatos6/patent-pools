@@ -38,7 +38,7 @@ public class LogAspect {
 
     }
 
-    @Pointcut("execution(public * com.suixingpay.controller.PatentInfoController.*(..))")
+    @Pointcut("execution(public * com.suixingpay.controller.PatentInfoController.editPatentById(..))")
     public void Pointcut1() {
 
     }
