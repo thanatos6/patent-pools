@@ -46,8 +46,8 @@ public interface PatentInfoMapper {
      * owner_id 已经存在的排在前面
      * owner_id 没有的排在后面
      *
-     * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
      * @param ownerUserId
+     * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
      */
     List<PatentInfo> selectPatentNormalUser(@Param("ownerUserId") Integer ownerUserId);
 
@@ -78,6 +78,13 @@ public interface PatentInfoMapper {
      */
     List<PatentInfo> selectPatentRootUserCondition(PatentInfo patentInfo);
 
-    List<PatentInfo> selectPatentByStatusList(@Param("currentStatusList")List<Integer> currentStatusList,
-                                              @Param("userId")Integer userId);
+    /**
+     * 传入指定的状态码集合以及用户 id 来查询该范围内的专利信息记录，这是为张提供的服务 mapper
+     *
+     * @param currentStatusList 传入的状态码集合
+     * @param userId            转入的用户 id
+     * @return 搜索专利的实体集合，如果为空就返回一个空的 LIST
+     */
+    List<PatentInfo> selectPatentByStatusList(@Param("currentStatusList") List<Integer> currentStatusList,
+                                              @Param("userId") Integer userId);
 }
