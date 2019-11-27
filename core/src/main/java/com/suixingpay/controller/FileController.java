@@ -51,14 +51,20 @@ public class FileController {
      * @param fileId
      * @return
      */
-    @PostMapping("/update")
-    public Map<String, Object> update(@RequestParam("fileId") int fileId) {
+    @GetMapping("/update")
+    public Map<String, Object> update(@RequestParam("fileId") Integer fileId) {
         Map<String, Object> map = new HashMap<>();
+        if (null == fileId) {
+            map.put("result", "参数为空");
+            return map;
+        }
         int info = fileService.update(fileId);
-        if (info >= 0) {
+        if (info  > 0) {
             map.put("result", "删除成功");
+            LOGGER.info("删除成功");
         } else {
             map.put("result", "删除失败");
+            LOGGER.info("删除失败");
         }
         return map;
     }
