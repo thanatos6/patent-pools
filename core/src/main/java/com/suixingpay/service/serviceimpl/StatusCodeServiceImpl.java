@@ -3,10 +3,13 @@ package com.suixingpay.service.serviceimpl;
 import com.suixingpay.mapper.StatusCodeMapper;
 import com.suixingpay.pojo.PatentInfo;
 import com.suixingpay.pojo.StatusCode;
+import com.suixingpay.service.PatentInfoService;
 import com.suixingpay.service.StatusCodeService;
+import com.suixingpay.util.ZhuanliUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +21,8 @@ import java.util.List;
 public class StatusCodeServiceImpl implements StatusCodeService {
     @Autowired
     private StatusCodeMapper statusCodeMapper;
+    @Autowired
+    private PatentInfoService patentInfoService;
 
     //审批通过
     @Override
@@ -90,11 +95,33 @@ public class StatusCodeServiceImpl implements StatusCodeService {
     }
 
     @Override
-    public List selectCodeByRole(int role) {
-
+    public String selectCodeByRole(int role, int userId) {
+        List<Integer> list = new ArrayList<Integer>();
         List<StatusCode> statusCode = statusCodeMapper.selectCodeByRole(role);
+        String result = "登陆者无权限！";
+        if (role == 1) {
+            //管理员的待办事项
+            for (int i = 0; i < statusCode.size(); i++) {
+                String sCode = statusCode.get(i).getProcessCode();
+                int nCode = Integer.parseInt(sCode);
+                list.add(nCode);
+            }
+            result = patentInfoService.searchPatentByCurrentStatusList(list, null);
+            return ZhuanliUtil.getJSONString(200,result);
 
-        return statusCode;
+        }
+
+        if (role == 0) {
+            //撰写人的待办事项
+            for (int i = 0; i < statusCode.size(); i++) {
+                String sCode = statusCode.get(i).getProcessCode();
+                int nCode = Integer.parseInt(sCode);
+                list.add(nCode);
+            }
+            result = patentInfoService.searchPatentByCurrentStatusList(list, userId);
+            return ZhuanliUtil.getJSONString(200,result);
+        }
+        return ZhuanliUtil.getJSONString(500,"");
     }
 
 }

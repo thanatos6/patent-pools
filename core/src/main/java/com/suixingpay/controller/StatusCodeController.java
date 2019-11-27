@@ -1,18 +1,14 @@
 package com.suixingpay.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.suixingpay.pojo.PatentInfo;
 import com.suixingpay.service.PatentInfoService;
 import com.suixingpay.service.StatusCodeService;
 import com.suixingpay.service.UserDescriptionService;
+import com.suixingpay.util.ZhuanliUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author zhangleying
@@ -27,8 +23,8 @@ public class StatusCodeController {
     private StatusCodeService statusCodeService;
     @Autowired
     private UserDescriptionService userDescriptionService;
-    @Autowired
-    private PatentInfoService patentInfoService;
+
+
     //根据登陆者角色码查找相应的待办，分为管理员1、撰写人0
     @RequestMapping(value = "/wait", method = RequestMethod.POST)
     public String wait(HttpSession session) {
@@ -36,23 +32,13 @@ public class StatusCodeController {
         int userId = userDescriptionService.userDescription(session).getId();
         int roleId = userDescriptionService.userDescription(session).getStatus();
         System.out.println(roleId);
-        List list1 = statusCodeService.selectCodeByRole(roleId);
-        String result="登陆者无权限！";
-        if (roleId == 1) {
-            //管理员的待办事项
-            result= patentInfoService.searchPatentByCurrentStatusList(list1,null);
-            return result;
-        }
-        if (roleId == 0) {
-            //撰写人的待办事项
-             result= patentInfoService.searchPatentByCurrentStatusList(list1,userId);
-            return result;
-        }
-        return result;
+        String list1 = statusCodeService.selectCodeByRole(roleId, userId);
+        ZhuanliUtil.getJSONString(200,list1);
+        return list1;
     }
 
 
-    //管理员点击同意按钮，改变专利当前状态ok
+    //管理员点击同意按钮，改变专利当前状态，前端测试通过
     @RequestMapping(value = "/agree", method = RequestMethod.POST)
     @ResponseBody
     public String agree(@RequestBody PatentInfo patentInfo) {
@@ -60,7 +46,7 @@ public class StatusCodeController {
         return statusCodeService.updateStatusPass(pid);
     }
 
-    //管理员点击驳回按钮，改变专利当前状态ok
+    //管理员点击驳回按钮，改变专利当前状态，，前端测试通过
     @RequestMapping(value = "/reject", method = RequestMethod.POST)
     @ResponseBody
     public String reject(@RequestBody PatentInfo patentInfo) {
@@ -70,7 +56,7 @@ public class StatusCodeController {
     }
 
 
-    //撰写人点击认领，将状态改为编写中ok
+    //撰写人点击认领，将状态改为编写中，前端测试通过
     @RequestMapping(value = "/claim", method = RequestMethod.POST)
     public String claim(@RequestBody PatentInfo patentInfo, HttpSession session) {
 
