@@ -29,13 +29,6 @@ public interface StatusCodeService {
     String updateStatusReject(int patentID);
 
 
-    /**
-     *  点击重新编写，根据专利Id号，改变流程状态
-     *
-     * @param patentID 专利ID号
-     * @return
-     */
-    boolean updateStatusWriter(int patentID);
 
 
     /**
@@ -50,10 +43,10 @@ public interface StatusCodeService {
     /**
      *  点击编写完成，根据专利Id号，改变流程状态
      *
-     * @param patentId 专利ID号
+     * @param patentInfo 专利实体
      * @return
      */
-    boolean updateStatusFinish(int patentId);
+    boolean updateStatusFinish(PatentInfo patentInfo);
 
 
     /**
