@@ -2,6 +2,7 @@ package com.suixingpay.controller;
 
 import com.suixingpay.service.FileService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ import java.util.*;
 @RequestMapping("/file")
 @Slf4j
 public class FileController {
-    private static final Logger LOGGER = LoggerFactory.getLogger( FileController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
     private FileService fileService;
@@ -32,8 +33,8 @@ public class FileController {
      * @return
      */
     @PostMapping("/upload")
-    public Map<String, Object> upload(@RequestParam("id") int filePatentId, @RequestParam("file") MultipartFile file) {
-        return fileService.insert(file, filePatentId);
+    public Map<String, Object> upload(@RequestParam("id") int filePatentId, @RequestParam("file") MultipartFile file,HttpServletRequest request) {
+        return fileService.insert(file, filePatentId,request);
     }
 
 
@@ -59,12 +60,13 @@ public class FileController {
             return map;
         }
         int info = fileService.update(fileId);
-        if (info  > 0) {
+        if (info >= 1) {
             map.put("result", "删除成功");
             LOGGER.info("删除成功");
         } else {
             map.put("result", "删除失败");
             LOGGER.info("删除失败");
+            return map;
         }
         return map;
     }
@@ -72,12 +74,17 @@ public class FileController {
 
     /**
      * @param fileId
-     * @param response
+     * @param request
      * @throws UnsupportedEncodingException
      */
     @GetMapping("/download")
-    public void selectPathByFileId(@Param("fileId") int fileId, HttpServletResponse response) throws UnsupportedEncodingException {
-        //通过查询方法获取信息
-        fileService.selectPathByFileId(fileId, response);
+    public String selectPathByFileId(@Param("fileId") Integer fileId, HttpServletRequest request) throws UnsupportedEncodingException {
+
+        String info =fileService.selectPathByFileId(fileId, request);
+        if (info==null){
+            return "文件不存在";
+        }else {
+            return info;
+        }
     }
 }
