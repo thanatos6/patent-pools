@@ -1,10 +1,8 @@
 package com.suixingpay.controller;
 
 import com.suixingpay.pojo.PatentInfo;
-import com.suixingpay.service.PatentInfoService;
 import com.suixingpay.service.StatusCodeService;
 import com.suixingpay.service.UserDescriptionService;
-import com.suixingpay.util.ZhuanliUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +31,6 @@ public class StatusCodeController {
         int roleId = userDescriptionService.userDescription(session).getStatus();
         System.out.println(roleId);
         String list1 = statusCodeService.selectCodeByRole(roleId, userId);
-        ZhuanliUtil.getJSONString(200,list1);
         return list1;
     }
 
