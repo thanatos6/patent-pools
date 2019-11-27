@@ -7,6 +7,9 @@ import com.suixingpay.pojo.StatusCode;
 import com.suixingpay.service.PatentInfoService;
 import com.suixingpay.service.StatusCodeService;
 import com.suixingpay.util.ZhuanliUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +22,13 @@ import java.util.List;
  * @date 2019/11/20 22:15
  */
 @Service
+@Slf4j
 public class StatusCodeServiceImpl implements StatusCodeService {
     @Autowired
     private StatusCodeMapper statusCodeMapper;
     @Autowired
     private PatentInfoService patentInfoService;
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatusCodeServiceImpl.class);
 
     /**
      * 审批通过，点击同意，根据专利Id号，点击同意按钮，改变流程状态
@@ -34,15 +38,15 @@ public class StatusCodeServiceImpl implements StatusCodeService {
      */
     @Override
     public String updateStatusPass(int patentID) {
-        String url = "";
+
         try {
             statusCodeMapper.updateStatusPass(patentID);
-            url = "200";
+            return ZhuanliUtil.getJSONString("200");
         } catch (Exception e) {
-            url = "失败";
             e.printStackTrace();
+            return ZhuanliUtil.getJSONString("失败");
         }
-        return url;
+
     }
 
 
@@ -54,21 +58,17 @@ public class StatusCodeServiceImpl implements StatusCodeService {
      */
     @Override
     public String updateStatusReject(int patentID) {
-        String url = "";
+
         try {
             statusCodeMapper.updateStatusReject(patentID);
-            url = "200";
+            return ZhuanliUtil.getJSONString("200");
 
         } catch (Exception e) {
-            url = "失败";
             e.printStackTrace();
+            return ZhuanliUtil.getJSONString("失败");
         }
 
-        return url;
     }
-
-
-
 
 
     /**
@@ -79,15 +79,16 @@ public class StatusCodeServiceImpl implements StatusCodeService {
      */
     @Override
     public String updateStatusClaim(PatentInfo patentInfo) {
-        String url = "";
+
         try {
             statusCodeMapper.updateStatusClaim(patentInfo);
-            url = "200";
+            return ZhuanliUtil.getJSONString("200");
         } catch (Exception e) {
-            url = "失败";
             e.printStackTrace();
+            return ZhuanliUtil.getJSONString("失败");
+
         }
-        return url;
+
     }
 
 
@@ -99,10 +100,11 @@ public class StatusCodeServiceImpl implements StatusCodeService {
      */
     @Override
     public boolean updateStatusFinish(PatentInfo patentInfo) {
-        int code= patentInfo.getCurrentStatus();
-        int patentId= patentInfo.getId();
+        int code = patentInfo.getCurrentStatus();
+        int patentId = patentInfo.getId();
+        LOGGER.info("[接受的参数为{}和{}]", code, patentId);
         boolean result = false;
-        if(code==15||code==16||code==4){
+        if (code == 15 || code == 16 || code == 4) {
             statusCodeMapper.updateStatusFinish(patentId);
             result = true;
         }

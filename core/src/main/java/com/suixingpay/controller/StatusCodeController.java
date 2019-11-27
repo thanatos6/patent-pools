@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
  */
 @RestController
 @RequestMapping("/approval")
-public class  StatusCodeController {
+public class StatusCodeController {
     @Autowired
     private StatusCodeService statusCodeService;
     @Autowired
@@ -29,7 +29,6 @@ public class  StatusCodeController {
 
         int userId = userDescriptionService.userDescription(session).getId();
         int roleId = userDescriptionService.userDescription(session).getStatus();
-        System.out.println(roleId);
         String list1 = statusCodeService.selectCodeByRole(roleId, userId);
         return list1;
     }
