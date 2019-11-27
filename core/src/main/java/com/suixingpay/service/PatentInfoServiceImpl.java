@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.suixingpay.mapper.PatentInfoMapper;
 import com.suixingpay.pojo.PatentInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +29,9 @@ public class PatentInfoServiceImpl implements PatentInfoService {
 
     @Resource
     private PatentInfoMapper patentInfoMapper;
+
+    @Autowired
+    private StatusCodeService statusCodeService;
 
     @Override
     public String createNewPatent(PatentInfo patentInfo) {
@@ -104,6 +108,9 @@ public class PatentInfoServiceImpl implements PatentInfoService {
         } else {
             returnJsonStr = executeUpdatePatent(patentInfo);
         }
+
+        // 更新专利状态
+        statusCodeService.updateStatusFinish(patentInfo);
 
         return returnJsonStr;
     }
