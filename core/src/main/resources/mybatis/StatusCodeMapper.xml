@@ -39,15 +39,7 @@
             current_status = current_status + 10
         where `id` = #{id,jdbcType=INTEGER}
     </update>
-    <!-- 用于页面撰写人的待办事件的状态码转化
-      不管是哪次驳回，都要把状态码改为编写中15变4，16变4，编写中
-    -->
-    <!--<update id="updateStatusWriter" parameterType="int">-->
-        <!--update `patent_info`-->
-        <!--set-->
-            <!--current_status = 4-->
-        <!--where `id` = #{id,jdbcType=INTEGER}-->
-    <!--</update>-->
+
     <!-- 当认领一瞬间，状态码1变4，状态变为编写中，-->
     <update id="updateStatusClaim" parameterType="com.suixingpay.pojo.PatentInfo">
         update `patent_info`
@@ -69,6 +61,20 @@
         FROM patent_process
         WHERE role = #{role}
     </select>
+    <!--根据专利ID号,查找当前专利状态码-->
+    <select id="selectCodeByPid" parameterType="int" resultType="int">
+        SELECT current_status
+        FROM patent_info
+        WHERE id = #{id}
+    </select>
 
-
+    <!-- 用于页面撰写人的待办事件的状态码转化
+     不管是哪次驳回，都要把状态码改为编写中15变4，16变4，编写中
+   -->
+    <!--<update id="updateStatusWriter" parameterType="int">-->
+    <!--update `patent_info`-->
+    <!--set-->
+    <!--current_status = 4-->
+    <!--where `id` = #{id,jdbcType=INTEGER}-->
+    <!--</update>-->
 </mapper>

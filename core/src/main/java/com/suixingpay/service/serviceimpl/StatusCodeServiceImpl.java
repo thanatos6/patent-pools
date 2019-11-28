@@ -40,8 +40,14 @@ public class StatusCodeServiceImpl implements StatusCodeService {
     public String updateStatusPass(int patentID) {
 
         try {
-            statusCodeMapper.updateStatusPass(patentID);
-            return ZhuanliUtil.getJSONString("200");
+            int statusCode = statusCodeMapper.selectCodeByPid(patentID);
+            if (statusCode == 1 || statusCode == 5 || statusCode == 6) {
+                statusCodeMapper.updateStatusPass(patentID);
+                return ZhuanliUtil.getJSONString("200");
+            } else {
+                return ZhuanliUtil.getJSONString("失败");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return ZhuanliUtil.getJSONString("失败");
@@ -60,9 +66,13 @@ public class StatusCodeServiceImpl implements StatusCodeService {
     public String updateStatusReject(int patentID) {
 
         try {
-            statusCodeMapper.updateStatusReject(patentID);
-            return ZhuanliUtil.getJSONString("200");
-
+            int statusCode = statusCodeMapper.selectCodeByPid(patentID);
+            if (statusCode == 1 || statusCode == 5 || statusCode == 6) {
+                statusCodeMapper.updateStatusReject(patentID);
+                return ZhuanliUtil.getJSONString("200");
+            } else {
+                return ZhuanliUtil.getJSONString("失败");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ZhuanliUtil.getJSONString("失败");
@@ -81,8 +91,14 @@ public class StatusCodeServiceImpl implements StatusCodeService {
     public String updateStatusClaim(PatentInfo patentInfo) {
 
         try {
-            statusCodeMapper.updateStatusClaim(patentInfo);
-            return ZhuanliUtil.getJSONString("200");
+            int patentId = patentInfo.getId();
+            int statusCode = statusCodeMapper.selectCodeByPid(patentId);
+            if (statusCode == 4) {
+                return ZhuanliUtil.getJSONString("失败");
+            } else {
+                statusCodeMapper.updateStatusClaim(patentInfo);
+                return ZhuanliUtil.getJSONString("200");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ZhuanliUtil.getJSONString("失败");
@@ -152,5 +168,6 @@ public class StatusCodeServiceImpl implements StatusCodeService {
         }
         return ZhuanliUtil.getJSONString(500, "");
     }
+
 
 }
