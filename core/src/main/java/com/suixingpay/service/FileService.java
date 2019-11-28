@@ -13,5 +13,5 @@ public interface FileService {
     Map<String,Object> insert(MultipartFile data,int filePatentId,HttpServletRequest request);
     int  update (int fileId);
     Map<String, Object> selectById (int filePatentId);
-    String selectPathByFileId(int fileId, HttpServletRequest request);
+    Map<String,Object> selectPathByFileId(int fileId, HttpServletRequest request);
 }

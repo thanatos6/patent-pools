@@ -34,7 +34,7 @@ public class FileController {
      */
     @PostMapping("/upload")
     public Map<String, Object> upload(@RequestParam("id") int filePatentId, @RequestParam("file") MultipartFile file,HttpServletRequest request) {
-        return fileService.insert(file, filePatentId,request);
+        return fileService.insert(file, filePatentId,request );
     }
 
 
@@ -66,7 +66,6 @@ public class FileController {
         } else {
             map.put("result", "删除失败");
             LOGGER.info("删除失败");
-            return map;
         }
         return map;
     }
@@ -78,13 +77,8 @@ public class FileController {
      * @throws UnsupportedEncodingException
      */
     @GetMapping("/download")
-    public String selectPathByFileId(@Param("fileId") Integer fileId, HttpServletRequest request) throws UnsupportedEncodingException {
+    public Map<String,Object> selectPathByFileId(@Param("fileId") Integer fileId, HttpServletRequest request) throws UnsupportedEncodingException {
 
-        String info =fileService.selectPathByFileId(fileId, request);
-        if (info==null){
-            return "文件不存在";
-        }else {
-            return info;
-        }
+        return fileService.selectPathByFileId(fileId, request);
     }
 }

@@ -37,9 +37,8 @@ public class FileServiceImpl implements FileService {
         }
         //文件名
         String fileName = file.getOriginalFilename();
-        //文件路径
+        //获取虚拟文件路径
         String filePath=request.getSession().getServletContext().getRealPath("/");
-      //  String filePath = "D://test/";
         File filed = new File(filePath +  fileName );
         try {
             file.transferTo(filed);
@@ -82,73 +81,20 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String selectPathByFileId(int fileId, HttpServletRequest request) {
+    public Map<String,Object> selectPathByFileId(int fileId, HttpServletRequest request) {
+        Map<String,Object> map =new HashMap<>();
         //获取文件
         Files files =fileMapper.selectPathByFileId(fileId);
         String filePath = files.getFilePath();
-//        if (fileName != null) {
-//            //设置文件路径
-//            File file = new File(filePath+fileName);
-//            // 如果文件名存在，则进行下载
-//            if (file.exists()) {
-//                // 配置
-//                response.setHeader("content-type", "application/octet-stream");
-//                response.setContentType("application/octet-stream");
-//                // 下载文件能正常显示中文
-//                try {
-//                    response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                }
-//                // 文件下载
-//                byte[] buffer = new byte[1024];
-//                FileInputStream fis = null;
-//                BufferedInputStream bis = null;
-//
-//                try {
-//                    //io流输入
-//                    fis = new FileInputStream(file);
-//                    //保证文件的准确性
-//                    bis = new BufferedInputStream(fis);
-//                    //io流输出
-//                    ServletOutputStream os = response.getOutputStream();
-//                    int i = 0;
-//                    while ((i = bis.read(buffer)) != -1) {
-//                        os.write(buffer, 0, i);
-//                        os.flush();
-//                    }
-//                    //刷新，否则写入的时候写不全
-//                   LOGGER.info("下载成功");
-//                }
-//                catch (Exception e) {
-//                    LOGGER.info("下载失败");
-//                }
-//                //关流
-//                finally {
-//                    if (bis != null) {
-//                        try {
-//                            bis.close();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    if (fis != null) {
-//                        try {
-//                            fis.close();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    if (fis != null) {
-//                        try {
-//                            fis.close();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            }
-//        }
-         return filePath;
+        if (filePath==null){
+            map.put("filePath",null);
+            map.put("status",0);
+            LOGGER.info("[下载失败]");
+        }else {
+            map.put("filePath",filePath);
+            map.put("status",1);
+            LOGGER.info("[下载成功,路径为:{}]",filePath);
+        }
+         return map;
     }
 }
