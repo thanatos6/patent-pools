@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hyx
@@ -32,11 +34,12 @@ public class LogController {
     }
 
     @RequestMapping("selectLogById")
-    public List<Log> selectLogById(Integer id){
-
+    public Map<String,Object> selectLogById(Integer id){
+        Map<String, Object> map =new HashMap<>(0);
         List<Log> list = logService.selectLogById(id);
-
-        return list;
+        map.put("list",list);
+        map.put("status",0);
+        return map;
     }
 
 
