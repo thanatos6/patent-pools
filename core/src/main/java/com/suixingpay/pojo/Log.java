@@ -2,6 +2,9 @@ package com.suixingpay.pojo;
 
 import java.util.Date;
 
+/**
+ * @author hyx
+ */
 public class Log {
 
     private Integer id;
