@@ -17,7 +17,7 @@ public interface StatusCodeMapper {
 
     void updateStatusReject(int patentId);
 
-    void updateStatusWriter(int patentId);
+    //void updateStatusWriter(int patentId);
 
     //点击认领
     void updateStatusClaim(PatentInfo patentInfo);
