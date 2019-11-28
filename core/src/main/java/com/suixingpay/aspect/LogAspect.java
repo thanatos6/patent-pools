@@ -81,7 +81,7 @@ public class LogAspect {
         log.setUserId(user.getId());
         String username = user.getName();
         if (EDITPATENTBYID.equals(joinPoint.getSignature().getName())){
-            log.setMessage(username+"修改了专利");
+            log.setMessage(username+"修改了ID为"+patentInfo.getId()+"的专利");
         }
         log.setCreateDate(date);
         log.setModifyDate(date);
