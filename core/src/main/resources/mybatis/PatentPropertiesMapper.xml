@@ -41,7 +41,7 @@
         select
         <include refid="Base_Column_List" />
         from patent_properties
-        where patent_id = #{patentId, jdbcType=INTEGER}
+        where patent_id = #{patentId, jdbcType=INTEGER} and is_delete=0
     </select>
 
     <!--<insert id="insertPatentProperty" parameterType="java.lang.String">
