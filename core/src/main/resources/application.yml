@@ -3,6 +3,8 @@ server:
 mybatis:
   mapper-locations: classpath:mybatis/*.xml
   type-aliases-package: com.suixingpay.pojo
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 spring:
   http:
     multipart:

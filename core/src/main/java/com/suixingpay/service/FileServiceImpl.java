@@ -2,6 +2,7 @@ package com.suixingpay.service;
 
 import com.suixingpay.mapper.FileMapper;
 import com.suixingpay.pojo.Files;
+import com.suixingpay.util.GetIp;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -48,7 +49,11 @@ public class FileServiceImpl implements FileService {
             files.setFileCreateTime(new Date());
             files.setFileName(fileName);
             files.setFilePatentId(filePatentId);
-            files.setFilePath("http://172.16.42.126:8080/"+fileName);
+            //动态获取本机Ip
+            String realIP = GetIp.getRealIP();
+            LOGGER.info("[获取到得本机ip{}]",realIP);
+            //文件保存得路径
+            files.setFilePath("http://"+realIP+":8080/"+fileName);
             LOGGER.info(files.getFilePath());
             LOGGER.info(files.getFileName());
             files.setFileStatus(1);
