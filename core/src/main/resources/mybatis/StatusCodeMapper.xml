@@ -43,7 +43,7 @@
     <update id="updateStatusTalk" parameterType="int">
         update `patent_info`
         set
-            current_status = 0,
+            current_status = 0
         where `id` = #{id,jdbcType=INTEGER}
     </update>
     <!-- 当认领一瞬间，状态码1变4，状态变为编写中，-->
