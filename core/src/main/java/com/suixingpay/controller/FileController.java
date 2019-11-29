@@ -60,11 +60,11 @@ public class FileController {
             return map;
         }
         int info = fileService.update(fileId);
-        if (info >= 1) {
-            map.put("result", "删除成功");
+        if (info >= 0) {
+            map.put("result", 1);
             LOGGER.info("删除成功");
         } else {
-            map.put("result", "删除失败");
+            map.put("result", 0);
             LOGGER.info("删除失败");
         }
         return map;
