@@ -40,6 +40,7 @@ public class FileServiceImpl implements FileService {
         String fileName = file.getOriginalFilename();
         //获取虚拟文件路径
         String filePath=request.getSession().getServletContext().getRealPath("/");
+        LOGGER.info(filePath);
         File filed = new File(filePath +  fileName );
         try {
             file.transferTo(filed);
