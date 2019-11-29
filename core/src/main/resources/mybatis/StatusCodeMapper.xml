@@ -58,7 +58,7 @@
     <update id="updateStatusFinish" parameterType="com.suixingpay.pojo.PatentInfo">
         update `patent_info`
         set
-            current_status = #{current_status,jdbcType=INTEGER}
+            current_status = #{currentStatus,jdbcType=INTEGER}
         where `id` = #{id,jdbcType=INTEGER}
     </update>
 
