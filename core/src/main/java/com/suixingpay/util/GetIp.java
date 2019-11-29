@@ -46,7 +46,7 @@ public class GetIp {
             System.err.println("Error when getting host ip address"
                     + e.getMessage());
         }
-        return null;
+        return "127.0.0.1";
     }
 
 }
