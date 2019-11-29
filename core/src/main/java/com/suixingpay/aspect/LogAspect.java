@@ -21,115 +21,141 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Date;
 
+
+/**
+ * @author hyx
+ * 切面实现日志功能
+ */
 @Aspect
 @Component
 public class LogAspect {
+
+    public static String AGREE="agree";
+    public static String REJECT="reject";
+    public static String EDITPATENTBYID="editPatentById";
+
 
     @Autowired
     LogMapper logMapper;
 
 
-
-    //    /*
-//    定义切点，切入点为com.suixingpay.controller下的所有函数
-//     */
-    @Pointcut("execution(public * com.suixingpay.controller.*.*(..))")
-    public void Pointcut() {
-
+    /**定义切点pointCutAgree，切点pointCutAgree为管理员同意申请的方法*/
+    @Pointcut("execution(public * com.suixingpay.controller.StatusCodeController.agree(..))")
+    public void pointCutAgree() {
     }
 
+    /**定义切点pointCutReject，切入点pointCutReject为管理员驳回申请的方法*/
+    @Pointcut("execution(public * com.suixingpay.controller.StatusCodeController.reject(..))")
+    public void pointCutReject() {
+    }
+
+    /**定义切点pointCutEditPatentById，切点pointCutEditPatentById为编辑专利方法*/
     @Pointcut("execution(public * com.suixingpay.controller.PatentInfoController.editPatentById(..))")
-    public void Pointcut1() {
-
+    public void pointCutEditPatentById() {
     }
 
-    @After("Pointcut1()")
-    public void After(JoinPoint joinPoint){
 
+
+
+
+    @After("pointCutEditPatentById()")
+    public void afterPointCutEditPatentById(JoinPoint joinPoint){
+        /*
+        从request域中，获取session，通过session获取user对象
+         */
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-
         HttpServletRequest request = attributes.getRequest();
-
-        //获取当前登陆的用户名和时间
         HttpSession session = request.getSession();
-
         User user = (User) session.getAttribute("user");
 
-
-
+        /*
+        使用getArgs()获取切点方法的入参，
+         */
         Object[] args = joinPoint.getArgs();
-        for (int i = 0; i < args.length; i++) {
-            System.out.println("第" + (i+1) + "个参数为:" + args[i]);
+        PatentInfo patentInfo = (PatentInfo)args[0];
+
+
+        Date date=new Date();
+        Log log = new Log();
+        log.setPatentInfoId(patentInfo.getId());
+        log.setUserId(user.getId());
+        String username = user.getName();
+        if (EDITPATENTBYID.equals(joinPoint.getSignature().getName())){
+            log.setMessage(username+"修改了ID为"+patentInfo.getId()+"的专利");
         }
+        log.setCreateDate(date);
+        log.setModifyDate(date);
+        log.setIsDelete((byte)0);
+
+        logMapper.insert(log);
+
+    }
+
+    @After("pointCutAgree()")
+    public void afterPointCutAgree(JoinPoint joinPoint){
+
+        //从request域中，获取session，通过session获取user对象
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        //使用getArgs()获取切点方法的入参，
+        Object[] args = joinPoint.getArgs();
         PatentInfo patentInfo = (PatentInfo)args[0];
 
         Date date=new Date();
         Log log = new Log();
-
-
-
-//        log.setUserId(user.getId());
-
         log.setPatentInfoId(patentInfo.getId());
-
         log.setUserId(user.getId());
         String username = user.getName();
-
-        if ("editPatentById".equals(joinPoint.getSignature().getName())){
-            log.setMessage(username+"编辑了专利");
+        if (AGREE.equals(joinPoint.getSignature().getName())){
+            log.setMessage(username+"同意了ID为"+patentInfo.getId()+"的专利申请");
         }
+
         log.setCreateDate(date);
         log.setModifyDate(date);
+        log.setIsDelete((byte)0);
 
         logMapper.insert(log);
 
     }
 
 
+    @After("pointCutReject()")
+    public void afterPointCutReject(JoinPoint joinPoint){
 
 
+        //从request域中，获取session，通过session获取user对象
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
 
 
+        //使用getArgs()获取切点方法的入参，
+        Object[] args = joinPoint.getArgs();
+        PatentInfo patentInfo = (PatentInfo)args[0];
 
 
+        Date date=new Date();
+        Log log = new Log();
+        log.setPatentInfoId(patentInfo.getId());
+        log.setUserId(user.getId());
+        String username = user.getName();
+        if (REJECT.equals(joinPoint.getSignature().getName())){
+            log.setMessage(username+"驳回了了ID为"+patentInfo.getId()+"的专利申请");
+        }
 
+        log.setCreateDate(date);
+        log.setModifyDate(date);
+        log.setIsDelete((byte)0);
+        logMapper.insert(log);
 
-
-//        System.out.println("Before执行了");
-//        System.out.println("目标方法名为:" + joinPoint.getSignature().getName());
-//        System.out.println("目标方法所属类的简单类名:" +  joinPoint.getSignature().getDeclaringType().getSimpleName());
-//        System.out.println("目标方法所属类的类名:" + joinPoint.getSignature().getDeclaringTypeName());
-//        System.out.println("目标方法声明类型:" + Modifier.toString(joinPoint.getSignature().getModifiers()));
-//        System.out.println("=================="+joinPoint.getSignature());
-//
-
-//        System.out.println("被代理的对象:" + joinPoint.getTarget());
-//        System.out.println("代理对象自己:" + joinPoint.getThis());
-
-        //获取传入目标方法的参数
-
-
-
-//
-//        log.setUserId(1002);
-//        } else if ("addLog".equals(joinPoint.getSignature().getName())){
-//            log.setMessage("增加了日志");
-//        } else if ("addLog".equals(joinPoint.getSignature().getName())){
-//
-//        } else if ("addLog".equals(joinPoint.getSignature().getName())){
-//
-//        } else if ("addLog".equals(joinPoint.getSignature().getName())){
-//
-//        }
-
-
-//    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-//    HttpServletRequest request = attributes.getRequest();
-//
-//    HttpSession httpSession = request.getSession();
-//
-//    User user = (User)httpSession.getAttribute("user");
-
-
-
+    }
 }
+
+
+
+
+

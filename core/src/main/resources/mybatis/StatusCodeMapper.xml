@@ -39,7 +39,13 @@
             current_status = current_status + 10
         where `id` = #{id,jdbcType=INTEGER}
     </update>
-
+    <!-- 当一审被驳回，状态码1变0，状态变为讨论中，-->
+    <update id="updateStatusTalk" parameterType="int">
+        update `patent_info`
+        set
+            current_status = 0
+        where `id` = #{id,jdbcType=INTEGER}
+    </update>
     <!-- 当认领一瞬间，状态码1变4，状态变为编写中，-->
     <update id="updateStatusClaim" parameterType="com.suixingpay.pojo.PatentInfo">
         update `patent_info`

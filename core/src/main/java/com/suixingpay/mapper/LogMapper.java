@@ -6,21 +6,34 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * @author hyx
+ */
 @Mapper
 @Component
 public interface LogMapper {
 
-    int deleteByPrimaryKey(Integer id);
-
+    /**
+     *
+     * @param record
+     * @return int
+     * 进行日志插入功能
+     */
     int insert(Log record);
 
-    int insertSelective(Log record);
-
+    /**
+     *根据ID查询日志
+     *
+     * @param id
+     * @return List<Log>
+     *
+     */
     List<Log> selectLogById(Integer id);
 
-    int updateByPrimaryKeySelective(Log record);
-
-    int updateByPrimaryKey(Log record);
-
+    /**
+     * 查询全部日志
+     *
+     * @return List<Log>
+     */
     List<Log> selectAllLog();
 }

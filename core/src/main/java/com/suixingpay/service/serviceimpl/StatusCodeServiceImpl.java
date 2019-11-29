@@ -67,8 +67,11 @@ public class StatusCodeServiceImpl implements StatusCodeService {
 
         try {
             int statusCode = statusCodeMapper.selectCodeByPid(patentID);
-            if (statusCode == 1 || statusCode == 5 || statusCode == 6) {
+            if (statusCode == 5 || statusCode == 6) {
                 statusCodeMapper.updateStatusReject(patentID);
+                return ZhuanliUtil.getJSONString("200");
+            } else if (statusCode == 1) {
+                statusCodeMapper.updateStatusTalk(patentID);
                 return ZhuanliUtil.getJSONString("200");
             } else {
                 return ZhuanliUtil.getJSONString("失败");

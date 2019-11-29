@@ -19,6 +19,8 @@ public interface StatusCodeMapper {
     //审批驳回
     void updateStatusReject(int patentId);
 
+    //一审批驳回
+    void updateStatusTalk(int patentId);
     //点击认领
     void updateStatusClaim(PatentInfo patentInfo);
 
