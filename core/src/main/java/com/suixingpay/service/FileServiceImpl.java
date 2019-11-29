@@ -76,7 +76,7 @@ public class FileServiceImpl implements FileService {
          List<Files> list =fileMapper.selectById(filePatentId);
             if (list.size() ==0){
                  map.put("status","0");
-                 map.put("list",null);
+                 map.put("list","");
                  return map;
               }
                  map.put("status","1");
