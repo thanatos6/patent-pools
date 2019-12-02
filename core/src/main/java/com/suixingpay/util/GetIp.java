@@ -5,6 +5,7 @@ import java.util.Enumeration;
 /**
  * 获取本地真正的IP地址，即获得有线或者无线WiFi地址。
  * 过滤虚拟机、蓝牙等地址
+ * @author duansiyu
  */
 public class GetIp {
 

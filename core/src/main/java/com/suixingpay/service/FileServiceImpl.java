@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.net.InetAddress;
 import java.util.*;
 
 /**
@@ -42,9 +41,6 @@ public class FileServiceImpl implements FileService {
         File filed = new File(filePath + fileName );
         LOGGER.info(fileName);
         try {
-//            InetAddress address = InetAddress.getLocalHost();//获取的是本地的IP地址 //PC-20140317PXKX/192.168.0.121
-//            String hostAddress = address.getHostAddress();//192.168.0.121
-//            LOGGER.info("获取到的本机Ip:"+hostAddress);
             file.transferTo(filed);
             LOGGER.info("上传成功");
             //上传到数据库中
