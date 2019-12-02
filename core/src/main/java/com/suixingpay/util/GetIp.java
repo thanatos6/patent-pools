@@ -1,8 +1,5 @@
 package com.suixingpay.util;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
+import java.net.*;
 import java.util.Enumeration;
 
 /**
@@ -46,7 +43,16 @@ public class GetIp {
             System.err.println("Error when getting host ip address"
                     + e.getMessage());
         }
-        return "127.0.0.1";
+        InetAddress address = null;
+        String hostAddress=null;//获取的是本地的IP地址 //PC-20140317PXKX/192.168.0.121
+        try {
+            address = InetAddress.getLocalHost();
+             hostAddress = address.getHostAddress();//192.168.0.121
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return hostAddress;
     }
 
 }
