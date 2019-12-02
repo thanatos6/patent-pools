@@ -4,6 +4,7 @@ import com.suixingpay.pojo.PatentInfo;
 import com.suixingpay.pojo.User;
 import com.suixingpay.service.PatentInfoService;
 import com.suixingpay.service.UserDescriptionService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,6 +48,7 @@ public class PatentInfoController {
     @RequestMapping(value = "/addPatent", method = RequestMethod.POST)
     public String addNewPatent(@RequestBody PatentInfo patentInfo) {
 
+        // 插入一条专利
         String addPatentResult = patentInfoService.createNewPatent(patentInfo);
         return addPatentResult;
 
@@ -55,6 +57,11 @@ public class PatentInfoController {
     @RequestMapping(value = "/searchPatent", method = RequestMethod.POST)
     public String searchPatentFuzzy(@RequestBody PatentInfo patentInfo) {
 
+        // TODO: 2019/12/2 Feature update - 字段模糊搜索完成，下一步
+
+        // TODO: 2019/12/2 Feature review - 关于普通用户的搜索，已经实现，但组长有代码问题，下一步跟组长讨论
+
+        // 获取用户信息
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
 
         // 判断用户是否登录，若没登录，就赋值 id 为 0 表示没有登录
@@ -67,7 +74,10 @@ public class PatentInfoController {
     @RequestMapping(value = "/searchPatentPool", method = RequestMethod.GET)
     public String searchPatentPool() {
 
+        // 获取用户信息
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
+
+        // 查询专利池
         String searchPatentPoolResult = patentInfoService.searchNavigationInfo(user.getId());
         return searchPatentPoolResult;
 
@@ -76,8 +86,11 @@ public class PatentInfoController {
     @RequestMapping(value = "/receivePatent", method = RequestMethod.POST)
     public String receiveOnePatent(@RequestBody PatentInfo patentInfo) {
 
+        // 获取用户信息
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
         patentInfo.setOwnerUserId(user.getId());
+
+        // 领取一个专利
         String receivePatentResult = patentInfoService.receivePatent(patentInfo);
         return receivePatentResult;
 
@@ -86,7 +99,10 @@ public class PatentInfoController {
     @RequestMapping(value = "/editPatent", method = RequestMethod.POST)
     public String editPatentById(@RequestBody PatentInfo patentInfo) {
 
+        // 获取用户信息
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
+
+        // 编辑对应用户类型的专利
         String editPatentResult = patentInfoService.editPatent(patentInfo, user.getId());
         return editPatentResult;
 
@@ -95,7 +111,7 @@ public class PatentInfoController {
     @RequestMapping(value = "/getPatentDetail", method = RequestMethod.POST)
     public String showPatentDetails(@RequestBody PatentInfo patentInfo) {
 
-        //由于只传入专利的 id 即可，则会返回只有一个专利的 List
+        // 返回专利的详细信息
         String showPatentDetailsResult = patentInfoService.searchPatentAnyCondition(patentInfo);
         return showPatentDetailsResult;
 

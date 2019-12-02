@@ -248,10 +248,10 @@
             and batch = #{batch,jdbcType=VARCHAR}
         </if>
         <if test="caseNumber != null and caseNumber !=''">
-            and case_number = #{caseNumber,jdbcType=VARCHAR}
+            and case_number LIKE CONCAT('%',#{caseNumber,jdbcType=VARCHAR},'%')
         </if>
         <if test="applyNumber != null and applyNumber !=''">
-            and apply_number = #{applyNumber,jdbcType=VARCHAR}
+            and apply_number LIKE CONCAT('%',#{applyNumber,jdbcType=VARCHAR},'%')
         </if>
         <if test="applyDate != null">
             and apply_date = #{applyDate,jdbcType=DATE}
@@ -263,7 +263,7 @@
             and apply_man_chs = #{applyManChs,jdbcType=VARCHAR}
         </if>
         <if test="inventionChs != null and inventionChs!=''">
-            and invention_chs = #{inventionChs,jdbcType=VARCHAR}
+            and invention_chs LIKE CONCAT('%',#{inventionChs,jdbcType=VARCHAR},'%')
         </if>
         <if test="lawStatus != null and lawStatus!=''">
             and law_status = #{lawStatus,jdbcType=VARCHAR}
@@ -272,7 +272,7 @@
             and patent_type = #{patentType,jdbcType=VARCHAR}
         </if>
         <if test="inventManChs != null and inventManChs !=''">
-            and invent_man_chs = #{inventManChs,jdbcType=VARCHAR}
+            and invent_man_chs LIKE CONCAT('%',#{inventManChs,jdbcType=VARCHAR},'%')
         </if>
         <if test="patentComment != null and patentComment !=''">
             and patent_comment = #{patentComment,jdbcType=VARCHAR}
@@ -290,7 +290,7 @@
             and current_status = #{currentStatus,jdbcType=TINYINT}
         </if>
         <if test="currentProcess != null and currentProcess !=''">
-            and current_process = #{currentProcess,jdbcType=VARCHAR}
+            and current_process LIKE CONCAT('%',#{currentProcess,jdbcType=VARCHAR},'%')
         </if>
         <if test="ownerUserId != null">
             and owner_user_id = #{ownerUserId,jdbcType=INTEGER}
@@ -312,10 +312,10 @@
             and batch = #{batch,jdbcType=VARCHAR}
         </if>
         <if test="caseNumber != null and caseNumber !=''">
-            and case_number = #{caseNumber,jdbcType=VARCHAR}
+            and case_number LIKE CONCAT('%',#{caseNumber,jdbcType=VARCHAR},'%')
         </if>
         <if test="applyNumber != null and applyNumber !=''">
-            and apply_number = #{applyNumber,jdbcType=VARCHAR}
+            and apply_number LIKE CONCAT('%',#{applyNumber,jdbcType=VARCHAR},'%')
         </if>
         <if test="applyDate != null">
             and apply_date = #{applyDate,jdbcType=DATE}
@@ -327,7 +327,7 @@
             and apply_man_chs = #{applyManChs,jdbcType=VARCHAR}
         </if>
         <if test="inventionChs != null and inventionChs!=''">
-            and invention_chs = #{inventionChs,jdbcType=VARCHAR}
+            and invention_chs LIKE CONCAT('%',#{inventionChs,jdbcType=VARCHAR},'%')
         </if>
         <if test="lawStatus != null and lawStatus!=''">
             and law_status = #{lawStatus,jdbcType=VARCHAR}
@@ -336,7 +336,7 @@
             and patent_type = #{patentType,jdbcType=VARCHAR}
         </if>
         <if test="inventManChs != null and inventManChs !=''">
-            and invent_man_chs = #{inventManChs,jdbcType=VARCHAR}
+            and invent_man_chs LIKE CONCAT('%',#{inventManChs,jdbcType=VARCHAR},'%')
         </if>
         <if test="patentComment != null and patentComment !=''">
             and patent_comment = #{patentComment,jdbcType=VARCHAR}
@@ -354,7 +354,7 @@
             and current_status = #{currentStatus,jdbcType=TINYINT}
         </if>
         <if test="currentProcess != null and currentProcess !=''">
-            and current_process = #{currentProcess,jdbcType=VARCHAR}
+            and current_process LIKE CONCAT('%',#{currentProcess,jdbcType=VARCHAR},'%')
         </if>
         and (owner_user_id = #{ownerUserId,jdbcType=INTEGER}
         or owner_user_id = 0)
