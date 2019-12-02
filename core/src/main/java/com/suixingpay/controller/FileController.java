@@ -60,7 +60,7 @@ public class FileController {
             return map;
         }
         int info = fileService.update(fileId);
-        if (info >= 0) {
+        if (info > 0) {
             map.put("result", 1);
             LOGGER.info("删除成功");
         } else {
@@ -78,7 +78,6 @@ public class FileController {
      */
     @GetMapping("/download")
     public Map<String,Object> selectPathByFileId(@Param("fileId") Integer fileId, HttpServletRequest request) throws UnsupportedEncodingException {
-
         return fileService.selectPathByFileId(fileId, request);
     }
 }

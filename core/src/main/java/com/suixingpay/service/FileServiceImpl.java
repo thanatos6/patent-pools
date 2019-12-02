@@ -9,12 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLEncoder;
-import java.nio.file.Path;
+import java.net.InetAddress;
 import java.util.*;
 
 /**
@@ -29,7 +26,7 @@ public class FileServiceImpl implements FileService {
     FileMapper fileMapper;
 
     @Override
-    public Map<String,Object> insert(MultipartFile file, int filePatentId, javax.servlet.http.HttpServletRequest httpServletRequest){
+    public Map<String,Object> insert(MultipartFile file, int filePatentId, HttpServletRequest httpServletRequest){
         LOGGER.info("[接受的参数为{}和{}]",file,filePatentId);
         Map<String,Object> map =new HashMap<>();
         if (file.isEmpty()) {
@@ -39,13 +36,15 @@ public class FileServiceImpl implements FileService {
         }
         //文件名
         String fileName = file.getOriginalFilename();
-        //获取虚拟文件路径
-        //String filePath = System.getProperty("user.dir");
+        //获取内置文件路径
         String filePath = httpServletRequest.getServletContext().getRealPath("/");
         LOGGER.info(filePath);
         File filed = new File(filePath + fileName );
         LOGGER.info(fileName);
         try {
+            InetAddress address = InetAddress.getLocalHost();//获取的是本地的IP地址 //PC-20140317PXKX/192.168.0.121
+            String hostAddress = address.getHostAddress();//192.168.0.121
+            LOGGER.info("获取到的本机Ip:"+hostAddress);
             file.transferTo(filed);
             LOGGER.info("上传成功");
             //上传到数据库中
