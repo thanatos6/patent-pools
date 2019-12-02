@@ -1,24 +1,18 @@
 package com.suixingpay.aspect;
 
-import ch.qos.logback.core.joran.action.ActionConst;
 import com.suixingpay.mapper.LogMapper;
 import com.suixingpay.pojo.Log;
 import com.suixingpay.pojo.PatentInfo;
 import com.suixingpay.pojo.User;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Date;
 
 

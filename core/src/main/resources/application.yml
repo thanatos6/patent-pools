@@ -7,7 +7,6 @@ mybatis:
   type-aliases-package: com.suixingpay.pojo
   configuration:
     map-underscore-to-camel-case: true
-#pagehelper
 pagehelper:
   helperDialect: mysql
   reasonable: true
@@ -20,12 +19,12 @@ spring:
       max-request-size: 30MB
   profiles:
     active: dev
-#  datasource:
-#    platform: mysql
-#    url: jdbc:mysql://localhost:3306/patent?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-#    username: kongjian
-#    password: 123456
-#    driver-class-name: com.mysql.jdbc.Driver
+  #  datasource:
+  #    platform: mysql
+  #    url: jdbc:mysql://localhost:3306/patent?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+  #    username: kongjian
+  #    password: 123456
+  #    driver-class-name: com.mysql.jdbc.Driver
   datasource:
     platform: mysql
     url: jdbc:mysql://172.16.41.67:3306/patent_zwl?useUnicode=true&characterEncoding=UTF-8&useSSL=false

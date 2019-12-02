@@ -36,4 +36,12 @@ public interface LogMapper {
      * @return List<Log>
      */
     List<Log> selectAllLog();
+
+
+    /**
+     *提供查询当前用户的日志操作
+     * @return List<Log>
+     *
+     */
+    List<Log> selectUserLog(Integer id);
 }
