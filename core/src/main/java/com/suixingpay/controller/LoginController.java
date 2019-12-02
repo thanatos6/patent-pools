@@ -25,15 +25,16 @@ public class LoginController {
     Boolean index = true;
 
     @PostMapping("/login")//一般注册都是写入到后台所以是post
-    public  String  login(@RequestParam("password") String password,
-                          @RequestParam("account") String account,
+    public  String  login(@RequestBody User user,
                           HttpSession session){
 
         try {
-        //System.out.println(userService);
+            //System.out.println(userService);
+            String account=user.getAccount();
+            String password=user.getPassword();
 
-        User user = userService.login(account, password);
-        System.out.println(user);
+             user =userService.login(account,password);
+            System.out.println(user);
 
         if (user == null) {
             return ZhuanliUtil.getJSONString(505, "");

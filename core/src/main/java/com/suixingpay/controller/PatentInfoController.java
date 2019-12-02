@@ -26,12 +26,21 @@ import javax.servlet.http.HttpServletRequest;
 
 public class PatentInfoController {
 
+    /**
+     * 专利信息服务
+     */
     @Autowired
     private PatentInfoService patentInfoService;
 
+    /**
+     * 用户信息服务
+     */
     @Autowired
     private UserDescriptionService userDescriptionService;
 
+    /**
+     * HttpServletRequest 服务
+     */
     @Autowired
     private HttpServletRequest httpServletRequest;
 

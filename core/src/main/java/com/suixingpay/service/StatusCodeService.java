@@ -2,8 +2,6 @@ package com.suixingpay.service;
 
 import com.suixingpay.pojo.PatentInfo;
 
-import java.util.List;
-
 /**
  * @author zhangleying
  * @version 1.0
@@ -12,7 +10,7 @@ import java.util.List;
 public interface StatusCodeService {
 
     /**
-     *  点击同意，根据专利Id号，点击同意按钮，改变流程状态
+     * 点击同意，根据专利Id号，点击同意按钮，改变流程状态
      *
      * @param patentID 专利ID号
      * @return
@@ -21,7 +19,7 @@ public interface StatusCodeService {
 
 
     /**
-     *  点击驳回，根据专利Id号，改变流程状态
+     * 点击驳回，根据专利Id号，改变流程状态
      *
      * @param patentID 专利ID号
      * @return
@@ -29,10 +27,8 @@ public interface StatusCodeService {
     String updateStatusReject(int patentID);
 
 
-
-
     /**
-     *  点击认领该状态，根据专利Id号，改变流程状态
+     * 点击认领该状态，根据专利Id号，改变流程状态
      *
      * @param patentInfo 专利对象
      * @return
@@ -41,7 +37,7 @@ public interface StatusCodeService {
 
 
     /**
-     *  点击编写完成，根据专利Id号，改变流程状态
+     * 点击编写完成，根据专利Id号，改变流程状态
      *
      * @param patentInfo 专利实体
      * @return
@@ -56,7 +52,7 @@ public interface StatusCodeService {
      * @param role   当前登录用户的权限号，管理员为1，撰写人为0
      * @return
      */
-    String selectCodeByRole(int role,int userId);
+    String selectCodeByRole(int role, int userId);
 
 
 }

@@ -97,22 +97,28 @@ public class PatentInfoServiceImpl implements PatentInfoService {
         // 根据专利的 id 查询，controller 层传入的 PatentInfo 实体应当只包含专利 id
         List<PatentInfo> patentInfos = executeSelectPatentAnyCondition(patentInfo);
 
+        // 根据查询的 List 直接取出原来的信息
+        PatentInfo originPatentInfo = patentInfos.isEmpty() ? null : patentInfos.get(0);
+
         // 查询不到指定的专利或者专利的拥有者未空
-        Integer originalPatentOwnerId = patentInfos.isEmpty() ? null : patentInfos.get(0).getOwnerUserId();
+        Integer originPatentOwnerId = originPatentInfo == null ? null : originPatentInfo.getOwnerUserId();
 
         // 查不到指定的专利或当前的编辑用户 id 对不上认领者 id， 组长说管理员可以编辑所有专利
         if (editUserId.equals(ROOT_USER_ID)) {
             returnJsonStr = executeUpdatePatent(patentInfo);
-        } else if (!editUserId.equals(originalPatentOwnerId)) {
+        } else if (!editUserId.equals(originPatentOwnerId)) {
             returnJsonStr = getExecuteJsonMessage(0);
         } else {
             returnJsonStr = executeUpdatePatent(patentInfo);
         }
 
         // 更新专利状态
+        Byte originPatentCurrentStatus = originPatentInfo == null ? null : originPatentInfo.getCurrentStatus();
+        patentInfo.setCurrentStatus(originPatentCurrentStatus);
         statusCodeService.updateStatusFinish(patentInfo);
 
         return returnJsonStr;
+
     }
 
     @Override

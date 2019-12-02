@@ -7,6 +7,9 @@ import com.suixingpay.pojo.StatusCode;
 import com.suixingpay.service.PatentInfoService;
 import com.suixingpay.service.StatusCodeService;
 import com.suixingpay.util.ZhuanliUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +22,13 @@ import java.util.List;
  * @date 2019/11/20 22:15
  */
 @Service
+@Slf4j
 public class StatusCodeServiceImpl implements StatusCodeService {
     @Autowired
     private StatusCodeMapper statusCodeMapper;
     @Autowired
     private PatentInfoService patentInfoService;
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatusCodeServiceImpl.class);
 
     /**
      * 审批通过，点击同意，根据专利Id号，点击同意按钮，改变流程状态
@@ -34,15 +38,21 @@ public class StatusCodeServiceImpl implements StatusCodeService {
      */
     @Override
     public String updateStatusPass(int patentID) {
-        String url = "";
+
         try {
-            statusCodeMapper.updateStatusPass(patentID);
-            url = "200";
+            int statusCode = statusCodeMapper.selectCodeByPid(patentID);
+            if (statusCode == 1 || statusCode == 5 || statusCode == 6) {
+                statusCodeMapper.updateStatusPass(patentID);
+                return ZhuanliUtil.getJSONString("200");
+            } else {
+                return ZhuanliUtil.getJSONString("失败");
+            }
+
         } catch (Exception e) {
-            url = "失败";
             e.printStackTrace();
+            return ZhuanliUtil.getJSONString("失败");
         }
-        return url;
+
     }
 
 
@@ -54,21 +64,24 @@ public class StatusCodeServiceImpl implements StatusCodeService {
      */
     @Override
     public String updateStatusReject(int patentID) {
-        String url = "";
-        try {
-            statusCodeMapper.updateStatusReject(patentID);
-            url = "200";
 
+        try {
+            int statusCode = statusCodeMapper.selectCodeByPid(patentID);
+            if (statusCode == 5 || statusCode == 6) {
+                statusCodeMapper.updateStatusReject(patentID);
+                return ZhuanliUtil.getJSONString("200");
+            } else if (statusCode == 1) {
+                statusCodeMapper.updateStatusTalk(patentID);
+                return ZhuanliUtil.getJSONString("200");
+            } else {
+                return ZhuanliUtil.getJSONString("失败");
+            }
         } catch (Exception e) {
-            url = "失败";
             e.printStackTrace();
+            return ZhuanliUtil.getJSONString("失败");
         }
 
-        return url;
     }
-
-
-
 
 
     /**
@@ -79,31 +92,45 @@ public class StatusCodeServiceImpl implements StatusCodeService {
      */
     @Override
     public String updateStatusClaim(PatentInfo patentInfo) {
-        String url = "";
+
         try {
-            statusCodeMapper.updateStatusClaim(patentInfo);
-            url = "200";
+            int patentId = patentInfo.getId();
+            int statusCode = statusCodeMapper.selectCodeByPid(patentId);
+            if (statusCode == 4) {
+                return ZhuanliUtil.getJSONString("失败");
+            } else {
+                statusCodeMapper.updateStatusClaim(patentInfo);
+                return ZhuanliUtil.getJSONString("200");
+            }
         } catch (Exception e) {
-            url = "失败";
             e.printStackTrace();
+            return ZhuanliUtil.getJSONString("失败");
+
         }
-        return url;
+
     }
 
 
     /**
      * 点击编写完成，只有当状态为4编写中,15二审不通过,16提交审批不通过时，才允许走到下一步5待二审，根据专利Id号，改变流程状态
+     * 当当前状态为0讨论中时，编写完成状态变为1待一审
      *
      * @param patentInfo 专利实体
      * @return
      */
     @Override
     public boolean updateStatusFinish(PatentInfo patentInfo) {
-        int code= patentInfo.getCurrentStatus();
-        int patentId= patentInfo.getId();
+        int code = patentInfo.getCurrentStatus();
+        //int patentId = patentInfo.getId();
+        //LOGGER.info("[接受的参数为{}和{}]", code, patentId);
         boolean result = false;
-        if(code==15||code==16||code==4){
-            statusCodeMapper.updateStatusFinish(patentId);
+        if (code == 15 || code == 16 || code == 4) {
+            patentInfo.setCurrentStatus((byte) 5);
+            statusCodeMapper.updateStatusFinish(patentInfo);
+            result = true;
+        } else if (code == 0) {
+            patentInfo.setCurrentStatus((byte) 1);
+            statusCodeMapper.updateStatusFinish(patentInfo);
             result = true;
         }
         return result;
@@ -150,5 +177,6 @@ public class StatusCodeServiceImpl implements StatusCodeService {
         }
         return ZhuanliUtil.getJSONString(500, "");
     }
+
 
 }
