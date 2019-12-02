@@ -6,6 +6,7 @@ import com.suixingpay.service.UserDescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -25,8 +26,8 @@ public class StatusCodeController {
 
     //根据登陆者角色码查找相应的待办，分为管理员1、撰写人0
     @RequestMapping(value = "/wait", method = RequestMethod.POST)
-    public String wait(HttpSession session) {
-
+    public String wait(HttpServletRequest request) {
+        HttpSession session = request.getSession();
         int userId = userDescriptionService.userDescription(session).getId();
         int roleId = userDescriptionService.userDescription(session).getStatus();
         String list1 = statusCodeService.selectCodeByRole(roleId, userId);

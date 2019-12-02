@@ -5,6 +5,7 @@ import com.suixingpay.mapper.UserMapper;
 import com.suixingpay.pojo.User;
 
 import com.suixingpay.service.UserService;
+import com.suixingpay.util.ZhuanliUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class UserImpl implements UserService {
 
     public User login(String account,String password){
        User user = userDao.userByAccountAndPassword(account,password);
-        System.out.println(user);
+
         return  user;
     }
 
