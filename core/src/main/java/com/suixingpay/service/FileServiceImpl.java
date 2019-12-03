@@ -3,6 +3,7 @@ package com.suixingpay.service;
 import com.suixingpay.mapper.FileMapper;
 import com.suixingpay.pojo.Files;
 import com.suixingpay.util.GetIp;
+import com.suixingpay.util.TimeFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -26,20 +29,27 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Map<String,Object> insert(MultipartFile file, int filePatentId, HttpServletRequest httpServletRequest){
-        LOGGER.info("[接受的参数为{}和{}]",file,filePatentId);
+        LOGGER.info("[接受的参数为{}和{}]", file, filePatentId);
+
         Map<String,Object> map =new HashMap<>();
+
         if (file.isEmpty()) {
             LOGGER.info("[上传失败，请选择文件]");
-            map.put("result","上传失败，请选择文件");
+            map.put("result", "上传失败，请选择文件");
             return map;
         }
         //文件名
         String fileName = file.getOriginalFilename();
-        //获取内置文件路径
+
+        if (fileName.endsWith(".exe")){
+            LOGGER.info(fileName);
+            map.put("result", 2);
+            return map;
+        }
         String filePath = httpServletRequest.getServletContext().getRealPath("/");
-        LOGGER.info(filePath);
-        File filed = new File(filePath + fileName );
-        LOGGER.info(fileName);
+        LOGGER.info("文件存储路径: " + filePath);
+        File filed = new File(filePath + fileName);
+        LOGGER.info("文件名: " + fileName);
         try {
             file.transferTo(filed);
             LOGGER.info("上传成功");
@@ -50,19 +60,18 @@ public class FileServiceImpl implements FileService {
             files.setFilePatentId(filePatentId);
             //动态获取本机Ip
             String realIP = GetIp.getRealIP();
-            LOGGER.info("[获取到得本机ip{}]",realIP);
+            LOGGER.info("[获取到得本机ip{}]", realIP);
             //文件保存得路径
-            files.setFilePath("http://"+realIP+":8080/"+fileName);
-            LOGGER.info(files.getFilePath());
-            LOGGER.info(files.getFileName());
+            files.setFilePath("http://" + realIP + ":8080/" + fileName);
+            LOGGER.info("数据库存储路径: " + files.getFilePath());
             files.setFileStatus(1);
             fileMapper.insert(files);
-            map.put("result","上传成功");
+            map.put("result", "上传成功");
         } catch (IOException e) {
             System.out.println(e.toString());
         }
         return map;
-        }
+    }
 
     @Override
     public int update(int fileId) {
@@ -71,34 +80,35 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Map<String, Object> selectById(int filePatentId) {
-         Map<String, Object> map =new HashMap<>(0);
+         Map<String, Object> map =new HashMap<>();
          List<Files> list =fileMapper.selectById(filePatentId);
-            if (list.size() ==0){
-                 map.put("status","0");
-                 map.put("list","");
-                 return map;
-              }
-                 map.put("status","1");
-                 map.put("list",list);
-                 LOGGER.info("查询成功");
-                 return map;
+         if (list.size() == 0){
+             map.put("status", "0");
+             map.put("list", "");
+         }else{
+             map.put("status", "1");
+             map.put("list", list);
+             LOGGER.info("查询成功");
+         }
+         return map;
     }
 
     @Override
-    public Map<String,Object> selectPathByFileId(int fileId, HttpServletRequest request) {
+    public Map<String,Object> selectPathByFileId(int fileId, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         Map<String,Object> map =new HashMap<>();
         //获取文件
         Files files =fileMapper.selectPathByFileId(fileId);
         String filePath = files.getFilePath();
-        if (filePath==null){
-            map.put("filePath",null);
-            map.put("status",0);
+        String fileName =files.getFileName();
+        if (filePath == null){
+            map.put("filePath", null);
+            map.put("status", 0);
             LOGGER.info("[下载失败]");
         }else {
-            map.put("filePath",filePath);
-            map.put("status",1);
-            LOGGER.info("[下载成功,路径为:{}]",filePath);
+            map.put("filePath", filePath);
+            map.put("status", 1);
+            LOGGER.info("[下载成功,路径为:{}]", filePath);
         }
-         return map;
+        return map;
     }
 }

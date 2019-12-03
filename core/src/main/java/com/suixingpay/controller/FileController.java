@@ -67,6 +67,7 @@ public class FileController {
             map.put("result", 0);
             LOGGER.info("删除失败");
         }
+
         return map;
     }
 
@@ -74,10 +75,9 @@ public class FileController {
     /**
      * @param fileId
      * @param request
-     * @throws UnsupportedEncodingException
      */
     @GetMapping("/download")
-    public Map<String,Object> selectPathByFileId(@Param("fileId") Integer fileId, HttpServletRequest request) throws UnsupportedEncodingException {
-        return fileService.selectPathByFileId(fileId, request);
+    public Map<String,Object> selectPathByFileId(@Param("fileId") Integer fileId, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        return fileService.selectPathByFileId(fileId, request, response);
     }
 }
