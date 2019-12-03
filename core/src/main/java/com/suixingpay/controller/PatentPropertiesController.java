@@ -4,8 +4,10 @@ package com.suixingpay.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.suixingpay.pojo.CodeEnum;
 import com.suixingpay.pojo.PatentProperties;
 import com.suixingpay.pojo.PatentPropertiesList;
+import com.suixingpay.pojo.Response;
 import com.suixingpay.service.PatentPropertiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,6 +101,10 @@ public class PatentPropertiesController {
         patentPropertiesList.setPatentTitle(title);
         List<PatentPropertiesList> result = patentPropertiesService.searchPropertiesJoinPatentEntity(patentPropertiesList);
         return getString(result);
+
+//        PageInfo<PatentPropertiesList> page = new PageInfo<>(result);
+//        Response<Map<String, PageInfo<PatentProperties>>> response = Response.getInstance(CodeEnum.SUCCESS, page);
+//        return response;
     }
 
     private String getString(List<PatentPropertiesList> result) {

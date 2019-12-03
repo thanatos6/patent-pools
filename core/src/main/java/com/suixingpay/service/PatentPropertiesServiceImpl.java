@@ -36,7 +36,7 @@ public class PatentPropertiesServiceImpl implements PatentPropertiesService {
 
     @Override
     public List<PatentProperties> searchPatentPropertiesByName(String name) {
-        PageHelper.startPage(1,1);
+        PageHelper.startPage(1, 1);
         List<PatentProperties> patentPropertiesLikeName = patentPropertiesMapper.selectPatentPropertiesByName(name);
         return patentPropertiesLikeName;
 
