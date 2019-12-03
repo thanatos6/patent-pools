@@ -20,4 +20,9 @@
     <select id="userByName" resultMap="userMap">
         SELECT name,password,account,status,modify_date,create_date,is_delete FROM patent_user WHERE account=#{account}
     </select>
+    <update id="userByNumAndId" parameterType="int">
+        update patent_user
+        set number =#{number}
+        where id=#{id}
+    </update>
 </mapper>

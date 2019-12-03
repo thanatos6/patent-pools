@@ -27,13 +27,17 @@ public class UserImpl implements UserService {
 
     public User login(String account,String password){
        User user = userDao.userByAccountAndPassword(account,password);
-
-        return  user;
+       int num=user.getNum();
+       return  user;
     }
 
 
     @Override
     public User userByName(String name) {
         return new User();
+    }
+    public  User userByNumAndId(int num,int id){
+        User user=userDao.userByNumAndId(num,id);
+        return user;
     }
 }
