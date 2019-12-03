@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.function.DoubleToIntFunction;
 
 /**
  * @author 詹文良
@@ -133,7 +134,7 @@ public class PatentInfoServiceImpl implements PatentInfoService {
         Integer originalPatentOwnerId = patentInfos.isEmpty() ? null : patentInfos.get(0).getOwnerUserId();
 
         // 如果已经有了拥有者, 就是 owner_user_id 不为 0, 则不再二次认领
-        if (!originalPatentOwnerId.equals(0)) {
+        if (originalPatentOwnerId == null || !originalPatentOwnerId.equals(0)) {
             returnJsonStr = getExecuteJsonMessage(0);
         } else {
             returnJsonStr = executeUpdatePatent(patentInfo);
@@ -194,6 +195,81 @@ public class PatentInfoServiceImpl implements PatentInfoService {
         // 返回结果集合如果为空，则返回错误状态信息，否则返回查询到的专利列表
         if (selectPatentList == null || selectPatentList.isEmpty()) {
             returnJsonStr = getExecuteJsonMessage(0);
+        } else {
+            returnJsonStr = JSON.toJSONString(selectPatentList);
+        }
+
+        return returnJsonStr;
+    }
+
+    @Override
+    public String searchPatentByUserAndReceive(PatentInfo patentInfo, int userId) {
+
+        // 定义要返回的 JSON 结果
+        String returnJsonStr = "";
+
+        // 返回结果集 - 初始化为空，表示未登录
+        List<PatentInfo> selectPatentList = null;
+
+        // 做异常处理
+        try {
+            // 0 表示未登录，ROOT_USER_ID 表示管理员，其他用户 id 表示普通用户
+            // 普通用户需要做给 patent 参数 加上 owner_user_id 限制条件去查询
+            if (userId == 0) {
+                selectPatentList = new ArrayList<>();
+            } else if (userId == ROOT_USER_ID) {
+                selectPatentList = patentInfoMapper.selectPatentRootUserAndReceive(patentInfo);
+
+            } else {
+                // 表示普通用户，参数需要带上 owner_user_id 限制，比较是否是当前用户
+                patentInfo.setOwnerUserId(userId);
+                selectPatentList = patentInfoMapper.selectPatentNormalUserAndReceive(patentInfo);
+            }
+        } catch (Exception e) {
+            log.error("数据库按照用户类型去查找一个已被领取的专利错误！");
+            log.error(e.getMessage());
+        }
+
+        // 如果执行错误，返回错误信息（0），执行结果为空，返回空（-1），执行结果成功，返回 List
+        if (selectPatentList == null) {
+            returnJsonStr = getExecuteJsonMessage(0);
+        } else if (selectPatentList.isEmpty()) {
+            returnJsonStr = getExecuteJsonMessage(-1);
+        } else {
+            returnJsonStr = JSON.toJSONString(selectPatentList);
+        }
+
+        return returnJsonStr;
+    }
+
+    @Override
+    public String searchPatentByUserAndNoReceive(PatentInfo patentInfo, int userId) {
+        // 定义要返回的 JSON 结果
+        String returnJsonStr = "";
+
+        // 返回结果集 - 初始化为空，表示未登录
+        List<PatentInfo> selectPatentList = null;
+
+        // 做异常处理
+        try {
+            // 0 表示未登录，ROOT_USER_ID 表示管理员，其他用户 id 表示普通用户
+            // 普通用户需要做给 patent 参数 加上 owner_user_id 限制条件去查询
+            // 普通用户和管理员可以看到一样的未被认领的专利
+            if (userId == 0) {
+                selectPatentList = new ArrayList<>();
+            } else {
+                selectPatentList = patentInfoMapper.selectPatentAllUserAndNoReceive(patentInfo);
+            }
+        } catch (Exception e) {
+            log.error("数据库按照用户类型去查找一个未被认领的专利错误！");
+            log.error(e.getMessage());
+        }
+
+        // 如果执行错误，返回错误信息（0），执行结果为空，返回空（-1），执行结果成功，返回 List
+        if (selectPatentList == null) {
+            returnJsonStr = getExecuteJsonMessage(0);
+        } else if (selectPatentList.isEmpty()) {
+            returnJsonStr = getExecuteJsonMessage(-1);
         } else {
             returnJsonStr = JSON.toJSONString(selectPatentList);
         }
@@ -266,8 +342,15 @@ public class PatentInfoServiceImpl implements PatentInfoService {
      * @return 返回状态 JSON 串
      */
     private String getExecuteJsonMessage(int effectNum) {
-        // 决定返回的 status 返回结果，num 如果为 1 则表示成功, 0 为失败
-        String executeMessage = effectNum == 1 ? "success" : "failed";
+        // 决定返回的 status 返回结果，num 如果为 1 则表示成功, 0 为失败，-1 表示空
+        String executeMessage = null;
+        if (effectNum >= 1) {
+            executeMessage = "success";
+        } else if (effectNum == 0) {
+            executeMessage = "failed";
+        } else if (effectNum == -1) {
+            executeMessage = "null";
+        }
         Map<String, String> executeStatus = new HashMap<>(1);
         executeStatus.put("patentStatus", executeMessage);
         return JSON.toJSONString(executeStatus);

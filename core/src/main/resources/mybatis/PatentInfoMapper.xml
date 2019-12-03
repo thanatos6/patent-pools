@@ -32,7 +32,7 @@
     create_date, is_delete, current_status, current_process, owner_user_id
   </sql>
 
-    <!-- 动态SQL ：模糊插入一条专利，对应新建专利功能 -->
+    <!--    动态SQL ：模糊插入一条专利，对应新建专利功能 -->
     <insert id="insertPatentInfo" parameterType="com.suixingpay.pojo.PatentInfo">
         insert into patent_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -150,7 +150,7 @@
     </insert>
 
 
-    <!--动态 SQL ：模糊查询专利，对应专利搜索功能-->
+    <!--    动态 SQL ：模糊查询专利，对应专利搜索功能  -->
     <select id="selectPatentFuzzy" resultMap="BaseResultMap"
             parameterType="com.suixingpay.pojo.PatentInfo">
         select
@@ -380,7 +380,192 @@
     </select>
 
 
-    <!--    动态 SQL : 根据传入的专利的 id 动态更新所需要更新的专利的对应的字段-->
+    <!--    动态 SQL ：普通用户的条件模糊搜索（已认领状态）    -->
+    <select id="selectPatentNormalUserAndReceive" resultType="com.suixingpay.pojo.PatentInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from patent_info
+        where 1 = 1
+        <if test="id != null">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="batch != null and batch !=''">
+            and batch = #{batch,jdbcType=VARCHAR}
+        </if>
+        <if test="caseNumber != null and caseNumber !=''">
+            and case_number LIKE CONCAT('%',#{caseNumber,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="applyNumber != null and applyNumber !=''">
+            and apply_number LIKE CONCAT('%',#{applyNumber,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="applyDate != null">
+            and apply_date = #{applyDate,jdbcType=DATE}
+        </if>
+        <if test="applyTechLinkman != null and applyTechLinkman !=''">
+            and apply_tech_linkman = #{applyTechLinkman,jdbcType=VARCHAR}
+        </if>
+        <if test="applyManChs != null and applyManChs !=''">
+            and apply_man_chs = #{applyManChs,jdbcType=VARCHAR}
+        </if>
+        <if test="inventionChs != null and inventionChs!=''">
+            and invention_chs LIKE CONCAT('%',#{inventionChs,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="lawStatus != null and lawStatus!=''">
+            and law_status = #{lawStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="patentType != null and patentType !=''">
+            and patent_type = #{patentType,jdbcType=VARCHAR}
+        </if>
+        <if test="inventManChs != null and inventManChs !=''">
+            and invent_man_chs LIKE CONCAT('%',#{inventManChs,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="patentComment != null and patentComment !=''">
+            and patent_comment = #{patentComment,jdbcType=VARCHAR}
+        </if>
+        <if test="modifyDate != null">
+            and modify_date #{modifyDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createDate != null">
+            and create_date = #{createDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="isDelete != null">
+            and is_delete = #{isDelete,jdbcType=TINYINT}
+        </if>
+        <if test="currentProcess != null and currentProcess !=''">
+            and current_process LIKE CONCAT('%',#{currentProcess,jdbcType=VARCHAR},'%')
+        </if>
+        and (owner_user_id = #{ownerUserId,jdbcType=INTEGER}
+        or owner_user_id = 0)
+        and current_status > 2
+        order by modify_date ASC
+    </select>
+
+
+    <!--    动态 SQL ：管理员的条件模糊搜索（已认领状态）    -->
+    <select id="selectPatentRootUserAndReceive" resultType="com.suixingpay.pojo.PatentInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from patent_info
+        where 1 = 1
+        <if test="id != null">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="batch != null and batch !=''">
+            and batch = #{batch,jdbcType=VARCHAR}
+        </if>
+        <if test="caseNumber != null and caseNumber !=''">
+            and case_number LIKE CONCAT('%',#{caseNumber,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="applyNumber != null and applyNumber !=''">
+            and apply_number LIKE CONCAT('%',#{applyNumber,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="applyDate != null">
+            and apply_date = #{applyDate,jdbcType=DATE}
+        </if>
+        <if test="applyTechLinkman != null and applyTechLinkman !=''">
+            and apply_tech_linkman = #{applyTechLinkman,jdbcType=VARCHAR}
+        </if>
+        <if test="applyManChs != null and applyManChs !=''">
+            and apply_man_chs = #{applyManChs,jdbcType=VARCHAR}
+        </if>
+        <if test="inventionChs != null and inventionChs!=''">
+            and invention_chs LIKE CONCAT('%',#{inventionChs,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="lawStatus != null and lawStatus!=''">
+            and law_status = #{lawStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="patentType != null and patentType !=''">
+            and patent_type = #{patentType,jdbcType=VARCHAR}
+        </if>
+        <if test="inventManChs != null and inventManChs !=''">
+            and invent_man_chs LIKE CONCAT('%',#{inventManChs,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="patentComment != null and patentComment !=''">
+            and patent_comment = #{patentComment,jdbcType=VARCHAR}
+        </if>
+        <if test="modifyDate != null">
+            and modify_date #{modifyDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createDate != null">
+            and create_date = #{createDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="isDelete != null">
+            and is_delete = #{isDelete,jdbcType=TINYINT}
+        </if>
+        <if test="currentProcess != null and currentProcess !=''">
+            and current_process LIKE CONCAT('%',#{currentProcess,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="ownerUserId != null">
+            and owner_user_id = #{ownerUserId,jdbcType=INTEGER}
+        </if>
+        and current_status > 2
+        order by modify_date ASC
+    </select>
+
+
+    <!--    动态 SQL ：管理员或普通用户的模糊搜索（未领取状态）    -->
+    <select id="selectPatentAllUserAndNoReceive" resultType="com.suixingpay.pojo.PatentInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from patent_info
+        where 1 = 1
+        <if test="id != null">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="batch != null and batch !=''">
+            and batch = #{batch,jdbcType=VARCHAR}
+        </if>
+        <if test="caseNumber != null and caseNumber !=''">
+            and case_number LIKE CONCAT('%',#{caseNumber,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="applyNumber != null and applyNumber !=''">
+            and apply_number LIKE CONCAT('%',#{applyNumber,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="applyDate != null">
+            and apply_date = #{applyDate,jdbcType=DATE}
+        </if>
+        <if test="applyTechLinkman != null and applyTechLinkman !=''">
+            and apply_tech_linkman = #{applyTechLinkman,jdbcType=VARCHAR}
+        </if>
+        <if test="applyManChs != null and applyManChs !=''">
+            and apply_man_chs = #{applyManChs,jdbcType=VARCHAR}
+        </if>
+        <if test="inventionChs != null and inventionChs!=''">
+            and invention_chs LIKE CONCAT('%',#{inventionChs,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="lawStatus != null and lawStatus!=''">
+            and law_status = #{lawStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="patentType != null and patentType !=''">
+            and patent_type = #{patentType,jdbcType=VARCHAR}
+        </if>
+        <if test="inventManChs != null and inventManChs !=''">
+            and invent_man_chs LIKE CONCAT('%',#{inventManChs,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="patentComment != null and patentComment !=''">
+            and patent_comment = #{patentComment,jdbcType=VARCHAR}
+        </if>
+        <if test="modifyDate != null">
+            and modify_date #{modifyDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createDate != null">
+            and create_date = #{createDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="isDelete != null">
+            and is_delete = #{isDelete,jdbcType=TINYINT}
+        </if>
+        <if test="currentProcess != null and currentProcess !=''">
+            and current_process LIKE CONCAT('%',#{currentProcess,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="ownerUserId != null">
+            and owner_user_id = #{ownerUserId,jdbcType=INTEGER}
+        </if>
+        and current_status = 2
+        order by modify_date ASC
+    </select>
+
+
+    <!--    动态 SQL : 根据传入的专利的 id 动态更新所需要更新的专利 -->
     <update id="updatePatentInfoById" parameterType="com.suixingpay.pojo.PatentInfo">
         update patent_info
         <set>

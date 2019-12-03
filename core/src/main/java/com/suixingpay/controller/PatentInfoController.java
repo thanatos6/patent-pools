@@ -49,27 +49,49 @@ public class PatentInfoController {
     public String addNewPatent(@RequestBody PatentInfo patentInfo) {
 
         // 插入一条专利
-        String addPatentResult = patentInfoService.createNewPatent(patentInfo);
-        return addPatentResult;
+        return patentInfoService.createNewPatent(patentInfo);
 
     }
 
     @RequestMapping(value = "/searchPatent", method = RequestMethod.POST)
     public String searchPatentFuzzy(@RequestBody PatentInfo patentInfo) {
 
-        // TODO: 2019/12/2 Feature update - 字段模糊搜索完成，下一步
-
-        // TODO: 2019/12/2 Feature review - 关于普通用户的搜索，已经实现，但组长有代码问题，下一步跟组长讨论
+        // TODO: 2019/12/2 Feature update - 字段模糊搜索完成，下一步优化状态条件查询
 
         // 获取用户信息
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
 
         // 判断用户是否登录，若没登录，就赋值 id 为 0 表示没有登录
         int userId = user == null ? 0 : user.getId();
-        String searchPatentResult = patentInfoService.searchPatentByUserType(patentInfo, userId);
-        return searchPatentResult;
+        return patentInfoService.searchPatentByUserType(patentInfo, userId);
 
     }
+
+    // TODO: 2019/12/3 模糊搜索分离 - 已经认领的专利搜索
+    @RequestMapping(value = "/searchPatentReceive", method = RequestMethod.POST)
+    public String searchPatentFuzzyReceive(@RequestBody PatentInfo patentInfo) {
+
+        // 获取用户信息
+        User user = userDescriptionService.userDescription(httpServletRequest.getSession());
+
+        // 判断用户是否登录，若没登录，就赋值 id 为 0 表示没有登录
+        int userId = user == null ? 0 : user.getId();
+        return patentInfoService.searchPatentByUserAndReceive(patentInfo, userId);
+
+    }
+
+    // TODO: 2019/12/3 模糊搜索分离 - 未被认领的专利搜索
+    @RequestMapping(value = "searchPatentNoReceive", method = RequestMethod.POST)
+    public String searchPatentFuzzyNoReceive(@RequestBody PatentInfo patentInfo) {
+
+        // 获取用户信息
+        User user = userDescriptionService.userDescription(httpServletRequest.getSession());
+
+        // 判断用户是否登录，若没登录，就赋值 id 为 0 表示没有登录
+        int userId = user == null ? 0 : user.getId();
+        return patentInfoService.searchPatentByUserAndNoReceive(patentInfo, userId);
+    }
+
 
     @RequestMapping(value = "/searchPatentPool", method = RequestMethod.GET)
     public String searchPatentPool() {
@@ -78,8 +100,7 @@ public class PatentInfoController {
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
 
         // 查询专利池
-        String searchPatentPoolResult = patentInfoService.searchNavigationInfo(user.getId());
-        return searchPatentPoolResult;
+        return patentInfoService.searchNavigationInfo(user.getId());
 
     }
 
@@ -91,8 +112,7 @@ public class PatentInfoController {
         patentInfo.setOwnerUserId(user.getId());
 
         // 领取一个专利
-        String receivePatentResult = patentInfoService.receivePatent(patentInfo);
-        return receivePatentResult;
+        return patentInfoService.receivePatent(patentInfo);
 
     }
 
@@ -103,8 +123,7 @@ public class PatentInfoController {
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
 
         // 编辑对应用户类型的专利
-        String editPatentResult = patentInfoService.editPatent(patentInfo, user.getId());
-        return editPatentResult;
+        return patentInfoService.editPatent(patentInfo, user.getId());
 
     }
 
@@ -112,8 +131,7 @@ public class PatentInfoController {
     public String showPatentDetails(@RequestBody PatentInfo patentInfo) {
 
         // 返回专利的详细信息
-        String showPatentDetailsResult = patentInfoService.searchPatentAnyCondition(patentInfo);
-        return showPatentDetailsResult;
+        return patentInfoService.searchPatentAnyCondition(patentInfo);
 
     }
 
