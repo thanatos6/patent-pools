@@ -13,11 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * @author kongjian
@@ -89,13 +86,7 @@ public class PatentPropertiesController {
                                           @RequestParam("pageNum") Integer pageNum) {
         PageHelper.startPage(pageNum, 20);
         List<PatentPropertiesList> result = patentPropertiesService.searchPropertiesJoinPatent(name);
-        PageInfo page = new PageInfo(result);
-
-        Map<String, Object> mapResult = new HashMap<>();
-        mapResult.put("code", 0);
-        mapResult.put("result", page);
-        String text = JSON.toJSONString(mapResult);
-        return text;
+        return getString(result);
     }
 
     @RequestMapping("/join-patent")
@@ -107,7 +98,11 @@ public class PatentPropertiesController {
         patentPropertiesList.setPropertiesTitle(name);
         patentPropertiesList.setPatentTitle(title);
         List<PatentPropertiesList> result = patentPropertiesService.searchPropertiesJoinPatentEntity(patentPropertiesList);
-        PageInfo page = new PageInfo(result);
+        return getString(result);
+    }
+
+    private String getString(List<PatentPropertiesList> result) {
+        PageInfo<PatentPropertiesList> page = new PageInfo<>(result);
 
         Map<String, Object> mapResult = new HashMap<>();
         mapResult.put("code", 0);
