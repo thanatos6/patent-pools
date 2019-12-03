@@ -55,12 +55,13 @@
         where `id` = #{id,jdbcType=INTEGER}
     </update>
     <!-- 编写完15,16，4变5 ，待二审-->
-    <update id="updateStatusFinish" parameterType="int">
+    <update id="updateStatusFinish" parameterType="com.suixingpay.pojo.PatentInfo">
         update `patent_info`
         set
-            current_status = 5
+            current_status = #{currentStatus,jdbcType=INTEGER}
         where `id` = #{id,jdbcType=INTEGER}
     </update>
+
     <!--根据当前登录人role,判断状态表的list-->
     <select id="selectCodeByRole" parameterType="int" resultMap="RoleMap">
         SELECT process_code

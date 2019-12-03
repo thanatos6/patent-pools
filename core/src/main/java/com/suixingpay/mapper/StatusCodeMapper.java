@@ -25,7 +25,7 @@ public interface StatusCodeMapper {
     void updateStatusClaim(PatentInfo patentInfo);
 
     //点击编辑完成
-    void updateStatusFinish(int patentId);
+    void updateStatusFinish(PatentInfo patentInfo);
 
     //根据角色码查找有权限的待办
     List<StatusCode> selectCodeByRole(int role);

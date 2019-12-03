@@ -113,6 +113,7 @@ public class StatusCodeServiceImpl implements StatusCodeService {
 
     /**
      * 点击编写完成，只有当状态为4编写中,15二审不通过,16提交审批不通过时，才允许走到下一步5待二审，根据专利Id号，改变流程状态
+     * 当当前状态为0讨论中时，编写完成状态变为1待一审
      *
      * @param patentInfo 专利实体
      * @return
@@ -120,11 +121,16 @@ public class StatusCodeServiceImpl implements StatusCodeService {
     @Override
     public boolean updateStatusFinish(PatentInfo patentInfo) {
         int code = patentInfo.getCurrentStatus();
-        int patentId = patentInfo.getId();
-        LOGGER.info("[接受的参数为{}和{}]", code, patentId);
+        //int patentId = patentInfo.getId();
+        //LOGGER.info("[接受的参数为{}和{}]", code, patentId);
         boolean result = false;
         if (code == 15 || code == 16 || code == 4) {
-            statusCodeMapper.updateStatusFinish(patentId);
+            patentInfo.setCurrentStatus((byte) 5);
+            statusCodeMapper.updateStatusFinish(patentInfo);
+            result = true;
+        } else if (code == 0) {
+            patentInfo.setCurrentStatus((byte) 1);
+            statusCodeMapper.updateStatusFinish(patentInfo);
             result = true;
         }
         return result;
