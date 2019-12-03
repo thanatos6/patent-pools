@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * @author kongjian
@@ -82,12 +83,30 @@ public class PatentPropertiesController {
         return text;
     }
 
-    @RequestMapping("/join-patent")
+    @RequestMapping("/join-patent-page")
     @ResponseBody
-    public String getPropertiesJoinPatent(@RequestParam("name") String name,
-                                            @RequestParam("pageNum") Integer pageNum) {
+    public String getPropertiesJoinPatentPage(@RequestParam("name") String name,
+                                          @RequestParam("pageNum") Integer pageNum) {
         PageHelper.startPage(pageNum, 20);
         List<PatentPropertiesList> result = patentPropertiesService.searchPropertiesJoinPatent(name);
+        PageInfo page = new PageInfo(result);
+
+        Map<String, Object> mapResult = new HashMap<>();
+        mapResult.put("code", 0);
+        mapResult.put("result", page);
+        String text = JSON.toJSONString(mapResult);
+        return text;
+    }
+
+    @RequestMapping("/join-patent")
+    @ResponseBody
+    public String getPropertiesJoinPatent(@RequestParam(value="name", required=false) String name,
+                                          @RequestParam(value="title", required=false) String title) {
+        PageHelper.startPage(1, 100);
+        PatentPropertiesList patentPropertiesList = new PatentPropertiesList();
+        patentPropertiesList.setPropertiesTitle(name);
+        patentPropertiesList.setPatentTitle(title);
+        List<PatentPropertiesList> result = patentPropertiesService.searchPropertiesJoinPatentEntity(patentPropertiesList);
         PageInfo page = new PageInfo(result);
 
         Map<String, Object> mapResult = new HashMap<>();

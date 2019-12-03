@@ -17,4 +17,6 @@ public interface PatentPropertiesService {
     void removePatentProperties(PatentProperties patentProperties);
 
     List<PatentPropertiesList> searchPropertiesJoinPatent(String name);
+
+    List<PatentPropertiesList> searchPropertiesJoinPatentEntity(PatentPropertiesList patentPropertiesList);
 }

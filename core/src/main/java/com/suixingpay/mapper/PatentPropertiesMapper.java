@@ -20,4 +20,6 @@ public interface PatentPropertiesMapper {
     List<PatentProperties> selectPatentPropertiesByPatentId(int id);
 
     List<PatentPropertiesList> selectPropertiesJoinPatent(String indicatorName);
+
+    List<PatentPropertiesList> selectPropertiesJoinPatentEntity(PatentPropertiesList patentPropertiesList);
 }
