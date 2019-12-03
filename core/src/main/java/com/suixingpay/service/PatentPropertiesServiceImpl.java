@@ -65,4 +65,10 @@ public class PatentPropertiesServiceImpl implements PatentPropertiesService {
         List<PatentPropertiesList> propertiesJoinPatent = patentPropertiesMapper.selectPropertiesJoinPatent(name);
         return propertiesJoinPatent;
     }
+
+    @Override
+    public List<PatentPropertiesList> searchPropertiesJoinPatentEntity(PatentPropertiesList patentPropertiesList) {
+        List<PatentPropertiesList> propertiesJoinPatent = patentPropertiesMapper.selectPropertiesJoinPatentEntity(patentPropertiesList);
+        return propertiesJoinPatent;
+    }
 }
