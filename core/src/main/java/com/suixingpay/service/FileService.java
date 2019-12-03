@@ -15,6 +15,6 @@ public interface FileService {
 
     Map<String,Object> insert(MultipartFile data, int filePatentId, HttpServletRequest httpServletRequest);
     int  update (int fileId);
-    Map<String, Object> selectById (int filePatentId);
+    Map<String, Object> selectById (Integer filePatentId);
     Map<String,Object> selectPathByFileId(int fileId, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException;
 }

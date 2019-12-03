@@ -32,7 +32,7 @@ public interface FileMapper {
      * @param filePatentId
      * @return
      */
-    List<Files> selectById(int filePatentId);
+    List<Files> selectById(Integer filePatentId);
 
     /**
      * 为了删除文件的查询功能

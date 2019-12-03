@@ -34,7 +34,7 @@ public class FileController {
      */
     @PostMapping("/upload")
     public Map<String, Object> upload(@RequestParam("id") int filePatentId, @RequestParam("file") MultipartFile file,HttpServletRequest request) {
-        return fileService.insert(file, filePatentId,request );
+        return fileService.insert(file, filePatentId, request );
     }
 
 
@@ -43,7 +43,7 @@ public class FileController {
      * @return
      */
     @GetMapping("/select")
-    public Map<String, Object> selectById(@RequestParam("id") int patentId) {
+    public Map<String, Object> selectById(@RequestParam("id") Integer patentId) {
         return fileService.selectById(patentId);
     }
 
