@@ -31,9 +31,9 @@ public class LoginController {
 
         try {
             //System.out.println(userService);
-            if (user==null){
+           /* if (user==null){
                 return  ZhuanliUtil.getJSONString(505,"");
-            }
+            }*/
             String account=user.getAccount();
             String password=user.getPassword();
             user =userService.login(account,password);
