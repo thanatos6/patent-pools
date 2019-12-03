@@ -95,4 +95,18 @@
         from patent_properties as pp left join patent_info as p on pp.patent_id = p.id
         where pp.indicator_name like concat('%', #{indicatorName,jdbcType=VARCHAR}, '%') AND p.is_delete=0
     </select>
+
+    <select id="selectPropertiesJoinPatentEntity" resultMap="JoinResultMap">
+        select pp.indicator_name, pp.patent_id, p.id, p.case_number, p.current_status, p.apply_date,
+        p.invention_chs, p.invent_man_chs, p.owner_user_id
+        from patent_properties as pp left join patent_info as p on pp.patent_id = p.id
+        where 1=1
+        <if test="propertiesTitle != null and propertiesTitle != ''">
+            and pp.indicator_name like concat('%', #{propertiesTitle,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="patentTitle != null and patentTitle != ''">
+            and p.invention_chs like concat('%', #{patentTitle,jdbcType=VARCHAR}, '%')
+        </if>
+        and pp.is_delete=0 and p.is_delete=0
+    </select>
 </mapper>
