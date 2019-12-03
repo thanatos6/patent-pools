@@ -111,7 +111,11 @@ public class PatentPropertiesController {
         PageInfo<PatentPropertiesList> page = new PageInfo<>(result);
 
         Map<String, Object> mapResult = new HashMap<>();
-        mapResult.put("code", 0);
+        if (result.isEmpty()) {
+            mapResult.put("code", -1);
+        } else {
+            mapResult.put("code", 0);
+        }
         mapResult.put("result", page);
         String text = JSON.toJSONString(mapResult);
         return text;
