@@ -8,12 +8,13 @@
  6. jar - 打jar包.
  7. javadoc - 打javadoc包.
  8. dependencies - 显示项目的所有依赖关系.
- 9. uploadArchives - 上传':archives'中配置的所有包到maven 仓库
+ 9. uploadArchives - 上传':archives'中配置的所有包到 maven 仓库
  */
 buildscript { // buildscript 不能抽取出来，只能重复写。
     ext {
-        sxGradleHome = "http://192.168.120.68/root/gradle-scripts/raw/master/"
-        // sxGradleHome = "https://raw.githubusercontent.com/iSayCheese/gradle-scripts/master/"
+//        sxGradleHome = "http://192.168.120.68/root/gradle-scripts/raw/master/"
+//        sxGradleHome = "https://gitee.com/qihualive/gradle-scripts-github/raw/master/"
+        sxGradleHome = "https://gitee.com/qihualive/gradle-scripts-github/raw/master/" //华哥的 gitee 配置
         suixingpayStarterVersion = "3.0.4.RELEASE" // 基础框架
         suixingpayConfigVersion = "1.1.0-SNAPSHOT" // 配置中心
         fdPortalVersion = "1.0.0-SNAPSHOT" // 统一门户
@@ -23,7 +24,7 @@ buildscript { // buildscript 不能抽取出来，只能重复写。
     apply from: sxGradleHome + 'spring-cloud-edgware.gradle' // 导入使用Spring Cloud及相应的Spring Boot版本号
     repositories {
         maven {
-            //url REPOSITORY_URL
+//            url REPOSITORY_URL
             url "https://plugins.gradle.org/m2/"
         }
     }
@@ -37,7 +38,7 @@ subprojects {
     // 参考 http://172.16.60.101:8080/wcp/webdoc/view/Pubff8080815ebdbff7015fc2efb33600b1.html
     apply from: sxGradleHome + 'maven.gradle'
     apply from: sxGradleHome + 'spring-cloud.gradle'
-    apply from: sxGradleHome + 'jacoco.gradle'
+//    apply from: sxGradleHome + 'jacoco.gradle' //不需要 jacoco 的配置
 
 //    version = '1.0.0-SNAPSHOT' // 设置版本
 //    group = 'com.suixingpay.cloud' // 设置group id
@@ -47,10 +48,18 @@ subprojects {
 
     dependencies {
         compileOnly('org.springframework.boot:spring-boot-configuration-processor')
-        compileOnly('org.projectlombok:lombok')
+        compile('org.projectlombok:lombok')
         testCompile('org.projectlombok:lombok')
         annotationProcessor('org.projectlombok:lombok')
         testCompile "org.springframework.boot:spring-boot-starter-test"
         testCompile "org.springframework.boot:spring-boot-test-autoconfigure"
+
+        compile group: 'org.slf4j', name: 'slf4j-api'
+
+        compile group: 'org.springframework', name: 'spring-aop'
+
+        compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+
+        compile group: 'com.alibaba', name: 'fastjson', version: '1.2.58'
     }
 }

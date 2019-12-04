@@ -1,5 +1,7 @@
 package com.suixingpay.controller;
 
+import com.suixingpay.pojo.CodeEnum;
+import com.suixingpay.pojo.Response;
 import com.suixingpay.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -24,6 +26,7 @@ public class FileController {
 
     @Autowired
     private FileService fileService;
+    Map<String, Object> map = new HashMap<>();
 
     /**
      * 上传文件
@@ -33,8 +36,8 @@ public class FileController {
      * @return
      */
     @PostMapping("/upload")
-    public Map<String, Object> upload(@RequestParam("id") int filePatentId, @RequestParam("file") MultipartFile file,HttpServletRequest request) {
-        return fileService.insert(file, filePatentId, request );
+    public Map<String ,Object> upload(@RequestParam("id") Integer filePatentId, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        return fileService.insert(file, filePatentId, request);
     }
 
 
@@ -44,7 +47,8 @@ public class FileController {
      */
     @GetMapping("/select")
     public Map<String, Object> selectById(@RequestParam("id") Integer patentId) {
-        return fileService.selectById(patentId);
+            return fileService.selectById(patentId);
+
     }
 
 
@@ -77,7 +81,7 @@ public class FileController {
      * @param request
      */
     @GetMapping("/download")
-    public Map<String,Object> selectPathByFileId(@Param("fileId") Integer fileId, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        return fileService.selectPathByFileId(fileId, request, response);
+    public Map<String,Object> selectPathByFileId(@Param("fileId") Integer fileId, HttpServletRequest request) {
+        return fileService.selectPathByFileId(fileId, request);
     }
 }

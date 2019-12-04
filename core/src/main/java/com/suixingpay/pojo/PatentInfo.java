@@ -1,5 +1,6 @@
 package com.suixingpay.pojo;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 
 /**
@@ -9,6 +10,7 @@ import java.util.Date;
  */
 
 public class PatentInfo {
+
     private Integer id;
 
     private String batch;
