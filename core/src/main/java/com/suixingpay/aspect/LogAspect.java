@@ -4,6 +4,7 @@ import ch.qos.logback.core.joran.action.ActionConst;
 import com.suixingpay.mapper.LogMapper;
 import com.suixingpay.pojo.Log;
 import com.suixingpay.pojo.PatentInfo;
+import com.suixingpay.pojo.RejectContent;
 import com.suixingpay.pojo.User;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -102,7 +103,7 @@ public class LogAspect {
 
         //使用getArgs()获取切点方法的入参，
         Object[] args = joinPoint.getArgs();
-        PatentInfo patentInfo = (PatentInfo)args[0];
+        RejectContent patentInfo = (RejectContent)args[0];
 
         Date date=new Date();
         Log log = new Log();
@@ -122,7 +123,7 @@ public class LogAspect {
     }
 
 
-    @After("pointCutReject()")
+    /*@After("pointCutReject()")
     public void afterPointCutReject(JoinPoint joinPoint){
 
 
@@ -152,7 +153,7 @@ public class LogAspect {
         log.setIsDelete((byte)0);
         logMapper.insert(log);
 
-    }
+    }*/
 }
 
 
