@@ -4,16 +4,17 @@ import com.suixingpay.mapper.FileMapper;
 import com.suixingpay.pojo.Files;
 import com.suixingpay.util.GetIp;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -28,7 +29,7 @@ public class FileServiceImpl implements FileService {
     FileMapper fileMapper;
 
     @Override
-    public Map<String,Object> insert(MultipartFile file,int filePatentId,HttpServletRequest request){
+    public Map<String,Object> insert(MultipartFile file, int filePatentId, javax.servlet.http.HttpServletRequest httpServletRequest){
         LOGGER.info("[接受的参数为{}和{}]",file,filePatentId);
         Map<String,Object> map =new HashMap<>();
         if (file.isEmpty()) {
@@ -39,9 +40,11 @@ public class FileServiceImpl implements FileService {
         //文件名
         String fileName = file.getOriginalFilename();
         //获取虚拟文件路径
-        String filePath=request.getSession().getServletContext().getRealPath("/");
+        //String filePath = System.getProperty("user.dir");
+        String filePath = httpServletRequest.getServletContext().getRealPath("/");
         LOGGER.info(filePath);
-        File filed = new File(filePath +  fileName );
+        File filed = new File(filePath + fileName );
+        LOGGER.info(fileName);
         try {
             file.transferTo(filed);
             LOGGER.info("上传成功");
