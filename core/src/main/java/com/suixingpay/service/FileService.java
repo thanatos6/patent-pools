@@ -16,7 +16,10 @@ import java.util.Map;
 public interface FileService {
 
     Map<String, Object> insert(MultipartFile data, Integer filePatentId, HttpServletRequest httpServletRequest);
-    int  update (Integer fileId);
-    Map<String, Object> selectById (Integer filePatentId);
-    Map<String,Object> selectPathByFileId(Integer fileId, HttpServletRequest request);
-        }
+
+    int update(Integer fileId);
+
+    Map<String, Object> selectById(Integer filePatentId);
+
+    Map<String, Object> selectPathByFileId(Integer fileId, HttpServletRequest request);
+}

@@ -1,8 +1,6 @@
 package com.suixingpay.controller;
 
 import com.suixingpay.aspect.Action;
-import com.suixingpay.pojo.CodeEnum;
-import com.suixingpay.pojo.Response;
 import com.suixingpay.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -12,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
 
@@ -49,10 +46,8 @@ public class FileController {
      */
     @GetMapping("/select")
     public Map<String, Object> selectById(@RequestParam("id") Integer patentId) {
-            return fileService.selectById(patentId);
-
+        return fileService.selectById(patentId);
     }
-
 
 
     /**
@@ -81,7 +76,6 @@ public class FileController {
     /**
      * @param fileId
      * @param request
-     * @throws UnsupportedEncodingException
      */
     @GetMapping("/download")
     public Map<String,Object> selectPathByFileId(@Param("fileId") Integer fileId, HttpServletRequest request) {
