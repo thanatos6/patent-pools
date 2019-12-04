@@ -1,5 +1,6 @@
 package com.suixingpay.controller;
 
+import com.suixingpay.aspect.Action;
 import com.suixingpay.pojo.PatentInfo;
 import com.suixingpay.pojo.RejectContent;
 import com.suixingpay.service.StatusCodeService;
@@ -44,6 +45,7 @@ public class StatusCodeController {
 
 
     //管理员点击同意按钮，改变专利当前状态，前端测试通过
+    @Action(name="agree")
     @RequestMapping(value = "/agree", method = RequestMethod.POST)
     @ResponseBody
     public String agree(@RequestBody PatentInfo patentInfo) {
@@ -58,6 +60,7 @@ public class StatusCodeController {
 
 
     //管理员点击驳回按钮，改变专利当前状态，并且插入驳回列表一条信息
+    @Action(name="reject")
     @RequestMapping(value = "/reject", method = RequestMethod.POST)
     @ResponseBody
     public String reject(@RequestBody RejectContent rejectContent) {

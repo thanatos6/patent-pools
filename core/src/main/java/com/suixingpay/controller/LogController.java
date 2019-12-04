@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author hyx
@@ -28,6 +25,7 @@ public class LogController {
     public Map<String,Object> selectAllLog(){
         Map<String, Object> map =new HashMap<>(0);
         List<Log> list = logService.selectAllLog();
+        Collections.reverse(list);
         if(list.size()==0){
             map.put("list","");
             map.put("status",1);
@@ -43,6 +41,7 @@ public class LogController {
     public Map<String,Object> selectLogById(Integer id){
         Map<String, Object> map =new HashMap<>(0);
         List<Log> list = logService.selectLogById(id);
+        Collections.reverse(list);
         if(list.size()==0){
             map.put("list","");
             map.put("status",1);
@@ -58,6 +57,7 @@ public class LogController {
     public Map<String,Object> selectUserLog(Integer id){
         Map<String, Object> map =new HashMap<>(0);
         List<Log> list = logService.selectUserLog(id);
+        Collections.reverse(list);
         if(list.size()==0){
             map.put("list","");
             map.put("status",1);
