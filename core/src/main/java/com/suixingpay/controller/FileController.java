@@ -1,5 +1,6 @@
 package com.suixingpay.controller;
 
+import com.suixingpay.aspect.Action;
 import com.suixingpay.pojo.CodeEnum;
 import com.suixingpay.pojo.Response;
 import com.suixingpay.service.FileService;
@@ -35,6 +36,7 @@ public class FileController {
      * @param file
      * @return
      */
+    @Action(name="upload")
     @PostMapping("/upload")
     public Map<String ,Object> upload(@RequestParam("id") Integer filePatentId, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
         return fileService.insert(file, filePatentId, request);
@@ -50,6 +52,7 @@ public class FileController {
             return fileService.selectById(patentId);
 
     }
+
 
 
     /**
@@ -71,7 +74,6 @@ public class FileController {
             map.put("result", 0);
             LOGGER.info("删除失败");
         }
-
         return map;
     }
 
@@ -79,6 +81,7 @@ public class FileController {
     /**
      * @param fileId
      * @param request
+     * @throws UnsupportedEncodingException
      */
     @GetMapping("/download")
     public Map<String,Object> selectPathByFileId(@Param("fileId") Integer fileId, HttpServletRequest request) {
