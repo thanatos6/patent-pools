@@ -1,6 +1,7 @@
 package com.suixingpay.controller;
 
 
+import com.suixingpay.aspect.Action;
 import com.suixingpay.mapper.LogMapper;
 import com.suixingpay.pojo.Log;
 import com.suixingpay.service.LogService;
@@ -37,6 +38,7 @@ public class LogController {
         return map;
     }
 
+
     @RequestMapping("selectLogById")
     public Map<String,Object> selectLogById(Integer id){
         Map<String, Object> map =new HashMap<>(0);
@@ -51,6 +53,7 @@ public class LogController {
         return map;
     }
 
+
     @RequestMapping("selectUserLog")
     public Map<String,Object> selectUserLog(Integer id){
         Map<String, Object> map =new HashMap<>(0);
@@ -63,7 +66,11 @@ public class LogController {
             map.put("status",0);
         }
         return map;
+    }
 
+    @RequestMapping("test")
+    public String test(){
 
+        return "注解执行了";
     }
 }
