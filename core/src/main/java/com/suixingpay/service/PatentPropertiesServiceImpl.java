@@ -36,7 +36,7 @@ public class PatentPropertiesServiceImpl implements PatentPropertiesService {
 
     @Override
     public List<PatentProperties> searchPatentPropertiesByName(String name) {
-        PageHelper.startPage(1,1);
+        PageHelper.startPage(1, 1);
         List<PatentProperties> patentPropertiesLikeName = patentPropertiesMapper.selectPatentPropertiesByName(name);
         return patentPropertiesLikeName;
 
@@ -63,6 +63,12 @@ public class PatentPropertiesServiceImpl implements PatentPropertiesService {
     @Override
     public List<PatentPropertiesList> searchPropertiesJoinPatent(String name) {
         List<PatentPropertiesList> propertiesJoinPatent = patentPropertiesMapper.selectPropertiesJoinPatent(name);
+        return propertiesJoinPatent;
+    }
+
+    @Override
+    public List<PatentPropertiesList> searchPropertiesJoinPatentEntity(PatentPropertiesList patentPropertiesList) {
+        List<PatentPropertiesList> propertiesJoinPatent = patentPropertiesMapper.selectPropertiesJoinPatentEntity(patentPropertiesList);
         return propertiesJoinPatent;
     }
 }

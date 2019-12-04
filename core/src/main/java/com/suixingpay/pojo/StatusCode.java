@@ -1,19 +1,23 @@
 package com.suixingpay.pojo;
 
 public class StatusCode {
-private int id;
-private String processStatus;
-private String role;
-private String processCode;
+    //状态码ID
+    private Integer id;
+    //当前状态
+    private String processStatus;
+    //权限角色
+    private String role;
+    //状态码
+    private String processCode;
 
     public StatusCode() {
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

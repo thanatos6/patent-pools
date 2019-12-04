@@ -29,4 +29,9 @@ public class LogServiceImpl implements LogService {
 
         return logMapper.selectAllLog();
     }
+
+    @Override
+    public List<Log> selectUserLog(Integer id) {
+        return logMapper.selectUserLog(id);
+    }
 }

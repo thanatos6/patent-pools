@@ -4,18 +4,16 @@ package com.suixingpay.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.suixingpay.pojo.CodeEnum;
 import com.suixingpay.pojo.PatentProperties;
 import com.suixingpay.pojo.PatentPropertiesList;
+import com.suixingpay.pojo.Response;
 import com.suixingpay.service.PatentPropertiesService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -23,7 +21,9 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/properties")
+@Slf4j
 public class PatentPropertiesController {
+
     @Autowired
     private PatentPropertiesService patentPropertiesService;
 
@@ -46,7 +46,7 @@ public class PatentPropertiesController {
 
     @RequestMapping("/patent-by-properties-name")
     @ResponseBody
-    public List<PatentProperties> propertiesByName (@RequestParam("name") String name) {
+    public List<PatentProperties> propertiesByName(@RequestParam("name") String name) {
         List<PatentProperties> patentListByPropertiesName = patentPropertiesService.searchPatentPropertiesByName(name);
         return patentListByPropertiesName;
     }
@@ -82,18 +82,60 @@ public class PatentPropertiesController {
         return text;
     }
 
-    @RequestMapping("/join-patent")
+    @RequestMapping("/join-patent-page")
     @ResponseBody
-    public String getPropertiesJoinPatent(@RequestParam("name") String name,
-                                            @RequestParam("pageNum") Integer pageNum) {
+    public String getPropertiesJoinPatentPage(@RequestParam("name") String name,
+                                              @RequestParam("pageNum") Integer pageNum) {
         PageHelper.startPage(pageNum, 20);
         List<PatentPropertiesList> result = patentPropertiesService.searchPropertiesJoinPatent(name);
-        PageInfo page = new PageInfo(result);
+        return getString(result);
+    }
+
+    @RequestMapping("/join-patent")
+    @ResponseBody
+    public String getPropertiesJoinPatent(@RequestParam(value = "name", required = false) String name,
+                                          @RequestParam(value = "title", required = false) String title) throws Exception {
+        PageHelper.startPage(1, 100);
+        if (log.isInfoEnabled()) {
+            log.info("=======获取到的参数：name {} ;title {}", name, title);
+        }
+        if (title == null && name == null) {
+//            log.info("title length {}", title.isEmpty());
+//            log.info("name length {}", name.isEmpty());
+            String errorMsg = "没有获取到需要搜索的参数";
+            throw new Exception(errorMsg);
+        }
+        PatentPropertiesList patentPropertiesList = new PatentPropertiesList();
+        patentPropertiesList.setPropertiesTitle(name);
+        patentPropertiesList.setPatentTitle(title);
+        List<PatentPropertiesList> result = patentPropertiesService.searchPropertiesJoinPatentEntity(patentPropertiesList);
+        return getString(result);
+
+//        PageInfo<PatentPropertiesList> page = new PageInfo<>(result);
+//        Response<Map<String, PageInfo<PatentProperties>>> response = Response.getInstance(CodeEnum.SUCCESS, page);
+//        return response;
+    }
+
+    private String getString(List<PatentPropertiesList> result) {
+        PageInfo<PatentPropertiesList> page = new PageInfo<>(result);
 
         Map<String, Object> mapResult = new HashMap<>();
-        mapResult.put("code", 0);
+        if (result.isEmpty()) {
+            mapResult.put("code", -1);
+        } else {
+            mapResult.put("code", 0);
+        }
         mapResult.put("result", page);
         String text = JSON.toJSONString(mapResult);
         return text;
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    public Response handlerSelfException(Exception e) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("msg", e.getMessage());
+        Response<Map<String, HashMap>> response = Response.getInstance(CodeEnum.FAIL, result);
+        return response;
     }
 }

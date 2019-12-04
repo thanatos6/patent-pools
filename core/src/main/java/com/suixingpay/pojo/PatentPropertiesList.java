@@ -1,9 +1,18 @@
 package com.suixingpay.pojo;
 
+/**
+ * @author kongjian
+ */
 public class PatentPropertiesList {
     private int patentId;
     private String propertiesTitle;
     private String code;
+    private int currentStatus;
+    private String statusName;
+    private String applyDate;
+    private String person;
+    private String codingPerson;
+    private String patentTitle;
 
     public int getCurrentStatus() {
         return currentStatus;
@@ -12,13 +21,6 @@ public class PatentPropertiesList {
     public void setCurrentStatus(int currentStatus) {
         this.currentStatus = currentStatus;
     }
-
-    private int currentStatus;
-    private String statusName;
-    private String applyDate;
-    private String person;
-    private String codingPerson;
-    private String patentTitle;
 
     public String getPatentTitle() {
         return patentTitle;
