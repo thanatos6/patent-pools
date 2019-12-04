@@ -1,5 +1,6 @@
 package com.suixingpay.controller;
 
+import com.suixingpay.aspect.Action;
 import com.suixingpay.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -32,6 +33,7 @@ public class FileController {
      * @param file
      * @return
      */
+    @Action(name="upload")
     @PostMapping("/upload")
     public Map<String, Object> upload(@RequestParam("id") int filePatentId, @RequestParam("file") MultipartFile file,HttpServletRequest request) {
         return fileService.insert(file, filePatentId,request );
@@ -46,6 +48,7 @@ public class FileController {
     public Map<String, Object> selectById(@RequestParam("id") int patentId) {
         return fileService.selectById(patentId);
     }
+
 
 
     /**

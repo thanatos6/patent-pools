@@ -30,13 +30,13 @@ import java.util.List;
 @Service
 @Slf4j
 public class StatusCodeServiceImpl implements StatusCodeService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatusCodeServiceImpl.class);
     @Autowired
     private StatusCodeMapper statusCodeMapper;
     @Autowired
     private PatentInfoService patentInfoService;
     @Autowired
     private UserDescriptionService userDescriptionService;
-    private static final Logger LOGGER = LoggerFactory.getLogger(StatusCodeServiceImpl.class);
     @Autowired
     private HttpServletRequest request;
 
@@ -52,7 +52,7 @@ public class StatusCodeServiceImpl implements StatusCodeService {
 
         try {
             Integer statusCode = statusCodeMapper.selectCodeByPid(patentID);
-            if(statusCode==null){
+            if (statusCode == null) {
                 return ZhuanliUtil.getJSONString("失败");
             }
             if (statusCode == 1 || statusCode == 5 || statusCode == 6) {
@@ -79,7 +79,7 @@ public class StatusCodeServiceImpl implements StatusCodeService {
     @Override
     @Transactional
     public String createNewReject(RejectContent rejectContent) {
-        int patentid = rejectContent.getPatentId();
+        Integer patentid = rejectContent.getPatentId();
         HttpSession session = request.getSession();
         int userId = userDescriptionService.userDescription(session).getId();
         rejectContent.setRejectUserId(userId);
@@ -88,12 +88,14 @@ public class StatusCodeServiceImpl implements StatusCodeService {
         Date date = new Date();
         rejectContent.setCreateDate(date);
         rejectContent.setModifyDate(date);
-
+        String getRejectContent = rejectContent.getRejectContent();
         // 通过 mapper 的执行来决定是否成功，插入失败，则返回结果为 0；插入成功，则 mapper 执行结果为 1
-        int insertResult = 0;
         try {
+            if (patentid == null || getRejectContent == null || getRejectContent.equals("")) {
+                return ZhuanliUtil.getJSONString("传参为空");
+            }
             Integer statusCode = statusCodeMapper.selectCodeByPid(patentid);
-            if(statusCode==null){
+            if (statusCode == null) {
                 return ZhuanliUtil.getJSONString("失败");
             }
             if (statusCode == 5 || statusCode == 6) {
@@ -104,8 +106,6 @@ public class StatusCodeServiceImpl implements StatusCodeService {
                 statusCodeMapper.updateStatusTalk(patentid);
                 statusCodeMapper.insertRejectContent(rejectContent);
                 return ZhuanliUtil.getJSONString("1");
-            } else {
-                return ZhuanliUtil.getJSONString("0");
             }
 
         } catch (Exception e) {
@@ -128,15 +128,12 @@ public class StatusCodeServiceImpl implements StatusCodeService {
         try {
             int patentId = patentInfo.getId();
             Integer statusCode = statusCodeMapper.selectCodeByPid(patentId);
-            if(statusCode==null){
+            if (statusCode == 4 || statusCode == null) {
                 return ZhuanliUtil.getJSONString("失败");
             }
-            if (statusCode == 4) {
-                return ZhuanliUtil.getJSONString("失败");
-            } else {
-                statusCodeMapper.updateStatusClaim(patentInfo);
-                return ZhuanliUtil.getJSONString("200");
-            }
+            statusCodeMapper.updateStatusClaim(patentInfo);
+            return ZhuanliUtil.getJSONString("200");
+
         } catch (Exception e) {
             e.printStackTrace();
             return ZhuanliUtil.getJSONString("失败");
@@ -156,11 +153,11 @@ public class StatusCodeServiceImpl implements StatusCodeService {
      */
     @Override
     public boolean updateStatusFinish(PatentInfo patentInfo) {
-        int code = patentInfo.getCurrentStatus();
-        //int patentId = patentInfo.getId();
-        //LOGGER.info("[接受的参数为{}和{}]", code, patentId);
+        Byte code = patentInfo.getCurrentStatus();
         boolean result = false;
-        if (code == 15 || code == 16 || code == 4) {
+        if (code == null) {
+            return result;
+        } else if (code == 15 || code == 16 || code == 4) {
             patentInfo.setCurrentStatus((byte) 5);
             statusCodeMapper.updateStatusFinish(patentInfo);
             result = true;

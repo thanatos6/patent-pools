@@ -80,11 +80,11 @@ public class RejectContent {
         return rejectContent;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public void setPatentId(int patentId) {
+    public void setPatentId(Integer patentId) {
         this.patentId = patentId;
     }
 
