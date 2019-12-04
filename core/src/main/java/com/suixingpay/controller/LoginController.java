@@ -1,6 +1,7 @@
 package com.suixingpay.controller;
 
 
+import com.suixingpay.aspect.Action;
 import com.suixingpay.pojo.User;
 import com.suixingpay.service.Impl.UserImpl;
 import com.suixingpay.service.UserService;
@@ -24,8 +25,9 @@ public class LoginController {
 
     Boolean index = true;
 
+    @Action(name="login")
     @PostMapping("/login")//一般注册都是写入到后台所以是post
-    public  String  login(@RequestBody User user,
+    public  String  login(@RequestBody(required = false) User user,
                           HttpSession session){
 
         try {
