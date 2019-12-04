@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author 詹文良
  * @time 2019-11-20
  */
+
 @SpringBootApplication
 @MapperScan("com.suixingpay.mapper")
 public class BootStrapApplication {
@@ -16,4 +17,5 @@ public class BootStrapApplication {
         SpringApplication.run(BootStrapApplication.class, args);
     }
 }
+
 

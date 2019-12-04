@@ -31,4 +31,5 @@
     select file_id , file_patent_id , file_path, file_status , file_create_time , file_name from patent_file where file_id =#{file_id}
   </select>
 
+
 </mapper>
