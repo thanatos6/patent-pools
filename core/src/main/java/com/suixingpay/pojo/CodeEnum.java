@@ -20,6 +20,7 @@ public enum CodeEnum {
         this.msg = msg;
     }
 
+
     public String getCode() {
         return code;
     }

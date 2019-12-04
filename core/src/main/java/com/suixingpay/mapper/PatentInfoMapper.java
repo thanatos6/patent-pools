@@ -25,7 +25,7 @@ public interface PatentInfoMapper {
     Integer insertPatentInfo(PatentInfo patentInfo);
 
     /**
-     * 模糊查询专利专利，为搜索专利提供的服务
+     * 模糊查询专利，为搜索专利提供的服务
      *
      * @param patentInfo 专利信息实体
      * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
@@ -40,43 +40,34 @@ public interface PatentInfoMapper {
      */
     Integer updatePatentInfoById(PatentInfo patentInfo);
 
-
     /**
-     * 普通用户的专利搜索页初始化，就把 owner_id 为该用户的专利记录和 owner_id 为空的记录返回
-     * owner_id 已经存在的排在前面
-     * owner_id 没有的排在后面
-     *
-     * @param ownerUserId
-     * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
+     * 专利池的初始化查询，返回已被领取的专利
+     * @param patentInfo 专利实体
+     * @return 专利实体集合或空 LIST
      */
-    List<PatentInfo> selectPatentNormalUser(@Param("ownerUserId") Integer ownerUserId);
-
+    List<PatentInfo> selectPatentPoolReceive(PatentInfo patentInfo);
 
     /**
-     * 管理员的专利搜索页初始化，信息全部返回, 并做一个排序, 直接按照修改时间倒序排 ASC
-     *
-     * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
+     * 专利池的初始化，返回未被领取的专利
+     * @return 专利实体集合或空 LIST
      */
-    List<PatentInfo> selectPatentRootUser();
+    List<PatentInfo> selectPatentPoolNoReceive();
 
     /**
-     * 普通用户的专利搜索页的条件模糊搜索，就把 owner_id 为该用户的专利记录和 owner_id 为空的记录返回
-     * owner_id 已经存在的排在前面
-     * owner_id 没有的排在后面
+     * 任意用户动态判断的是否需要认领者限制的已认领专利搜索页的模糊查询
+     * @param patentInfo 专利信息实体
+     * @return 不空模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
+     */
+    List<PatentInfo> selectPatentAnyUserReceive(PatentInfo patentInfo);
+
+    /**
+     * 任意用户的未认领专利搜索页的模糊搜索，一个条件，并加上日期排序
+     * 1. 专利状态未认领 （current_status = 2)
      *
      * @param patentInfo 专利信息实体
-     * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
+     * @return 不空模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
      */
-    List<PatentInfo> selectPatentNormalUserCondition(PatentInfo patentInfo);
-
-
-    /**
-     * 管理员的专利搜索页的条件模糊搜索，信息全部返回, 并做一个排序, 直接按照修改时间倒序排 ASC
-     *
-     * @param patentInfo 专利信息实体
-     * @return 模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
-     */
-    List<PatentInfo> selectPatentRootUserCondition(PatentInfo patentInfo);
+    List<PatentInfo> selectPatentAllUserAndNoReceive(PatentInfo patentInfo);
 
     /**
      * 传入指定的状态码集合以及用户 id 来查询该范围内的专利信息记录，这是为张提供的服务 mapper
@@ -87,4 +78,5 @@ public interface PatentInfoMapper {
      */
     List<PatentInfo> selectPatentByStatusList(@Param("currentStatusList") List<Integer> currentStatusList,
                                               @Param("userId") Integer userId);
+
 }

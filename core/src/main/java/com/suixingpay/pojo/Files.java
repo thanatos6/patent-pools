@@ -1,5 +1,7 @@
 package com.suixingpay.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -18,6 +20,7 @@ public class Files {
 
     private Integer fileStatus;
 
+   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date fileCreateTime;
 
     public Integer getFileId() {

@@ -8,7 +8,7 @@ package com.suixingpay.pojo;
 public class Response<T> {
     private String code;
     private String msg;
-    private T data;
+    private T data ;
 
     public Response() {
 
@@ -16,6 +16,7 @@ public class Response<T> {
     public Response(String code, String msg) {
         this.code = code;
         this.msg = msg;
+
     }
     public Response(String code, String msg, T data) {
         this.code = code;
