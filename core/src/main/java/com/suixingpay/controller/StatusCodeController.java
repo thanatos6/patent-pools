@@ -27,7 +27,7 @@ public class StatusCodeController {
     private UserDescriptionService userDescriptionService;
 
 
-    //根据登陆者角色码查找相应的待办，分为管理员1、撰写人0,测试成功
+    // 1.根据登陆者角色码查找相应的待办，分为管理员1、撰写人0,测试成功
     @RequestMapping(value = "/wait", method = RequestMethod.POST)
     public String wait(HttpServletRequest request) {
         HttpSession session = request.getSession();
