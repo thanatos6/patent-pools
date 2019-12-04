@@ -56,7 +56,7 @@ public class LogAspect {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
-
+        Date date = new Date();
         Log log = new Log();
 
         //使用getArgs()获取切点方法的入参，
@@ -66,13 +66,7 @@ public class LogAspect {
             Object[] args = joinPoint.getArgs();
             PatentInfo patentInfo = (PatentInfo) args[0];
 
-            Date date = new Date();
             log.setPatentInfoId(patentInfo.getId());
-            log.setUserId(user.getId());
-            log.setCreateDate(date);
-            log.setModifyDate(date);
-            log.setIsDelete((byte) 0);
-
 
             if (AGREE.equals(joinPoint.getSignature().getName())) {
                 log.setMessage(user.getName() + "同意了ID为" + patentInfo.getId() + "的专利申请");
@@ -82,12 +76,7 @@ public class LogAspect {
 
         } else if (LOGIN.equals(joinPoint.getSignature().getName())) {
 
-            Date date = new Date();
-            log.setUserId(user.getId());
             log.setPatentInfoId(0);
-            log.setCreateDate(date);
-            log.setModifyDate(date);
-            log.setIsDelete((byte) 0);
             log.setMessage(user.getName() + "登陆了系统");
 
         } else if (UPLOAD.equals(joinPoint.getSignature().getName())) {
@@ -96,11 +85,6 @@ public class LogAspect {
             Integer patentId = (Integer)args[0];
             MultipartFile multipartFile = (MultipartFile)args[1];
 
-            Date date = new Date();
-            log.setUserId(user.getId());
-            log.setCreateDate(date);
-            log.setModifyDate(date);
-            log.setIsDelete((byte) 0);
             log.setPatentInfoId(patentId);
             log.setMessage(user.getName() + "上传了文件,文件名为"+multipartFile.getOriginalFilename());
 
@@ -109,15 +93,15 @@ public class LogAspect {
             Object[] args = joinPoint.getArgs();
             RejectContent rejectContent = (RejectContent) args[0];
 
-                Date date = new Date();
-                log.setPatentInfoId(rejectContent.getPatentId());
-                log.setUserId(user.getId());
-                log.setCreateDate(date);
-                log.setModifyDate(date);
-                log.setIsDelete((byte) 0);
-                log.setMessage(user.getName() + "驳回了了ID为" + rejectContent.getPatentId() + "的专利申请");
+            log.setPatentInfoId(rejectContent.getPatentId());
+            log.setMessage(user.getName() + "驳回了了ID为" + rejectContent.getPatentId() + "的专利申请");
 
             }
+
+            log.setUserId(user.getId());
+            log.setCreateDate(date);
+            log.setModifyDate(date);
+            log.setIsDelete((byte) 0);
 
             logMapper.insert(log);
         }
