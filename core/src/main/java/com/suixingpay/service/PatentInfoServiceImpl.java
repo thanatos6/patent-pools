@@ -127,40 +127,21 @@ public class PatentInfoServiceImpl implements PatentInfoService {
 
     }
 
-    @Override
-    public String receivePatent(PatentInfo patentInfo) {
-        // 定义要返回的 JSON 结果
-        String returnJsonStr = "";
-
-        // 如果专利还没被认领或者当前的编辑用户或者认领者 id 对不上就不能编辑
-        List<PatentInfo> patentInfos = executeSelectPatentAnyCondition(patentInfo);
-
-        // 查询不到指定的专利或者专利的拥有者未空
-        Integer originalPatentOwnerId = patentInfos.isEmpty() ? null : patentInfos.get(0).getOwnerUserId();
-
-        // 如果已经有了拥有者, 就是 owner_user_id 不为 0, 则不再二次认领
-        if (originalPatentOwnerId == null || !originalPatentOwnerId.equals(0)) {
-            returnJsonStr = getExecuteJsonMessage(0);
-        } else {
-            returnJsonStr = executeUpdatePatent(patentInfo);
-        }
-
-        return returnJsonStr;
-    }
 
     @Override
-    public String searchNavigationInfo(int id) {
+    public String searchNavigationInfoReceive(User user) {
         // 定义要返回的 JSON 结果
         String returnJsonStr = "";
 
         // 领取异常处理
         try {
-            // 如果是管理员 id，返回全部, 因为没有一个 role 字段，暂时写死为 2
-            if (id != ROOT_USER_ID) {
-                returnJsonStr = JSON.toJSONString(patentInfoMapper.selectPatentNormalUser(id));
-            } else {
-                returnJsonStr = JSON.toJSONString(patentInfoMapper.selectPatentRootUser());
+            // 如果是管理员不用认领者限制，普通用户需要
+            PatentInfo patentInfo = new PatentInfo();
+            if (user.getStatus() != ROOT_USER_STATUS) {
+                patentInfo.setOwnerUserId(user.getId());
             }
+            returnJsonStr = JSON.toJSONString(patentInfoMapper.selectPatentPoolReceive(patentInfo));
+
         } catch (Exception e) {
             log.error("数据库领取一个专利错误！");
             log.error(e.getMessage());
@@ -171,41 +152,24 @@ public class PatentInfoServiceImpl implements PatentInfoService {
     }
 
     @Override
-    public String searchPatentByUserType(PatentInfo patentInfo, User user) {
+    public String searchNavigationInfoNoReceive(User user) {
         // 定义要返回的 JSON 结果
         String returnJsonStr = "";
 
-        // 返回结果集 - 初始化为空，表示未登录
-        List<PatentInfo> selectPatentList = null;
-
-        // 做异常处理
+        // 领取异常处理
         try {
-            // 0 表示未登录，ROOT_USER_ID 表示管理员，其他用户 id 表示普通用户
-            // 普通用户需要做给 patent 参数 加上 owner_user_id 限制条件去查询
-            if (user.getId() == 0) {
-                selectPatentList = new ArrayList<>();
-            } else if (user.getStatus() == ROOT_USER_ID) {
-                selectPatentList = patentInfoMapper.selectPatentRootUserCondition(patentInfo);
+            // 如果是为认领的专利池，管理员和普通用户可以看到的都是一样的
+            returnJsonStr = JSON.toJSONString(patentInfoMapper.selectPatentPoolNoReceive());
 
-            } else {
-                // 表示普通用户，参数需要带上 owner_user_id 限制，比较是否是当前用户
-                patentInfo.setOwnerUserId(user.getId());
-                selectPatentList = patentInfoMapper.selectPatentNormalUserCondition(patentInfo);
-            }
         } catch (Exception e) {
-            log.error("数据库按照用户类型去查找一个专利错误！");
+            log.error("数据库领取一个专利错误！");
             log.error(e.getMessage());
-        }
-
-        // 返回结果集合如果为空，则返回错误状态信息，否则返回查询到的专利列表
-        if (selectPatentList == null || selectPatentList.isEmpty()) {
             returnJsonStr = getExecuteJsonMessage(0);
-        } else {
-            returnJsonStr = JSON.toJSONString(selectPatentList);
         }
 
         return returnJsonStr;
     }
+
 
     @Override
     public String searchPatentByUserAndReceive(PatentInfo patentInfo, User user) {
@@ -220,13 +184,13 @@ public class PatentInfoServiceImpl implements PatentInfoService {
         try {
             // 0 表示未登录，ROOT_USER_ID 表示管理员，其他用户 id 表示普通用户
             // 普通用户需要做给 patent 参数 加上 owner_user_id 限制条件去查询
-            if(user.getId() == 0) {
+            if (user.getId() == 0) {
                 selectPatentList = new ArrayList<>();
-            } else if(user.getStatus() != ROOT_USER_STATUS) {
+            } else if (user.getStatus() != ROOT_USER_STATUS) {
                 // 表示普通用户，参数需要带上 owner_user_id 限制，比较专利所属是否是当前用户
                 patentInfo.setOwnerUserId(user.getId());
                 selectPatentList = patentInfoMapper.selectPatentAnyUserReceive(patentInfo);
-            } else{
+            } else {
                 selectPatentList = patentInfoMapper.selectPatentAnyUserReceive(patentInfo);
             }
         } catch (Exception e) {

@@ -97,48 +97,25 @@ public class PatentInfoController {
 
     }
 
-    // TODO: 2019/12/4 专利池需要抽象 
-    @RequestMapping(value = "/searchPatentPool", method = RequestMethod.GET)
-    public String searchPatentPool() {
+    @RequestMapping(value = "searchPatentPoolReceive", method = RequestMethod.GET)
+    public String searchPatentPoolRec() {
 
         // 获取用户信息
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
 
         // 查询专利池
-        return patentInfoService.searchNavigationInfo(user.getId());
+        return patentInfoService.searchNavigationInfoReceive(user);
 
     }
 
-
-    // TODO: 2019/12/4 在这抽离专利池接口为两个状态的信息
-
-
-
-    // 弃用接口
-    @Deprecated
-    @RequestMapping(value = "/receivePatent", method = RequestMethod.POST)
-    public String receiveOnePatent(@RequestBody PatentInfo patentInfo) {
-
-        // 获取用户信息
-        User user = userDescriptionService.userDescription(httpServletRequest.getSession());
-        patentInfo.setOwnerUserId(user.getId());
-
-        // 领取一个专利
-        return patentInfoService.receivePatent(patentInfo);
-
-    }
-
-    // 弃用接口
-    @Deprecated
-    @RequestMapping(value = "/searchPatent", method = RequestMethod.POST)
-    public String searchPatentFuzzy(@RequestBody PatentInfo patentInfo) {
+    @RequestMapping(value = "/searchPatentPoolNoReceive", method = RequestMethod.GET)
+    public String searchPatentPoolNoRec() {
 
         // 获取用户信息
         User user = userDescriptionService.userDescription(httpServletRequest.getSession());
 
-        // 判断用户是否登录，若没登录，就赋值 id 为 0 表示没有登录
-        int userId = user == null ? 0 : user.getId();
-        return patentInfoService.searchPatentByUserType(patentInfo, user);
+        // 查询专利池
+        return patentInfoService.searchNavigationInfoNoReceive(user);
 
     }
 

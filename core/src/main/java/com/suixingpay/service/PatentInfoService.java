@@ -44,31 +44,18 @@ public interface PatentInfoService {
     String editPatent(PatentInfo patentInfo, Integer editUserId);
 
     /**
-     * 传入专利实体, 按照专利的 id (用户 id)来更新一个专利的认领人 id
-     *
-     * @param patentInfo 专利实体
-     * @return 返回一个状态 Json 串。{status :  value}.成功返回：value = success;失败返回：value = error
+     * 返回已经被领取的专利池专利实体集合
+     * @param user 用户实体
+     * @return 返回一个 JSON 串。返回: JSON 串 ：List<PatentInfo> , 如果查不到或失败返回 failed 状态信息
      */
-    String receivePatent(PatentInfo patentInfo);
-
+    String searchNavigationInfoReceive(User user);
 
     /**
-     * 传入用户 id ，来显示专利导航页的东西，也就是当前用户能看到的专利池的专利
-     *
-     * @param id 用户 id
-     * @return 返回一个 JSON 串。返回: JSON 串 ：List<PatentInfo> , 如果查不到则返回一个空的 LIST
+     * 返回未被领取的专利池专利实体集合
+     * @param user 用户实体
+     * @return 返回一个 JSON 串。返回: JSON 串 ：List<PatentInfo> , 如果查不到或失败返回 failed 状态信息
      */
-    String searchNavigationInfo(int id);
-
-    /**
-     * 传入用户 id ， 做对应用户的模糊查询，也就是专利搜索，因此需要传进一个 Patent，封装查询条件
-     * searchPatentAnyCondition() 已经分割为 selectPatentNormalUserCondition() 和 selectPatentNormalUserCondition()
-     *
-     * @param patentInfo 专利实体
-     * @param user         用户 id
-     * @return 返回一个 JSON 串。返回: JSON 串 ：List<PatentInfo> , 如果查不到则返回一个空的 LIST
-     */
-    String searchPatentByUserType(PatentInfo patentInfo, User user);
+    String searchNavigationInfoNoReceive(User user);
 
     /**
      * 返回指定用户类型的已经认领的专利
