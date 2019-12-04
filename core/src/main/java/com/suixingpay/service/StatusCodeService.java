@@ -1,6 +1,8 @@
 package com.suixingpay.service;
 
 import com.suixingpay.pojo.PatentInfo;
+import com.suixingpay.pojo.RejectContent;
+
 
 /**
  * @author zhangleying
@@ -16,15 +18,6 @@ public interface StatusCodeService {
      * @return
      */
     String updateStatusPass(int patentID);
-
-
-    /**
-     * 点击驳回，根据专利Id号，改变流程状态
-     *
-     * @param patentID 专利ID号
-     * @return
-     */
-    String updateStatusReject(int patentID);
 
 
     /**
@@ -55,4 +48,47 @@ public interface StatusCodeService {
     String selectCodeByRole(int role, int userId);
 
 
+    /**
+     * 根据认领人ID查看已认领未撰写的专利 ，状态码为4
+     *
+     * @param patentInfo 当前登录用户的ID号
+     * @return
+     */
+    String selectPatentByclaimed(PatentInfo patentInfo);
+
+
+    /**
+     * 根据认领人ID查看自己认领的待审批的专利 ，状态码为1,5,6
+     *
+     * @param patentInfo 当前登录用户的ID号
+     * @return
+     */
+    String selectPatentByWaitMyself(PatentInfo patentInfo);
+
+
+    /**
+     * 根据当前用户ID查看自己认领的待维护的专利列表 ，状态码为7提交成功
+     *
+     * @param patentInfo 当前登录用户的ID号
+     * @return
+     */
+    String selectPatentBySuccess(PatentInfo patentInfo);
+
+
+    /**
+     * 管理员点击驳回按钮，改变专利当前状态，并且插入驳回列表一条信息
+     *
+     * @param rejectContent 驳回列表实体
+     * @return
+     */
+    String createNewReject(RejectContent rejectContent);
+
+
+    /**
+     * 撰写人点击查看驳回原因，显示专利被驳回理由
+     *
+     * @param patentId 专利ID号
+     * @return
+     */
+    String selectPatentViewReason(int patentId);
 }
