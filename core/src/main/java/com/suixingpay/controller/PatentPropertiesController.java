@@ -94,10 +94,16 @@ public class PatentPropertiesController {
     @RequestMapping("/join-patent")
     @ResponseBody
     public String getPropertiesJoinPatent(@RequestParam(value = "name", required = false) String name,
-                                          @RequestParam(value = "title", required = false) String title) {
+                                          @RequestParam(value = "title", required = false) String title) throws Exception {
         PageHelper.startPage(1, 100);
         if (log.isInfoEnabled()) {
             log.info("=======获取到的参数：name {} ;title {}", name, title);
+        }
+        if (title == null && name == null) {
+//            log.info("title length {}", title.isEmpty());
+//            log.info("name length {}", name.isEmpty());
+            String errorMsg = "没有获取到需要搜索的参数";
+            throw new Exception(errorMsg);
         }
         PatentPropertiesList patentPropertiesList = new PatentPropertiesList();
         patentPropertiesList.setPropertiesTitle(name);
