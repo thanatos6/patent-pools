@@ -1,6 +1,7 @@
 package com.suixingpay.controller;
 
 
+import com.github.pagehelper.util.StringUtil;
 import com.suixingpay.pojo.User;
 import com.suixingpay.service.Impl.UserImpl;
 import com.suixingpay.service.UserService;
@@ -12,46 +13,54 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.ws.Action;
 import java.util.Date;
 
 @RestController
 public class LoginController {
-        private static final Logger logger= LoggerFactory.getLogger(LoginController.class);
+    private static final Logger logger= LoggerFactory.getLogger(LoginController.class);
     @Autowired
     UserService userService;
 
+    @Autowired
+    private HttpServletRequest request;
+
+    /*@Action(name="login")*/
     @PostMapping("/login")//一般注册都是写入到后台所以是post
-    public  String  login(@RequestBody User user,
-                          HttpSession session){
+    public  String  login(@RequestBody(required =false)  User user){
 
         try {
             //System.out.println(userService);
+            HttpSession session=request.getSession();
             String account=user.getAccount();
             String password=user.getPassword();
-
-             user =userService.login(account,password);
-            System.out.println(user);
-
-            if (user==null){
-                return  ZhuanliUtil.getJSONString(505,"");
-            }
-            /*if (StringUtils.isEmpty(password)){
+            if (ZhuanliUtil.isBlank(password)){
                 return  ZhuanliUtil.getJSONString("密码不能为空");
             }
-            if (StringUtils.isEmpty(account)){
-               return ZhuanliUtil.getJSONString("账号不能为空");
-            }*/
-            Date now=new Date();
-            user.setCreateDate(now);
-            session.setAttribute("user",user);
-            return  ZhuanliUtil.getJSONString(200,user);
+            if (ZhuanliUtil.isBlank(account)){
+                return ZhuanliUtil.getJSONString("账号不能为空");
+            }
 
+            user=userService.login(account,password);
+
+            System.out.println(user);
+
+            if (user!=null) {
+                session.setAttribute("user", user);
+                System.out.println(user);
+                return ZhuanliUtil.getJSONString(200, user);
+
+            }
+            else {
+                return  ZhuanliUtil.getJSONString(505,"账户或密码错误");
+            }
 
         }catch (Exception e){
             logger.error(e.getMessage());
             e.printStackTrace();
-            logger.error("登陆异常");
+
             return  ZhuanliUtil.getJSONString(500,"登录异常");
         }
     }

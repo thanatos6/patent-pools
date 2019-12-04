@@ -51,7 +51,10 @@ public class StatusCodeServiceImpl implements StatusCodeService {
     public String updateStatusPass(int patentID) {
 
         try {
-            int statusCode = statusCodeMapper.selectCodeByPid(patentID);
+            Integer statusCode = statusCodeMapper.selectCodeByPid(patentID);
+            if(statusCode==null){
+                return ZhuanliUtil.getJSONString("失败");
+            }
             if (statusCode == 1 || statusCode == 5 || statusCode == 6) {
                 statusCodeMapper.updateStatusPass(patentID);
                 return ZhuanliUtil.getJSONString("200");
@@ -89,7 +92,10 @@ public class StatusCodeServiceImpl implements StatusCodeService {
         // 通过 mapper 的执行来决定是否成功，插入失败，则返回结果为 0；插入成功，则 mapper 执行结果为 1
         int insertResult = 0;
         try {
-            int statusCode = statusCodeMapper.selectCodeByPid(patentid);
+            Integer statusCode = statusCodeMapper.selectCodeByPid(patentid);
+            if(statusCode==null){
+                return ZhuanliUtil.getJSONString("失败");
+            }
             if (statusCode == 5 || statusCode == 6) {
                 statusCodeMapper.updateStatusReject(patentid);
                 statusCodeMapper.insertRejectContent(rejectContent);
@@ -121,7 +127,10 @@ public class StatusCodeServiceImpl implements StatusCodeService {
 
         try {
             int patentId = patentInfo.getId();
-            int statusCode = statusCodeMapper.selectCodeByPid(patentId);
+            Integer statusCode = statusCodeMapper.selectCodeByPid(patentId);
+            if(statusCode==null){
+                return ZhuanliUtil.getJSONString("失败");
+            }
             if (statusCode == 4) {
                 return ZhuanliUtil.getJSONString("失败");
             } else {

@@ -34,7 +34,7 @@ public interface StatusCodeMapper {
     List<StatusCode> selectCodeByRole(int role);
 
     //根据专利ID号,查找当前专利状态码
-    int selectCodeByPid(int patentId);
+    Integer selectCodeByPid(int patentId);
 
     //根据认领人ID查看已认领未撰写的专利 ，状态码为4
     List<PatentInfo> selectPatentByclaimed(PatentInfo patentInfo);
