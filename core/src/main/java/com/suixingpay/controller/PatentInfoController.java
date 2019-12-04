@@ -53,21 +53,6 @@ public class PatentInfoController {
 
     }
 
-    @RequestMapping(value = "/searchPatent", method = RequestMethod.POST)
-    public String searchPatentFuzzy(@RequestBody PatentInfo patentInfo) {
-
-        // TODO: 2019/12/2 Feature update - 字段模糊搜索完成，下一步优化状态条件查询
-
-        // 获取用户信息
-        User user = userDescriptionService.userDescription(httpServletRequest.getSession());
-
-        // 判断用户是否登录，若没登录，就赋值 id 为 0 表示没有登录
-        int userId = user == null ? 0 : user.getId();
-        return patentInfoService.searchPatentByUserType(patentInfo, userId);
-
-    }
-
-    // TODO: 2019/12/3 模糊搜索分离 - 已经认领的专利搜索
     @RequestMapping(value = "/searchPatentReceive", method = RequestMethod.POST)
     public String searchPatentFuzzyReceive(@RequestBody PatentInfo patentInfo) {
 
@@ -76,11 +61,11 @@ public class PatentInfoController {
 
         // 判断用户是否登录，若没登录，就赋值 id 为 0 表示没有登录
         int userId = user == null ? 0 : user.getId();
-        return patentInfoService.searchPatentByUserAndReceive(patentInfo, userId);
+
+        return patentInfoService.searchPatentByUserAndReceive(patentInfo, user);
 
     }
 
-    // TODO: 2019/12/3 模糊搜索分离 - 未被认领的专利搜索
     @RequestMapping(value = "searchPatentNoReceive", method = RequestMethod.POST)
     public String searchPatentFuzzyNoReceive(@RequestBody PatentInfo patentInfo) {
 
@@ -89,31 +74,8 @@ public class PatentInfoController {
 
         // 判断用户是否登录，若没登录，就赋值 id 为 0 表示没有登录
         int userId = user == null ? 0 : user.getId();
-        return patentInfoService.searchPatentByUserAndNoReceive(patentInfo, userId);
-    }
 
-
-    @RequestMapping(value = "/searchPatentPool", method = RequestMethod.GET)
-    public String searchPatentPool() {
-
-        // 获取用户信息
-        User user = userDescriptionService.userDescription(httpServletRequest.getSession());
-
-        // 查询专利池
-        return patentInfoService.searchNavigationInfo(user.getId());
-
-    }
-
-    @RequestMapping(value = "/receivePatent", method = RequestMethod.POST)
-    public String receiveOnePatent(@RequestBody PatentInfo patentInfo) {
-
-        // 获取用户信息
-        User user = userDescriptionService.userDescription(httpServletRequest.getSession());
-        patentInfo.setOwnerUserId(user.getId());
-
-        // 领取一个专利
-        return patentInfoService.receivePatent(patentInfo);
-
+        return patentInfoService.searchPatentByUserAndNoReceive(patentInfo, user);
     }
 
     @RequestMapping(value = "/editPatent", method = RequestMethod.POST)
@@ -132,6 +94,51 @@ public class PatentInfoController {
 
         // 返回专利的详细信息
         return patentInfoService.searchPatentAnyCondition(patentInfo);
+
+    }
+
+    // TODO: 2019/12/4 专利池需要抽象 
+    @RequestMapping(value = "/searchPatentPool", method = RequestMethod.GET)
+    public String searchPatentPool() {
+
+        // 获取用户信息
+        User user = userDescriptionService.userDescription(httpServletRequest.getSession());
+
+        // 查询专利池
+        return patentInfoService.searchNavigationInfo(user.getId());
+
+    }
+
+
+    // TODO: 2019/12/4 在这抽离专利池接口为两个状态的信息
+
+
+
+    // 弃用接口
+    @Deprecated
+    @RequestMapping(value = "/receivePatent", method = RequestMethod.POST)
+    public String receiveOnePatent(@RequestBody PatentInfo patentInfo) {
+
+        // 获取用户信息
+        User user = userDescriptionService.userDescription(httpServletRequest.getSession());
+        patentInfo.setOwnerUserId(user.getId());
+
+        // 领取一个专利
+        return patentInfoService.receivePatent(patentInfo);
+
+    }
+
+    // 弃用接口
+    @Deprecated
+    @RequestMapping(value = "/searchPatent", method = RequestMethod.POST)
+    public String searchPatentFuzzy(@RequestBody PatentInfo patentInfo) {
+
+        // 获取用户信息
+        User user = userDescriptionService.userDescription(httpServletRequest.getSession());
+
+        // 判断用户是否登录，若没登录，就赋值 id 为 0 表示没有登录
+        int userId = user == null ? 0 : user.getId();
+        return patentInfoService.searchPatentByUserType(patentInfo, user);
 
     }
 

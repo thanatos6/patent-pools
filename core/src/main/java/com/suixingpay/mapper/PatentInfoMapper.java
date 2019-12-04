@@ -79,26 +79,14 @@ public interface PatentInfoMapper {
     List<PatentInfo> selectPatentRootUserCondition(PatentInfo patentInfo);
 
     /**
-     * 普通用户的已经认领专利搜索页的模糊搜索，两个条件，并加上日期排序
-     * 1. 专利认领者（owner_id = 2）
-     * 2. 专利状态已经认领（current_status > 2）
-     *
+     * 任意用户动态判断的是否需要认领者限制的已认领专利搜索页的模糊查询
      * @param patentInfo 专利信息实体
      * @return 不空模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
      */
-    List<PatentInfo> selectPatentNormalUserAndReceive(PatentInfo patentInfo);
+    List<PatentInfo> selectPatentAnyUserReceive(PatentInfo patentInfo);
 
     /**
-     * 管理员的已经认领专利搜索页的模糊搜索，一个条件，并加上日期排序
-     * 1. 专利状态已认领（current_status > 2)
-     *
-     * @param patentInfo 专利信息实体
-     * @return 不空模糊搜索专利的实体集合，如果为空就返回一个空的 LIST
-     */
-    List<PatentInfo> selectPatentRootUserAndReceive(PatentInfo patentInfo);
-
-    /**
-     * 管理员的未认领专利搜索页的模糊搜索，一个条件，并加上日期排序
+     * 任意用户的未认领专利搜索页的模糊搜索，一个条件，并加上日期排序
      * 1. 专利状态未认领 （current_status = 2)
      *
      * @param patentInfo 专利信息实体

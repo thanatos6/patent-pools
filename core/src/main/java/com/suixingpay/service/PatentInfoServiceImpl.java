@@ -3,13 +3,13 @@ package com.suixingpay.service;
 import com.alibaba.fastjson.JSON;
 import com.suixingpay.mapper.PatentInfoMapper;
 import com.suixingpay.pojo.PatentInfo;
+import com.suixingpay.pojo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.function.DoubleToIntFunction;
 
 /**
  * @author 詹文良
@@ -27,6 +27,11 @@ public class PatentInfoServiceImpl implements PatentInfoService {
      * 暂时写死管理员的 id ， 值为 2
      */
     private static final int ROOT_USER_ID = 2;
+
+    /**
+     * 卢 YUN 提供了一个字段 status，来判断管理员，管理员 status 为部分重构代码调用
+     */
+    private static final int ROOT_USER_STATUS = 1;
 
     @Resource
     private PatentInfoMapper patentInfoMapper;
@@ -166,7 +171,7 @@ public class PatentInfoServiceImpl implements PatentInfoService {
     }
 
     @Override
-    public String searchPatentByUserType(PatentInfo patentInfo, int userId) {
+    public String searchPatentByUserType(PatentInfo patentInfo, User user) {
         // 定义要返回的 JSON 结果
         String returnJsonStr = "";
 
@@ -177,14 +182,14 @@ public class PatentInfoServiceImpl implements PatentInfoService {
         try {
             // 0 表示未登录，ROOT_USER_ID 表示管理员，其他用户 id 表示普通用户
             // 普通用户需要做给 patent 参数 加上 owner_user_id 限制条件去查询
-            if (userId == 0) {
+            if (user.getId() == 0) {
                 selectPatentList = new ArrayList<>();
-            } else if (userId == ROOT_USER_ID) {
+            } else if (user.getStatus() == ROOT_USER_ID) {
                 selectPatentList = patentInfoMapper.selectPatentRootUserCondition(patentInfo);
 
             } else {
                 // 表示普通用户，参数需要带上 owner_user_id 限制，比较是否是当前用户
-                patentInfo.setOwnerUserId(userId);
+                patentInfo.setOwnerUserId(user.getId());
                 selectPatentList = patentInfoMapper.selectPatentNormalUserCondition(patentInfo);
             }
         } catch (Exception e) {
@@ -203,7 +208,7 @@ public class PatentInfoServiceImpl implements PatentInfoService {
     }
 
     @Override
-    public String searchPatentByUserAndReceive(PatentInfo patentInfo, int userId) {
+    public String searchPatentByUserAndReceive(PatentInfo patentInfo, User user) {
 
         // 定义要返回的 JSON 结果
         String returnJsonStr = "";
@@ -215,15 +220,14 @@ public class PatentInfoServiceImpl implements PatentInfoService {
         try {
             // 0 表示未登录，ROOT_USER_ID 表示管理员，其他用户 id 表示普通用户
             // 普通用户需要做给 patent 参数 加上 owner_user_id 限制条件去查询
-            if (userId == 0) {
+            if(user.getId() == 0) {
                 selectPatentList = new ArrayList<>();
-            } else if (userId == ROOT_USER_ID) {
-                selectPatentList = patentInfoMapper.selectPatentRootUserAndReceive(patentInfo);
-
-            } else {
-                // 表示普通用户，参数需要带上 owner_user_id 限制，比较是否是当前用户
-                patentInfo.setOwnerUserId(userId);
-                selectPatentList = patentInfoMapper.selectPatentNormalUserAndReceive(patentInfo);
+            } else if(user.getStatus() != ROOT_USER_STATUS) {
+                // 表示普通用户，参数需要带上 owner_user_id 限制，比较专利所属是否是当前用户
+                patentInfo.setOwnerUserId(user.getId());
+                selectPatentList = patentInfoMapper.selectPatentAnyUserReceive(patentInfo);
+            } else{
+                selectPatentList = patentInfoMapper.selectPatentAnyUserReceive(patentInfo);
             }
         } catch (Exception e) {
             log.error("数据库按照用户类型去查找一个已被领取的专利错误！");
@@ -243,7 +247,7 @@ public class PatentInfoServiceImpl implements PatentInfoService {
     }
 
     @Override
-    public String searchPatentByUserAndNoReceive(PatentInfo patentInfo, int userId) {
+    public String searchPatentByUserAndNoReceive(PatentInfo patentInfo, User user) {
         // 定义要返回的 JSON 结果
         String returnJsonStr = "";
 
@@ -255,7 +259,7 @@ public class PatentInfoServiceImpl implements PatentInfoService {
             // 0 表示未登录，ROOT_USER_ID 表示管理员，其他用户 id 表示普通用户
             // 普通用户需要做给 patent 参数 加上 owner_user_id 限制条件去查询
             // 普通用户和管理员可以看到一样的未被认领的专利
-            if (userId == 0) {
+            if (user.getId() == 0) {
                 selectPatentList = new ArrayList<>();
             } else {
                 selectPatentList = patentInfoMapper.selectPatentAllUserAndNoReceive(patentInfo);

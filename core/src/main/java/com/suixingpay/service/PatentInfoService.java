@@ -2,9 +2,9 @@ package com.suixingpay.service;
 
 
 import com.suixingpay.pojo.PatentInfo;
+import com.suixingpay.pojo.User;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -64,29 +64,29 @@ public interface PatentInfoService {
      * 传入用户 id ， 做对应用户的模糊查询，也就是专利搜索，因此需要传进一个 Patent，封装查询条件
      * searchPatentAnyCondition() 已经分割为 selectPatentNormalUserCondition() 和 selectPatentNormalUserCondition()
      *
-     * @param id         用户 id
      * @param patentInfo 专利实体
+     * @param user         用户 id
      * @return 返回一个 JSON 串。返回: JSON 串 ：List<PatentInfo> , 如果查不到则返回一个空的 LIST
      */
-    String searchPatentByUserType(PatentInfo patentInfo, int id);
+    String searchPatentByUserType(PatentInfo patentInfo, User user);
 
     /**
      * 返回指定用户类型的已经认领的专利
      *
      * @param patentInfo 专利实体
-     * @param id         用户 id
+     * @param user         用户 id
      * @return 返回一个 JSON 串。返回: JSON 串 ：List<PatentInfo> , 如果查不到则返回 null 信息或者 failed 信息
      */
-    String searchPatentByUserAndReceive(PatentInfo patentInfo, int id);
+    String searchPatentByUserAndReceive(PatentInfo patentInfo, User user);
 
     /**
      * 返回指定用户类型的未被认领的专利
      *
      * @param patentInfo 专利实体
-     * @param id         用户 id
+     * @param user         用户 id
      * @return 返回一个 JSON 串。返回: JSON 串 ：List<PatentInfo> , 如果查不到则返回 null 信息或者 failed 信息
      */
-    String searchPatentByUserAndNoReceive(PatentInfo patentInfo, int id);
+    String searchPatentByUserAndNoReceive(PatentInfo patentInfo, User user);
 
     /**
      * 根据状态码来返回指定集合状态码集合里的专利，id 如果为空，就返回全部专利，不为空则还有 认领者 owner_user_id 的返回限制
