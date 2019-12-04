@@ -27,42 +27,42 @@ public class LoginController {
     @Autowired
     private HttpServletRequest request;
 
-    @Action(name="login")
+    /*@Action(name="login")*/
     @PostMapping("/login")//一般注册都是写入到后台所以是post
-    public  String  login(@RequestBody(required =false)  User user
-                          ){
+    public  String  login(@RequestBody(required =false)  User user){
 
         try {
             //System.out.println(userService);
             HttpSession session=request.getSession();
             String account=user.getAccount();
             String password=user.getPassword();
-            user=userService.login(account,password);
-            System.out.println(user);
             if (ZhuanliUtil.isBlank(password)){
                 return  ZhuanliUtil.getJSONString("密码不能为空");
             }
             if (ZhuanliUtil.isBlank(account)){
-               return ZhuanliUtil.getJSONString("账号不能为空");
+                return ZhuanliUtil.getJSONString("账号不能为空");
             }
 
-            if (user!=null){
-                synchronized (this){
-                userService.userByNumAndId(user.getNum()+1,user.getId());
-                }
+            user=userService.login(account,password);
+            int num = userService.userByNumAndId(user.getNum(), user.getId());
+            user.setNum(num);
+            int num1 = userService.selectNumById(user.getId());
+            System.out.println(user);
 
-                session.setAttribute("user",user);
-                System.out.println(user);
-                return  ZhuanliUtil.getJSONString(200,user);
+            if (user!=null) {
+                    session.setAttribute("user", user);
+                    System.out.println(user);
+                    return ZhuanliUtil.getJSONString(200, user);
 
-            }else {
+            }
+            else {
                 return  ZhuanliUtil.getJSONString(505,"账户或密码错误");
             }
 
         }catch (Exception e){
             logger.error(e.getMessage());
             e.printStackTrace();
-            logger.error("登陆异常");
+
             return  ZhuanliUtil.getJSONString(500,"登录异常");
         }
     }

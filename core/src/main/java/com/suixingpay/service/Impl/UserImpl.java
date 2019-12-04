@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 
@@ -20,15 +21,17 @@ public class UserImpl implements UserService {
     @Autowired
     UserMapper userDao;
 
+    @Autowired
+    private  HttpServletRequest request;
     public User selectByname(String name){
         return userDao.userByName(name);
     }
 
 
     public User login(String account,String password){
-       User user = userDao.userByAccountAndPassword(account,password);
-       int num=user.getNum();
-       return  user;
+        User user = userDao.userByAccountAndPassword(account,password);
+        int num=user.getNum();
+        return  user;
     }
 
 
@@ -36,8 +39,10 @@ public class UserImpl implements UserService {
     public User userByName(String name) {
         return new User();
     }
-    public  User userByNumAndId(int num,int id){
-        User user=userDao.userByNumAndId(num,id);
-        return user;
+    public  int userByNumAndId(int num,int id){
+        return userDao.userByNumAndId(num,id);
+    }
+    public  int selectNumById(int id){
+        return userDao.selectNumById(id);
     }
 }

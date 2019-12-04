@@ -12,7 +12,7 @@
 
 
     <select id="userByAccountAndPassword" resultMap="userMap" parameterType="java.lang.String">
-        SELECT id,name,password,account,status,modify_date,create_date
+        SELECT id,name,password,account,status,modify_date,create_date,number
         FROM patent_user
         WHERE account=#{account} and  password=#{password}
     </select>
@@ -20,9 +20,12 @@
     <select id="userByName" resultMap="userMap">
         SELECT name,password,account,status,modify_date,create_date,is_delete FROM patent_user WHERE account=#{account}
     </select>
+    <select id="selectNumById" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+        SELECT number FROM patent_user WHERE id=#{id}
+    </select>
     <update id="userByNumAndId" parameterType="int">
         update patent_user
-        set number =#{number}
+        set number =#{number}+1
         where id=#{id}
     </update>
 </mapper>
