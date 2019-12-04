@@ -1,26 +1,26 @@
 package com.suixingpay.controller;
 
 
-import com.github.pagehelper.util.StringUtil;
-import com.suixingpay.pojo.User;
-import com.suixingpay.service.Impl.UserImpl;
-import com.suixingpay.service.UserService;
-import com.suixingpay.util.ZhuanliUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+        import com.github.pagehelper.util.StringUtil;
+        import com.suixingpay.pojo.User;
+        import com.suixingpay.service.Impl.UserImpl;
+        import com.suixingpay.service.UserService;
+        import com.suixingpay.util.ZhuanliUtil;
+        import org.slf4j.Logger;
+        import org.slf4j.LoggerFactory;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.util.StringUtils;
+        import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.xml.ws.Action;
-import java.util.Date;
+        import javax.annotation.Resource;
+        import javax.servlet.http.HttpServletRequest;
+        import javax.servlet.http.HttpSession;
+        import javax.xml.ws.Action;
+        import java.util.Date;
 
 @RestController
 public class LoginController {
-        private static final Logger logger= LoggerFactory.getLogger(LoginController.class);
+    private static final Logger logger= LoggerFactory.getLogger(LoginController.class);
     @Autowired
     UserService userService;
 
@@ -50,9 +50,9 @@ public class LoginController {
             System.out.println(user);
 
             if (user!=null) {
-                    session.setAttribute("user", user);
-                    System.out.println(user);
-                    return ZhuanliUtil.getJSONString(200, user);
+                session.setAttribute("user", user);
+                System.out.println(user);
+                return ZhuanliUtil.getJSONString(200, user);
 
             }
             else {
