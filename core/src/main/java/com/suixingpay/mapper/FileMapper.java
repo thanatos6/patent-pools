@@ -25,19 +25,19 @@ public interface FileMapper {
      * @param fileId
      * @return
      */
-    int update(int fileId);
+    int update(Integer fileId);
 
     /**
      * 根据专利Id查询该Id下的所有文件
      * @param filePatentId
      * @return
      */
-    List<Files> selectById(int filePatentId);
+    List<Files> selectById(Integer filePatentId);
 
     /**
      * 为了删除文件的查询功能
      * @param fileId
      * @return
      */
-    Files selectPathByFileId(int fileId);
+    Files selectPathByFileId(Integer fileId);
 }

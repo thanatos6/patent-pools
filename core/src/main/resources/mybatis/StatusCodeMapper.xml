@@ -2,21 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.suixingpay.mapper.StatusCodeMapper">
     <resultMap id="RoleMap" type="com.suixingpay.pojo.StatusCode">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="role" property="role" jdbcType="INTEGER"/>
-        <result column="process_code" property="processCode" javaType="String" jdbcType="INTEGER"/>
+        <id column="id" property="id" jdbcType="INTEGER"/><!--状态码的id-->
+        <result column="role" property="role" jdbcType="INTEGER"/><!--状态码的角色权限-->
+        <result column="process_code" property="processCode" javaType="String" jdbcType="INTEGER"/><!--状态码-->
     </resultMap>
-    <resultMap id="ManageMap" type="com.suixingpay.pojo.PatentInfo">
-        <id column="id" property="id" jdbcType="INTEGER"/><!--专利的id-->
-        <result column="case_number" property="caseNumber" jdbcType="INTEGER"/><!--专利的案件文号-->
-        <result column="apply_number" property="applyNumber" jdbcType="INTEGER"/><!--专利的申请号-->
-        <result column="apply_date" property="applyDate" jdbcType="INTEGER"/><!--专利的申请日-->
-        <result column="apply_man_chs" property="applyManChs" jdbcType="INTEGER"/><!--专利的申请人的中文名称-->
-        <result column="invention_chs" property="inventionChs" jdbcType="INTEGER"/><!--专利的中文发明名称-->
-        <result column="current_status" property="currentStatus" jdbcType="INTEGER"/><!--当前专利所在的流程状态-->
-        <result column="owner_user_id" property="ownerUserId" jdbcType="INTEGER"/><!--认领该专利的用户的id-->
-
+    <resultMap type="com.suixingpay.pojo.RejectContent" id="ClazzMap">
+        <id column="id" property="id"/>
+        <result column="patent_id" property="patentId"/>
+        <result column="reject_content" property="rejectContent"/>
+        <result column="create_date" property="createDate"/>
+        <result column="reject_user_id" property="rejectUserId"/>
+        <association property="user" javaType="com.suixingpay.pojo.User">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
     </resultMap>
+    <!--数据库字段集合 - SQL 查询字段-->
+    <sql id="Base_Column_List">
+        id
+        ,
+        batch,
+        case_number,
+        apply_number,
+        apply_date,
+        apply_tech_linkman,
+        apply_man_chs,
+        invention_chs,
+        law_status,
+        patent_type,
+        invent_man_chs,
+        patent_comment,
+        modify_date,
+        create_date,
+        is_delete,
+        current_status,
+        current_process,
+        owner_user_id
+    </sql>
     <!-- 用于页面三类管理员审批通过驳回，根据专利id修改状态码
      1.当一审通过1变2，待认领
      当一审不通过1变11，一审不通过
@@ -61,7 +83,6 @@
             current_status = #{currentStatus,jdbcType=INTEGER}
         where `id` = #{id,jdbcType=INTEGER}
     </update>
-
     <!--根据当前登录人role,判断状态表的list-->
     <select id="selectCodeByRole" parameterType="int" resultMap="RoleMap">
         SELECT process_code
@@ -69,19 +90,103 @@
         WHERE role = #{role}
     </select>
     <!--根据专利ID号,查找当前专利状态码-->
-    <select id="selectCodeByPid" parameterType="int" resultType="int">
+    <select id="selectCodeByPid" parameterType="int" resultType="integer">
         SELECT current_status
         FROM patent_info
         WHERE id = #{id}
     </select>
+    <!-- 根据认领人ID查看已认领未撰写的专利 ，状态码为4-->
+    <select id="selectPatentByclaimed" resultType="com.suixingpay.pojo.PatentInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from `patent_info`
+        where current_status = 4
+        <if test="ownerUserId != null">
+            and owner_user_id = #{ownerUserId,jdbcType=INTEGER}
+        </if>
+    </select>
+    <!-- 根据认领人ID查看自己认领的待审批的专利 ，状态码为1,5,6-->
+    <select id="selectPatentByWaitMyself" parameterType="int" resultType="com.suixingpay.pojo.PatentInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from `patent_info`
+        where current_status in (1,5,6)
+        <if test="ownerUserId != null">
+            and owner_user_id = #{ownerUserId,jdbcType=INTEGER}
+        </if>
+    </select>
+    <!-- 根据当前用户ID查看自己认领的待维护的专利列表 ，状态码为7提交成功-->
+    <select id="selectPatentBySuccess" parameterType="int" resultType="com.suixingpay.pojo.PatentInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from `patent_info`
+        where current_status =7
+        <if test="ownerUserId != null">
+            and owner_user_id = #{ownerUserId,jdbcType=INTEGER}
+        </if>
+    </select>
+    <!-- 动态SQL ：模糊插入一条专利驳回原因，对应新建驳回原因 -->
+    <insert id="insertRejectContent" parameterType="com.suixingpay.pojo.RejectContent">
+        insert into patent_reject
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="patentId != null">
+                patent_id,
+            </if>
+            <if test="rejectContent != null and rejectContent !=''">
+                reject_content,
+            </if>
+            <if test="modifyDate != null">
+                modify_date,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="rejectUserId != null">
+                reject_user_id,
+            </if>
 
-    <!-- 用于页面撰写人的待办事件的状态码转化
-     不管是哪次驳回，都要把状态码改为编写中15变4，16变4，编写中
-   -->
-    <!--<update id="updateStatusWriter" parameterType="int">-->
-    <!--update `patent_info`-->
-    <!--set-->
-    <!--current_status = 4-->
-    <!--where `id` = #{id,jdbcType=INTEGER}-->
-    <!--</update>-->
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="patentId != null and patentId !=''">
+                #{patentId,jdbcType=INTEGER},
+            </if>
+            <if test="rejectContent != null">
+                #{rejectContent,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyDate != null">
+                #{modifyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="rejectUserId != null">
+                #{rejectUserId,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <!-- 根据当前专利ID号查看自己认领的被驳回专利的原因-->
+    <select id="selectPatentViewReason" parameterType="int" resultMap="ClazzMap">
+        SELECT a.patent_id,
+               a.reject_content,
+               u.name,
+               a.create_date
+        FROM patent_reject a
+                 LEFT JOIN patent_user u
+                           ON a.reject_user_id = u.id
+        WHERE a.patent_id = #{patentId,jdbcType=INTEGER}
+        ORDER BY a.create_date DESC LIMIT 1
+
+    </select>
 </mapper>

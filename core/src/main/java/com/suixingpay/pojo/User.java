@@ -17,17 +17,10 @@ public class User {
     private Date createDate;
     private Date modifyDate;
     private int status;
-    private  int num;
 
-    public int getNum() {
-        return num;
-    }
 
-    public void setNum(int num) {
-        this.num = num;
-    }
 
-    public Date getCreateDate() {
+   public Date getCreateDate() {
         return createDate;
     }
 

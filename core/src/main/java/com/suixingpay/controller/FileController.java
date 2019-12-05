@@ -1,5 +1,8 @@
 package com.suixingpay.controller;
 
+import com.suixingpay.aspect.Action;
+import com.suixingpay.pojo.CodeEnum;
+import com.suixingpay.pojo.Response;
 import com.suixingpay.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -24,6 +27,7 @@ public class FileController {
 
     @Autowired
     private FileService fileService;
+    Map<String, Object> map = new HashMap<>();
 
     /**
      * 上传文件
@@ -32,9 +36,10 @@ public class FileController {
      * @param file
      * @return
      */
+    @Action(name="upload")
     @PostMapping("/upload")
-    public Map<String, Object> upload(@RequestParam("id") int filePatentId, @RequestParam("file") MultipartFile file,HttpServletRequest request) {
-        return fileService.insert(file, filePatentId,request );
+    public Map<String ,Object> upload(@RequestParam("id") Integer filePatentId, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        return fileService.insert(file, filePatentId, request);
     }
 
 
@@ -43,9 +48,11 @@ public class FileController {
      * @return
      */
     @GetMapping("/select")
-    public Map<String, Object> selectById(@RequestParam("id") int patentId) {
-        return fileService.selectById(patentId);
+    public Map<String, Object> selectById(@RequestParam("id") Integer patentId) {
+            return fileService.selectById(patentId);
+
     }
+
 
 
     /**
@@ -60,7 +67,7 @@ public class FileController {
             return map;
         }
         int info = fileService.update(fileId);
-        if (info >= 0) {
+        if (info > 0) {
             map.put("result", 1);
             LOGGER.info("删除成功");
         } else {
@@ -77,8 +84,7 @@ public class FileController {
      * @throws UnsupportedEncodingException
      */
     @GetMapping("/download")
-    public Map<String,Object> selectPathByFileId(@Param("fileId") Integer fileId, HttpServletRequest request) throws UnsupportedEncodingException {
-
+    public Map<String,Object> selectPathByFileId(@Param("fileId") Integer fileId, HttpServletRequest request) {
         return fileService.selectPathByFileId(fileId, request);
     }
 }

@@ -190,4 +190,28 @@ public class PatentInfo {
     public void setOwnerUserId(Integer ownerUserId) {
         this.ownerUserId = ownerUserId;
     }
+
+    @Override
+    public String toString() {
+        return "PatentInfo{" +
+                "id=" + id +
+                ", batch='" + batch + '\'' +
+                ", caseNumber='" + caseNumber + '\'' +
+                ", applyNumber='" + applyNumber + '\'' +
+                ", applyDate=" + applyDate +
+                ", applyTechLinkman='" + applyTechLinkman + '\'' +
+                ", applyManChs='" + applyManChs + '\'' +
+                ", inventionChs='" + inventionChs + '\'' +
+                ", lawStatus='" + lawStatus + '\'' +
+                ", patentType='" + patentType + '\'' +
+                ", inventManChs='" + inventManChs + '\'' +
+                ", patentComment='" + patentComment + '\'' +
+                ", modifyDate=" + modifyDate +
+                ", createDate=" + createDate +
+                ", isDelete=" + isDelete +
+                ", currentStatus=" + currentStatus +
+                ", currentProcess='" + currentProcess + '\'' +
+                ", ownerUserId=" + ownerUserId +
+                '}';
+    }
 }

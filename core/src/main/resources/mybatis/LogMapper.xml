@@ -122,5 +122,12 @@
     where patent_info_id = #{id,jdbcType=INTEGER}
   </select>
 
+  <select id="selectUserLog" parameterType="Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from log
+    where user_id = #{id,jdbcType=INTEGER}
+  </select>
+
 
 </mapper>

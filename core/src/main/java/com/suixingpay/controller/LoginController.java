@@ -2,6 +2,7 @@ package com.suixingpay.controller;
 
 
 import com.github.pagehelper.util.StringUtil;
+import com.suixingpay.aspect.Action;
 import com.suixingpay.pojo.User;
 import com.suixingpay.service.Impl.UserImpl;
 import com.suixingpay.service.UserService;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.xml.ws.Action;
 import java.util.Date;
 
 @RestController
@@ -27,9 +27,9 @@ public class LoginController {
     @Autowired
     private HttpServletRequest request;
 
-    /*@Action(name="login")*/
+    @Action(name="login")
     @PostMapping("/login")//一般注册都是写入到后台所以是post
-    public  String  login(@RequestBody(required =false)  User user){
+    public  String  login(@RequestBody(required =false)  User user){//可以不传值
 
         try {
             //System.out.println(userService);
@@ -42,11 +42,7 @@ public class LoginController {
             if (ZhuanliUtil.isBlank(account)){
                 return ZhuanliUtil.getJSONString("账号不能为空");
             }
-
             user=userService.login(account,password);
-            int num = userService.userByNumAndId(user.getNum(), user.getId());
-            user.setNum(num);
-            int num1 = userService.selectNumById(user.getId());
             System.out.println(user);
 
             if (user!=null) {
