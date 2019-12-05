@@ -17,6 +17,16 @@ public class User {
     private Date createDate;
     private Date modifyDate;
     private int status;
+    private int number;
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+
 
 
 
@@ -94,7 +104,7 @@ public class User {
                 ", isDelete='" + isDelete + '\'' +
                 ", createDate=" + createDate +
                 ", modifyDate=" + modifyDate +
-                ", status=" + status +
+                ", status=" + status +", number="+number+
                 '}';
     }
 }

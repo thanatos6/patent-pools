@@ -30,7 +30,7 @@ public class UserImpl implements UserService {
 
     public User login(String account,String password){
         User user = userDao.userByAccountAndPassword(account,password);
-        int num=user.getNum();
+        int num=user.getNumber();
         return  user;
     }
 
