@@ -29,7 +29,7 @@ public class LoginController {
 
     @Action(name="login")
     @PostMapping("/login")//一般注册都是写入到后台所以是post
-    public  String  login(@RequestBody(required =false)  User user){
+    public  String  login(@RequestBody(required =false)  User user){//可以不传值
 
         try {
             //System.out.println(userService);
@@ -42,9 +42,7 @@ public class LoginController {
             if (ZhuanliUtil.isBlank(account)){
                 return ZhuanliUtil.getJSONString("账号不能为空");
             }
-
             user=userService.login(account,password);
-
             System.out.println(user);
 
             if (user!=null) {

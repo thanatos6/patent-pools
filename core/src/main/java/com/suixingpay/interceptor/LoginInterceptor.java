@@ -1,6 +1,10 @@
 package com.suixingpay.interceptor;
 
+import com.suixingpay.pojo.User;
+import com.suixingpay.service.UserService;
 import com.suixingpay.util.ExceptionUtil;
+import com.suixingpay.util.ZhuanliUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
  *  用于校验拦截非法登录用户
  */
 @Component public class LoginInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    UserService userService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) {
 
@@ -46,7 +53,7 @@ import javax.servlet.http.HttpServletResponse;
         String origin = request.getHeader("Origin");
         response.setHeader("Access-Control-Allow-Origin", origin);
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Max-Age", "18000");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization");
         response.setHeader("Access-Control-Allow-Credentials", "true");
     }
