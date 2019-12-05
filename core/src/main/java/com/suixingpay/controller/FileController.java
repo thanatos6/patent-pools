@@ -59,6 +59,7 @@ public class FileController {
      * @param fileId
      * @return
      */
+    @Action(name="update")
     @GetMapping("/update")
     public Map<String, Object> update(@RequestParam("fileId") Integer fileId) {
         Map<String, Object> map = new HashMap<>();
