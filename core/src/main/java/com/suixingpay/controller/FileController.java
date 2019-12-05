@@ -53,6 +53,7 @@ public class FileController {
      * @param fileId
      * @return
      */
+    @Action(name="update")
     @GetMapping("/update")
     public Map<String, Object> update(@RequestParam("fileId") Integer fileId) {
         //用于装数据、状态码、信息并返回

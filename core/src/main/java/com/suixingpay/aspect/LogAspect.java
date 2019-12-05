@@ -1,10 +1,8 @@
 package com.suixingpay.aspect;
 
+import com.suixingpay.mapper.FileMapper;
 import com.suixingpay.mapper.LogMapper;
-import com.suixingpay.pojo.Log;
-import com.suixingpay.pojo.PatentInfo;
-import com.suixingpay.pojo.RejectContent;
-import com.suixingpay.pojo.User;
+import com.suixingpay.pojo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -34,7 +32,11 @@ public class LogAspect {
     public static String EDITED = "editPatentById";
     public static String LOGIN = "login";
     public static String UPLOAD = "upload";
+    public static String CLAIM = "claim";
+    public static String UPDATE = "update";
 
+    @Autowired
+    FileMapper fileMapper;
 
     @Autowired
     LogMapper logMapper;
@@ -43,12 +45,13 @@ public class LogAspect {
      * 定义切点pointCutAgree，此注释所在的方法，即为AOP切面所修饰的方法
      */
     @Pointcut("@annotation(com.suixingpay.aspect.Action)")
-    public void CutAnnotation() {
+    public void cutAnnotation() {
 
     }
 
-    @After("CutAnnotation()")
-    public void afterPointCutReject(JoinPoint joinPoint) {
+
+    @After("cutAnnotation()")
+    public void afterSomething(JoinPoint joinPoint) {
 
         //从request域中，获取session，通过session获取user对象
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -76,17 +79,19 @@ public class LogAspect {
 
         } else if (LOGIN.equals(joinPoint.getSignature().getName())) {
 
+
+
             log.setPatentInfoId(0);
             log.setMessage(user.getName() + "登陆了系统");
 
         } else if (UPLOAD.equals(joinPoint.getSignature().getName())) {
 
             Object[] args = joinPoint.getArgs();
-            Integer patentId = (Integer)args[0];
-            MultipartFile multipartFile = (MultipartFile)args[1];
+            Integer patentId = (Integer) args[0];
+            MultipartFile multipartFile = (MultipartFile) args[1];
 
             log.setPatentInfoId(patentId);
-            log.setMessage(user.getName() + "上传了文件,文件名为"+multipartFile.getOriginalFilename());
+            log.setMessage(user.getName() + "上传了文件,文件名为" + multipartFile.getOriginalFilename());
 
         } else if (REJECT.equals(joinPoint.getSignature().getName())) {
 
@@ -95,18 +100,41 @@ public class LogAspect {
 
             log.setPatentInfoId(rejectContent.getPatentId());
             log.setMessage(user.getName() + "驳回了了ID为" + rejectContent.getPatentId() + "的专利申请");
+        } else if (CLAIM.equals(joinPoint.getSignature().getName())) {
+            Object[] args = joinPoint.getArgs();
+            PatentInfo patentInfo = (PatentInfo) args[0];
 
-            }
+            log.setPatentInfoId(patentInfo.getId());
+            log.setMessage(user.getName() + "认领了ID为" + patentInfo.getId() + "的专利申请");
+        } else if (UPDATE.equals(joinPoint.getSignature().getName())) {
 
-            log.setUserId(user.getId());
-            log.setCreateDate(date);
-            log.setModifyDate(date);
-            log.setIsDelete((byte) 0);
+            System.out.println("删除方法执行了");
+            Object[] args = joinPoint.getArgs();
+            Integer filesId = (Integer) args[0];
 
-            logMapper.insert(log);
+
+
+            Files files =fileMapper.selectPathByFileId(filesId);
+            log.setPatentInfoId(files.getFilePatentId());
+            log.setMessage(user.getName() + "删除了专利" + files.getFilePatentId() + "的文件,文件名为"+files.getFileName());
+
         }
 
+
+        log.setUserId(user.getId());
+        log.setCreateDate(date);
+        log.setModifyDate(date);
+        log.setIsDelete((byte) 0);
+
+        logMapper.insert(log);
+
+
     }
+
+
+
+}
+
 
 
 

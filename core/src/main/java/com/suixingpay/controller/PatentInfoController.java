@@ -1,5 +1,6 @@
 package com.suixingpay.controller;
 
+import com.suixingpay.aspect.Action;
 import com.suixingpay.pojo.PatentInfo;
 import com.suixingpay.pojo.User;
 import com.suixingpay.service.PatentInfoService;
@@ -78,6 +79,8 @@ public class PatentInfoController {
         return patentInfoService.searchPatentByUserAndNoReceive(patentInfo, user);
     }
 
+
+    @Action(name="editPatentById")
     @RequestMapping(value = "/editPatent", method = RequestMethod.POST)
     public String editPatentById(@RequestBody PatentInfo patentInfo) {
 

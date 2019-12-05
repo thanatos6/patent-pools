@@ -90,7 +90,7 @@
         WHERE role = #{role}
     </select>
     <!--根据专利ID号,查找当前专利状态码-->
-    <select id="selectCodeByPid" parameterType="int" resultType="int">
+    <select id="selectCodeByPid" parameterType="int" resultType="integer">
         SELECT current_status
         FROM patent_info
         WHERE id = #{id}

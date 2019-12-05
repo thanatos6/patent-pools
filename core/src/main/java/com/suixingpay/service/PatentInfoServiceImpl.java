@@ -252,7 +252,9 @@ public class PatentInfoServiceImpl implements PatentInfoService {
 
         // 做异常处理，如果异常，返回错误的 patent 状态 JSON 信息
         try {
-            returnJsonStr = JSON.toJSONString(patentInfoMapper.selectPatentByStatusList(statusList, userId));
+            List<PatentInfo> resultList = patentInfoMapper.selectPatentByStatusList(statusList,userId);
+            Collections.reverse(resultList);
+            returnJsonStr = JSON.toJSONString(resultList);
         } catch (Exception e) {
             log.error("数据库按照状态集合查找一个专利 List 错误！");
             log.error(e.getMessage());

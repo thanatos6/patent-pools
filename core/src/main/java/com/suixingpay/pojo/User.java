@@ -19,6 +19,7 @@ public class User {
     private int status;
 
 
+
    public Date getCreateDate() {
         return createDate;
     }

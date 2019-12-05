@@ -73,6 +73,7 @@ public class StatusCodeController {
 
 
     //撰写人点击认领，将状态改为编写中，前端测试通过
+    @Action(name="claim")
     @RequestMapping(value = "/claim", method = RequestMethod.POST)
     public String claim(@RequestBody PatentInfo patentInfo, HttpServletRequest request) {
         HttpSession session = request.getSession();
