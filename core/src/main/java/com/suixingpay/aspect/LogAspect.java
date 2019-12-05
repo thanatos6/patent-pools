@@ -34,6 +34,7 @@ public class LogAspect {
     public static String EDITED = "editPatentById";
     public static String LOGIN = "login";
     public static String UPLOAD = "upload";
+    public static String CLAIM="claim";
 
 
     @Autowired
@@ -95,8 +96,14 @@ public class LogAspect {
 
             log.setPatentInfoId(rejectContent.getPatentId());
             log.setMessage(user.getName() + "驳回了了ID为" + rejectContent.getPatentId() + "的专利申请");
+        } else if(CLAIM.equals(joinPoint.getSignature().getName())){
+            Object[] args = joinPoint.getArgs();
+            PatentInfo patentInfo = (PatentInfo) args[0];
 
-            }
+            log.setPatentInfoId(patentInfo.getId());
+            log.setMessage(user.getName() + "认领了ID为" + patentInfo.getId() + "的专利申请");
+
+        }
 
             log.setUserId(user.getId());
             log.setCreateDate(date);
