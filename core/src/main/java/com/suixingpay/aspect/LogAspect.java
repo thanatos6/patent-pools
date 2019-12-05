@@ -1,10 +1,8 @@
 package com.suixingpay.aspect;
 
+import com.suixingpay.mapper.FileMapper;
 import com.suixingpay.mapper.LogMapper;
-import com.suixingpay.pojo.Log;
-import com.suixingpay.pojo.PatentInfo;
-import com.suixingpay.pojo.RejectContent;
-import com.suixingpay.pojo.User;
+import com.suixingpay.pojo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -37,6 +35,8 @@ public class LogAspect {
     public static String CLAIM = "claim";
     public static String UPDATE = "update";
 
+    @Autowired
+    FileMapper fileMapper;
 
     @Autowired
     LogMapper logMapper;
@@ -104,12 +104,18 @@ public class LogAspect {
             log.setPatentInfoId(patentInfo.getId());
             log.setMessage(user.getName() + "认领了ID为" + patentInfo.getId() + "的专利申请");
         } else if (UPDATE.equals(joinPoint.getSignature().getName())) {
-            Object[] args = joinPoint.getArgs();
-            Integer patentId = (Integer) args[0];
-            MultipartFile multipartFile = (MultipartFile) args[1];
 
-            log.setPatentInfoId(patentId);
-            log.setMessage(user.getName() + "删除了专利" + patentId + "的文件,文件名为" + multipartFile.getOriginalFilename());
+            System.out.println("删除方法执行了");
+            Object[] args = joinPoint.getArgs();
+            Integer filesId = (Integer) args[0];
+
+
+
+            Files files =fileMapper.selectPathByFileId(filesId);
+            log.setPatentInfoId(files.getFilePatentId());
+
+            System.out.println(files.getFilePatentId()+" "+files.getFileName());
+            log.setMessage(user.getName() + "删除了专利" + files.getFilePatentId() + "的文件,文件名为"+files.getFileName());
 
         }
 

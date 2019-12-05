@@ -19,4 +19,5 @@ public interface FileService {
     int  update (Integer fileId);
     Map<String, Object> selectById (Integer filePatentId);
     Map<String,Object> selectPathByFileId(Integer fileId, HttpServletRequest request);
-        }
+
+}
