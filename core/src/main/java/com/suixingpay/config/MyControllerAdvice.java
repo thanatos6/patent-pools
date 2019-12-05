@@ -20,7 +20,7 @@ public class MyControllerAdvice {
     @ExceptionHandler(value = ExceptionUtil.class)
     public void handleServiceException(ExceptionUtil exception, HttpServletResponse response) {
         try {
-            System.out.println(exception.getMsg() + exception.getCode());
+            
             response.setCharacterEncoding("UTF-8");
             response.setContentType("text/html");
             response.setStatus(exception.getCode());
