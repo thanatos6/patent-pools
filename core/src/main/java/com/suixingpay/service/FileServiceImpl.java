@@ -108,7 +108,7 @@ public class FileServiceImpl implements FileService {
             map.put("status", "0");
         }
          if (list.size() == 0){
-             LOGGER.info("查询失败");
+             LOGGER.info("该专利下无文件");
              map.put("status", "0");
              map.put("list", "");
          }else{
