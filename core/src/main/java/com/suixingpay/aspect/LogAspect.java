@@ -49,8 +49,9 @@ public class LogAspect {
 
     }
 
+
     @After("cutAnnotation()")
-    public void afterPointCutReject(JoinPoint joinPoint) {
+    public void afterSomething(JoinPoint joinPoint) {
 
         //从request域中，获取session，通过session获取user对象
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -77,6 +78,8 @@ public class LogAspect {
             }
 
         } else if (LOGIN.equals(joinPoint.getSignature().getName())) {
+
+
 
             log.setPatentInfoId(0);
             log.setMessage(user.getName() + "登陆了系统");
@@ -113,8 +116,6 @@ public class LogAspect {
 
             Files files =fileMapper.selectPathByFileId(filesId);
             log.setPatentInfoId(files.getFilePatentId());
-
-            System.out.println(files.getFilePatentId()+" "+files.getFileName());
             log.setMessage(user.getName() + "删除了专利" + files.getFilePatentId() + "的文件,文件名为"+files.getFileName());
 
         }
@@ -126,7 +127,11 @@ public class LogAspect {
         log.setIsDelete((byte) 0);
 
         logMapper.insert(log);
+
+
     }
+
+
 
 }
 
