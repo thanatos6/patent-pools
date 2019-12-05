@@ -10,6 +10,7 @@ import java.util.Enumeration;
 public class GetIp {
 
     public static String getRealIP() {
+        //有虚拟机的情况下进行的过滤
         try {
             Enumeration<NetworkInterface> allNetInterfaces = NetworkInterface
                     .getNetworkInterfaces();
@@ -44,8 +45,9 @@ public class GetIp {
             System.err.println("Error when getting host ip address"
                     + e.getMessage());
         }
+        //没有虚拟机的情况下
         InetAddress address = null;
-        String hostAddress = null;//获取的是本地的IP地址 //PC-20140317PXKX/192.168.0.121
+        String hostAddress = null;//获取的是本地的IP地址
         try {
             address = InetAddress.getLocalHost();
              hostAddress = address.getHostAddress();//192.168.0.121
