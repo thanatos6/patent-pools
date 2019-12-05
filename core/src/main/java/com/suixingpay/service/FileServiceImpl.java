@@ -127,32 +127,23 @@ public class FileServiceImpl implements FileService {
         //用于装数据、状态码、信息并返回
         Map<String, Object> map = new HashMap<>();
         LOGGER.info("接受的参数为[{}]", filePatentId);
+        List<Files> list = fileMapper.selectById(filePatentId);
+
         //传值的判空
         if (filePatentId == null) {
             map.put("list", "没有此专利");
             map.put("status", "0");
         }
-         if (list.size() == 0){
+        if (list.size() == 0){
              LOGGER.info("该专利下无文件");
              map.put("status", "0");
              map.put("list", "");
-         }else{
+        }else{
              LOGGER.info("查询成功");
              map.put("status", "1");
              map.put("list", list);
-         }
-             return map;
-        List<Files> list = fileMapper.selectById(filePatentId);
-        //判断该专利下是否有文件存在
-        if (list.size() == 0) {
-            LOGGER.info("此专利下没有文件");
-            map.put("status", "0");
-            map.put("list", "");
-        } else {
-            LOGGER.info("查询成功");
-            map.put("status", "1");
-            map.put("list", list);
         }
+
         return map;
     }
 
