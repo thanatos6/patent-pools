@@ -2,7 +2,6 @@ package com.suixingpay.service;
 
 import com.github.pagehelper.PageHelper;
 import com.suixingpay.pojo.PatentPropertiesList;
-import org.springframework.boot.builder.ParentContextCloserApplicationListener;
 import org.springframework.stereotype.Service;
 import com.suixingpay.mapper.PatentPropertiesMapper;
 import com.suixingpay.pojo.PatentProperties;
