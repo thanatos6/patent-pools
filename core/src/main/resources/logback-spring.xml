@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--debug="false"关闭logback内部监控 -->
+<configuration debug="false">
+    <property name="LOG_PATH" value="${APP_HOME:-.}/logs" /><!-- 日志保存路径，默认值为./logs -->
+    <include resource="com/suixingpay/takin/logback/base.xml" />
+    <jmxConfigurator/>
+    <!-- 根据不同的环境，设置不同的level以及 appender-->
+    <!--开发环境配置 -->
+    <springProfile name="default,dev">
+        <logger name="org.springframework.web" level="ERROR" />
+        <logger name="org.springboot.sample" level="ERROR" />
+        <logger name="com.jarvis" level="TRACE" />
+        <logger name="com.suixingpay.takin.cache" level="TRACE" />
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+            <appender-ref ref="ERROR" />
+        </root>
+    </springProfile>
+
+    <!--test环境配置 -->
+    <springProfile name="test">
+        <logger name="org.springframework.web" level="ERROR" />
+        <logger name="org.springboot.sample" level="ERROR" />
+        <logger name="com.jarvis" level="DEBUG" />
+        <logger name="com.suixingpay.takin.cache" level="DEBUG" />
+        <root level="INFO">
+            <appender-ref ref="FILE" />
+            <appender-ref ref="ERROR" />
+        </root>
+    </springProfile>
+
+    <!--rc 环境配置 -->
+    <springProfile name="rc">
+        <logger name="org.springframework.web" level="ERROR" />
+        <logger name="org.springboot.sample" level="ERROR" />
+        <logger name="com.jarvis" level="DEBUG" />
+        <logger name="com.suixingpay.takin.cache" level="DEBUG" />
+        <root level="INFO">
+            <appender-ref ref="ASYNC_FILE" />
+            <appender-ref ref="ERROR" />
+        </root>
+    </springProfile>
+
+    <!--prod环境配置 -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="ASYNC_FILE" /><!-- 使用异步方式保存日志 -->
+            <appender-ref ref="ERROR" />
+        </root>
+    </springProfile>
+</configuration>

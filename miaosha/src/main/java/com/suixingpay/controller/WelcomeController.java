@@ -23,6 +23,7 @@ public class WelcomeController {
     @ResponseBody
     public Response test() {
         String hello = "hello kongjian";
+        log.error("hello kongjian");
         Map<String, Object> result = new HashMap<>();
         result.put("msg", hello);
         Response<Map<String, HashMap>> response = Response.getInstance(CodeEnum.SUCCESS, result);

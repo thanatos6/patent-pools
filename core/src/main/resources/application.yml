@@ -45,3 +45,5 @@ suixingpay:
     unkown-exception-message: "未知错误" #自定义未知异常信息，如果不自定义，默认为null，会获取Exception中的Message
     overriddenErrorController: true # 是否覆盖默认的ErrorController，默认值为true
     escapeIllegalChars: false # 防止XSS去除异常信息中的特殊字符(<和>)，默认值为false(3.0.6版本增加)
+logging:
+  config: classpath:logback-spring.xml
